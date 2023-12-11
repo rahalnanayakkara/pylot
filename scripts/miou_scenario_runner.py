@@ -46,7 +46,7 @@ def spawn_camera(camera_bp,
                                 transform,
                                 attach_to=ego_vehicle)
     camera_setup = SegmentedCameraSetup(
-        "segmented_camera", width, height,
+        "segmented_camera", 1280, 720,
         pylot.utils.Transform.from_simulator_transform(transform))
 
     _world.tick()

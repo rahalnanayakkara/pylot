@@ -45,7 +45,7 @@ flags.DEFINE_float(
     'person_angle_emergency_zone', 0.5,
     'Angle threshold for a person to be in the emergency zone [rad]')
 # Steering control parameters
-flags.DEFINE_float('throttle_max', 1.0, 'Maximum throttle [0, 1]')
+flags.DEFINE_float('throttle_max', 10.0, 'Maximum throttle [0, 1]')
 flags.DEFINE_float('steer_gain', 0.7, 'Gain on computed steering angle')
-flags.DEFINE_float('brake_max', 1.0, 'Maximum brake [0, 1]')
+flags.DEFINE_float('brake_max', 10.0, 'Maximum brake [0, 1]')
 flags.DEFINE_float('coast_factor', 1.75, 'Factor to control coasting')

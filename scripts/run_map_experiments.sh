@@ -30,7 +30,7 @@ for speed in ${speeds[@]}; do
     # Start the scenario runner.
     echo "[x] Starting the scenario runner..."
     cd $SCENARIO_RUNNER_HOME
-    python3 scenario_runner.py --scenario ERDOSBenchmarks_2 --reloadWorld &
+    python3 scenario_runner.py --scenario Custom_4 --reloadWorld &
     sleep 5  
 
     # Start the mIoU script. 

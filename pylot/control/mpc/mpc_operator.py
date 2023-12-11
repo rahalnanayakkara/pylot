@@ -128,7 +128,7 @@ class MPCOperator(erdos.Operator):
         except Exception as e:
             self._logger.error('Failed to solve MPC. Emergency braking.')
             self._logger.error(e)
-            return ControlMessage(0, 0, 1, False, False, timestamp)
+            return ControlMessage(0, 1, 0, False, False, timestamp)
 
         # Compute pid controls.
         target_speed = self._mpc.solution.vel_list[-1]
