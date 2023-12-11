@@ -54,7 +54,10 @@ class ObstacleLocationHistoryOperator(erdos.Operator):
         if timestamp.is_top:
             tracked_obstacles_stream.send(erdos.WatermarkMessage(timestamp))
             return
-        obstacles_msg = self._obstacles_msgs.popleft()
+        if self._obstacles_msgs:
+            obstacles_msg = self._obstacles_msgs.popleft()
+        else:
+            obstacles_msg = None
         depth_msg = self._depth_msgs.popleft()
         vehicle_transform = self._pose_msgs.popleft().data.transform
 

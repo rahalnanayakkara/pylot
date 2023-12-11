@@ -237,6 +237,11 @@ class World(object):
         min_speed_factor_v = compute_vehicle_speed_factor(
             ego_location_2d, obstacle.transform.location.as_vector_2D(),
             wp_vector, self._flags, self._logger)
+        v_dist = obstacle.transform.location.as_vector_2D().l2_distance(ego_location_2d)
+        f=open("/home/erdos/workspace/pylot/dist_sortpid.txt", 'a')
+        f.write(str(v_dist))
+        f.write('\n')
+        f.close()
         transforms = itertools.islice(
             obstacle.predicted_trajectory, 0,
             min(NUM_FUTURE_TRANSFORMS, len(obstacle.predicted_trajectory)))
