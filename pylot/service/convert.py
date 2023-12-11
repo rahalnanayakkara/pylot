@@ -22,9 +22,9 @@ def to_pylot_transform(transform: utils.Transform):
 
 def from_pylot_transform(transform: pylot.utils.Transform):
     return utils.Transform(
-        location=to_pylot_location(transform.location),
-        rotation=to_pylot_rotation(transform.rotation),
-        matrix=to_pylot_rotation(transform.matrix)
+        location=from_pylot_location(transform.location),
+        rotation=from_pylot_rotation(transform.rotation),
+        matrix=from_pylot_rotation(transform.matrix)
     )
 
 def to_pylot_location(location: utils.Location):
@@ -37,7 +37,7 @@ def to_pylot_rotation(rotation: utils.Rotation):
     return pylot.utils.Rotation(rotation.pitch, rotation.yaw, rotation.roll)
 
 def from_pylot_rotation(rotation: pylot.utils.Rotation):
-    return utils.Location(rotation.pitch, rotation.yaw, rotation.roll)
+    return utils.Rotation(rotation.pitch, rotation.yaw, rotation.roll)
 
 def to_pylot_vector(vector: utils.Vector3D):
     return pylot.utils.Vector3D(vector.x, vector.y, vector.z)

@@ -54,6 +54,6 @@ flags.DEFINE_bool('use_remote_pid_server', True, 'True to fetch PID control inst
 flags.DEFINE_bool('use_remote_mpc_server', True, 'True to fetch MPC control instruction from remote server')
 
 flags.DEFINE_string('remote_control_server_local', '127.0.0.1', 'Remote server to fetch control instructions')
-flags.DEFINE_string('remote_control_port_local', '5001', 'Remote server to fetch control instructions')
+flags.DEFINE_integer('remote_control_port_local', 5001, 'Remote server to fetch control instructions')
 flags.DEFINE_string('remote_control_server_cloud', '127.0.0.1', 'Remote server to fetch control instructions')
-flags.DEFINE_string('remote_control_port_cloud', '5001', 'Remote server to fetch control instructions')
+flags.DEFINE_integer('remote_control_port_cloud', 5001, 'Remote server to fetch control instructions')

@@ -1,6 +1,8 @@
 from collections import deque
 
 import erdos
+import socket
+import pickle
 
 import numpy as np
 
@@ -10,6 +12,8 @@ from pylot.control.mpc.mpc import ModelPredictiveController
 from pylot.control.mpc.utils import CubicSpline2D, global_config, zero_to_2_pi
 from pylot.control.pid import PIDLongitudinalController
 
+import pylot.service.service
+import pylot.service.convert
 
 class MPCOperator(erdos.Operator):
     def __init__(self, pose_stream, waypoints_stream, control_stream, flags):
@@ -39,6 +43,7 @@ class MPCOperator(erdos.Operator):
         self._traffic_light_msgs = deque()
         self._waypoint_msgs = deque()
         self._mpc = None
+        self._server=None
 
     @staticmethod
     def connect(pose_stream, waypoints_stream):
@@ -55,6 +60,40 @@ class MPCOperator(erdos.Operator):
     def on_pose_update(self, msg):
         self._logger.debug('@{}: pose update'.format(msg.timestamp))
         self._pose_msgs.append(msg)
+    
+    def connect_to_server(self):
+        if self._flags.use_remote_mpc_server:
+            host = self._flags.remote_control_server_local
+            port = self._flags.remote_control_port_local
+        else:
+            print("Remote MPC Server not enabled!")
+            return None
+        
+        self._server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self._server.connect((host, port))
+
+        return self._server
+
+    def fetch_from_server(self, pose_msg, waypoints):
+        if self._server == None:
+            self.connect_to_server()
+        
+        controller_input = pylot.service.service.ControllerInput(
+            pose_msg=pylot.service.convert.from_pylot_pose(pose_msg.data), 
+            waypoints_msg=pylot.service.convert.from_pylot_waypoint(waypoints), 
+            type="pid"
+            )
+        
+        print("Sent controller input ", controller_input)
+        input_string = pickle.dumps(controller_input)
+
+        self._server.send(input_string)
+        output_string = self._server.recv(102400)
+
+        control_output = pickle.loads(output_string)
+        print("Received control message ", control_output)
+        return control_output
+
 
     @erdos.profile_method()
     def on_watermark(self, timestamp, control_stream):
@@ -73,9 +112,13 @@ class MPCOperator(erdos.Operator):
         target_speeds = waypoint_msg.waypoints.target_speeds
 
         # Compute and send control message
-        control_msg = self.get_control_message(waypoints, target_speeds,
-                                               vehicle_transform,
-                                               vehicle_speed, timestamp)
+        if self._flags.use_remote_mpc_server:
+            control_output = self.fetch_from_server(pose_msg=pose_msg, waypoints=waypoints)
+            control_msg = pylot.service.convert.to_pylot_control_message(control_output, timestamp)
+        else:
+            control_msg = self.get_control_message(waypoints, target_speeds,
+                                                vehicle_transform,
+                                                vehicle_speed, timestamp)
         self._logger.debug("Throttle: {}".format(control_msg.throttle))
         self._logger.debug("Steer: {}".format(control_msg.steer))
         self._logger.debug("Brake: {}".format(control_msg.brake))

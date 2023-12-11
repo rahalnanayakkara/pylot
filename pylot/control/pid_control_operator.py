@@ -7,11 +7,11 @@ import socket, pickle
 
 import pylot.control.utils
 import pylot.planning.utils
-import pylot.service.service
-import pylot.service.convert
 from pylot.control.messages import ControlMessage
 from pylot.control.pid import PIDLongitudinalController
 
+import pylot.service.service
+import pylot.service.convert
 
 class PIDControlOperator(erdos.Operator):
     """Operator that uses PID to follow a list of waypoints.
@@ -66,13 +66,12 @@ class PIDControlOperator(erdos.Operator):
         self._logger.warn('destroying {}'.format(self.config.name))
 
     def connect_to_server(self):
-        if not self._flags.use_remote_pid_server:
-            print("Remote Control Server not enabled!")
-            return
-
         if self._flags.use_remote_pid_server:
             host = self._flags.remote_control_server_local
             port = self._flags.remote_control_port_local
+        else:
+            print("Remote PID Server not enabled!")
+            return
         
         self._server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._server.connect((host, port))
@@ -84,7 +83,7 @@ class PIDControlOperator(erdos.Operator):
             self.connect_to_server()
         
         controller_input = pylot.service.service.ControllerInput(
-            pose_msg=pylot.service.convert.from_pylot_pose(pose_msg), 
+            pose_msg=pylot.service.convert.from_pylot_pose(pose_msg.data), 
             waypoints_msg=pylot.service.convert.from_pylot_waypoint(waypoints), 
             type="pid"
             )
