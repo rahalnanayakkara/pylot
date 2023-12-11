@@ -16,10 +16,9 @@ from messages import ControlMessage
 
 import params
 
-def get_control_message(pose_msg, waypoint_msg, type):
-    ego = pose_msg.transform
-    speed = pose_msg.forward_speed
-    waypoints = waypoint_msg.waypoints
+def get_control_message(pose, waypoints, type):
+    ego = pose.transform
+    speed = pose.forward_speed
 
     if params.simulator_control_frequency == -1:
         dt = 1.0 / params.simulator_fps
@@ -29,7 +28,7 @@ def get_control_message(pose_msg, waypoint_msg, type):
     if type == "pid":
         steer, throttle, brake = get_pid_control_message(ego, speed, waypoints, dt)
     elif type == "mpc":
-        steer, throttle, brake = get_mpc_control_message(ego, speed, waypoint_msg, dt)
+        steer, throttle, brake = get_mpc_control_message(ego, speed, waypoints, dt)
 
     return ControlMessage(steer, throttle, brake, False, False)
 
@@ -53,13 +52,12 @@ def get_pid_control_message(vehicle, speed, waypoints, dt):
     return steer, throttle, brake
 
 
-def get_mpc_control_message(vehicle, speed, waypoint_msg, dt):
+def get_mpc_control_message(vehicle, speed, waypoints, dt):
         
     # Get first 50 waypoints (50 meters) waypoints.
-    waypoints = waypoint_msg.waypoints
-    target_speeds = waypoint_msg.waypoints.target_speeds
-
+    target_speeds = waypoints.target_speeds
     path = waypoints.as_numpy_array_2D()
+    
     # convert target waypoints into spline
     spline = CubicSpline2D(path[0, :], path[1, :])
     ss = []

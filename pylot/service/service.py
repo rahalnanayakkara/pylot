@@ -47,8 +47,22 @@ Needs access to following independent components -
     - open3d
 '''
 
+# send pose + waypoints data, receive messages.ControlMessage
+class ControllerInput():
+    def __init__(self, pose_msg, waypoints_msg, type):
+        self.pose = pose_msg
+        self.waypoints = waypoints_msg
+        self.type = type
+
+# send frame + obstacle message, receive messages.ObstacleMessage
+class TrackerInput():
+    def __init__(self, frame_msg, obstacle_msg, runtime, type):
+        self.frame_msg = frame_msg
+        self.obstacles = obstacle_msg.obstacles
+        self.runtime = runtime
+        self.type = type
+
 # TODO: 
-# - port controller logic from operator to standalone service
 # - write client code in operators to call socket service
 # - add flags and params for server / client endpoints
 # - test in isolation (Mac, Pi, AWS) and then integration (E2E)
@@ -60,6 +74,3 @@ Needs access to following independent components -
 # Tracker -
 #   input=(type, CameraFrame, ObstacleMessage)
 #   output=(ObstacleMessage, error)
-def main():
-    return 0
-

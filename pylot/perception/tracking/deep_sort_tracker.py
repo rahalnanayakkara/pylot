@@ -9,8 +9,7 @@ class MultiObjectDeepSORTTracker(MultiObjectTracker):
     def __init__(self, flags, logger):
         self._logger = logger
         # Initialize the deepsort object, which has a tracker object within it
-        print("INITIALIZING DEEPSORT TRACKER")
-	self._deepsort = deepsort_rbc(
+        self._deepsort = deepsort_rbc(
             wt_path=flags.deep_sort_tracker_weights_path,
             max_age=flags.obstacle_track_max_age,
             min_iou=flags.min_matching_iou)
@@ -35,8 +34,7 @@ class MultiObjectDeepSORTTracker(MultiObjectTracker):
         """
         # If obstacles, run deep sort to update tracker with detections.
         # Otherwise, step each confirmed track one step forward.
-        print("INSIDE DEEPSORT TRACKER")
-	if obstacles:
+        if obstacles:
             bboxes, labels, confidence_scores, ids = [], [], [], []
             for obstacle in obstacles:
                 bboxes.append(obstacle.bounding_box_2D.as_width_height_bbox())

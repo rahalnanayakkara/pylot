@@ -1,26 +1,41 @@
 import socket
 
-def server_program():
-    # get the hostname
-    host = socket.gethostname()
-    port = 5000  # initiate port no above 1024
+import pickle
 
-    server_socket = socket.socket()  # get instance
-    # look closely. The bind() function takes tuple as argument
-    server_socket.bind((host, port))  # bind host address and port together
+from controller import get_control_message
+from tracker import get_obstacle_tracker_message
+
+def controller_server():
+    host = "0.0.0.0"
+    port = 5001
+
+    server_socket = socket.socket() 
+    server_socket.bind((host, port))
 
     # configure how many client the server can listen simultaneously
-    server_socket.listen(2)
-    conn, address = server_socket.accept()  # accept new connection
+    server_socket.listen(1)
+    conn, address = server_socket.accept()  
+
     print("Connection from: " + str(address))
     while True:
         # receive data stream. it won't accept data packet greater than 1024 bytes
-        data = conn.recv(1024).decode()
-        if not data:
+        input_message = conn.recv(102400)
+        if not input_message:
             # if data is not received break
             break
-        print("from connected user: " + str(data))
-        data = input(' -> ')
-        conn.send(data.encode())  # send data to the client
+        
+        input = pickle.loads(input_message)
+        print("Received input message: ", input)
+        control_message = get_control_message(
+            pose=input.pose, 
+            waypoints=input.waypoints, 
+            type=input.type
+            )
 
+        print("Generated control message: ", control_message)
+        conn.send(pickle.dumps(control_message))  # send data to the client
     conn.close()  # close the connection
+
+if __name__=='__main__':
+    controller_server()
+

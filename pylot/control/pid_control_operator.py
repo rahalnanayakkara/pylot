@@ -3,8 +3,12 @@ from collections import deque
 import erdos
 from erdos import Message, ReadStream, Timestamp, WriteStream
 
+import socket, pickle
+
 import pylot.control.utils
 import pylot.planning.utils
+import pylot.service.service
+import pylot.service.convert
 from pylot.control.messages import ControlMessage
 from pylot.control.pid import PIDLongitudinalController
 
@@ -51,6 +55,7 @@ class PIDControlOperator(erdos.Operator):
         # Queues in which received messages are stored.
         self._waypoint_msgs = deque()
         self._pose_msgs = deque()
+        self._server=None
 
     @staticmethod
     def connect(pose_stream: ReadStream, waypoints_stream: ReadStream):
@@ -59,6 +64,40 @@ class PIDControlOperator(erdos.Operator):
 
     def destroy(self):
         self._logger.warn('destroying {}'.format(self.config.name))
+
+    def connect_to_server(self):
+        if not self._flags.use_remote_pid_server:
+            print("Remote Control Server not enabled!")
+            return
+
+        if self._flags.use_remote_pid_server:
+            host = self._flags.remote_control_server_local
+            port = self._flags.remote_control_port_local
+        
+        self._server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self._server.connect((host, port))
+
+        return self._server
+
+    def fetch_from_server(self, pose_msg, waypoints):
+        if self._server == None:
+            self.connect_to_server()
+        
+        controller_input = pylot.service.service.ControllerInput(
+            pose_msg=pylot.service.convert.from_pylot_pose(pose_msg), 
+            waypoints_msg=pylot.service.convert.from_pylot_waypoint(waypoints), 
+            type="pid"
+            )
+        
+        print("Sent controller input ", controller_input)
+        input_string = pickle.dumps(controller_input)
+
+        self._server.send(input_string)
+        output_string = self._server.recv(102400)
+
+        control_output = pickle.loads(output_string)
+        print("Received control message ", control_output)
+        return control_output
 
     @erdos.profile_method()
     def on_watermark(self, timestamp: Timestamp, control_stream: WriteStream):
@@ -78,26 +117,32 @@ class PIDControlOperator(erdos.Operator):
         # Vehicle speed in m/s.
         current_speed = pose_msg.data.forward_speed
         waypoints = self._waypoint_msgs.popleft().waypoints
-        try:
-            angle_steer = waypoints.get_angle(
-                ego_transform, self._flags.min_pid_steer_waypoint_distance)
-            target_speed = waypoints.get_target_speed(
-                ego_transform, self._flags.min_pid_speed_waypoint_distance)
-            throttle, brake = pylot.control.utils.compute_throttle_and_brake(
-                self._pid, current_speed, target_speed, self._flags,
-                self._logger)
-            steer = pylot.control.utils.radians_to_steer(
-                angle_steer, self._flags.steer_gain)
-        except ValueError:
-            self._logger.warning('Braking! No more waypoints to follow.')
-            throttle, brake = 0.0, 0.5
-            steer = 0.0
-        self._logger.debug(
-            '@{}: speed {}, location {}, steer {}, throttle {}, brake {}'.
-            format(timestamp, current_speed, ego_transform, steer, throttle,
-                   brake))
-        control_stream.send(
-            ControlMessage(steer, throttle, brake, False, False, timestamp))
+
+        if self._flags.use_remote_pid_server:
+            control_output = self.fetch_from_server(pose_msg=pose_msg, waypoints=waypoints)
+            control_message = pylot.service.convert.to_pylot_control_message(control_output, timestamp)
+            control_stream.send(control_message)
+        else:
+            try:
+                angle_steer = waypoints.get_angle(
+                    ego_transform, self._flags.min_pid_steer_waypoint_distance)
+                target_speed = waypoints.get_target_speed(
+                    ego_transform, self._flags.min_pid_speed_waypoint_distance)
+                throttle, brake = pylot.control.utils.compute_throttle_and_brake(
+                    self._pid, current_speed, target_speed, self._flags,
+                    self._logger)
+                steer = pylot.control.utils.radians_to_steer(
+                    angle_steer, self._flags.steer_gain)
+            except ValueError:
+                self._logger.warning('Braking! No more waypoints to follow.')
+                throttle, brake = 0.0, 0.5
+                steer = 0.0
+            self._logger.debug(
+                '@{}: speed {}, location {}, steer {}, throttle {}, brake {}'.
+                format(timestamp, current_speed, ego_transform, steer, throttle,
+                    brake))
+            control_stream.send(
+                ControlMessage(steer, throttle, brake, False, False, timestamp))
 
     def on_waypoints_update(self, msg: Message):
         self._logger.debug('@{}: waypoints update'.format(msg.timestamp))

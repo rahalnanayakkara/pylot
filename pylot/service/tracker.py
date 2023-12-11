@@ -9,7 +9,7 @@ from messages import ObstaclesMessage
 
 import params
 
-def get_obstacle_tracker_message(frame, obstacles_msg, type):
+def get_obstacle_tracker_message(frame, obstacles, type):
     if type == "sort":
         tracker = MultiObjectSORTTracker()
     elif type == "deep_sort":
@@ -17,7 +17,7 @@ def get_obstacle_tracker_message(frame, obstacles_msg, type):
     
     detected_obstacles = []
     tracked_obstacles = []
-    for obstacle in obstacles_msg.obstacles:
+    for obstacle in obstacles:
         if obstacle.is_vehicle() or obstacle.is_person():
             detected_obstacles.append(obstacle)
     tracker.reinitialize(frame, detected_obstacles)

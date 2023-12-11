@@ -120,3 +120,6 @@ flags.DEFINE_list('tracking_metrics', [
     'num_misses', 'num_switches', 'num_false_positives', 'mota', 'motp',
     'mostly_tracked', 'mostly_lost', 'partially_tracked', 'idf1', 'num_objects'
 ], 'Tracking evaluation metrics')
+
+flags.DEFINE_string('remote_tracking_server', '0.0.0.0', 'Remote server to fetch control instructions')
+flags.DEFINE_string('remote_tracking_port', '5000', 'Remote server to fetch control instructions')
