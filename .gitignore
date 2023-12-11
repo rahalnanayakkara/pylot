@@ -2,7 +2,6 @@
 *.json
 *.pyc
 *.log
-*.csv
 *.ipynb
 *.dot
 dependencies/
