@@ -56,7 +56,7 @@ class ControllerInput():
 
 # send frame + obstacle message, receive messages.ObstacleMessage
 class TrackerInput():
-    def __init__(self, frame_msg, obstacle_msg, reinit=False, type):
+    def __init__(self, frame_msg, obstacle_msg, reinit, type):
         self.frame_msg = frame_msg
         self.obstacles = obstacle_msg.obstacles
         self.reinit = True

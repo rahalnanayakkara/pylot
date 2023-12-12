@@ -73,4 +73,4 @@ def tracker_server():
 if __name__=='__main__':
     thread_one = threading.Thread(target=controller_server)
     thread_two = threading.Thread(target=tracker_server)
-
+    thread_two.start()
