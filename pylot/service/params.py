@@ -8,7 +8,7 @@ steer_gain = False
 
 min_matching_iou=0.5
 obstacle_track_max_age=3
-deep_sort_tracker_weights_path='dependencies/models/tracking/deep-sort-carla/feature_extractor'
+deep_sort_tracker_weights_path='/home/erdos/workspace/pylot/dependencies/models/tracking/deep-sort-carla/feature_extractor'
 
 host="0.0.0.0"
-port=5001
+port=5010

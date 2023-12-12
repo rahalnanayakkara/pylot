@@ -1,6 +1,7 @@
 import time
 from collections import deque
 
+import sys
 import erdos
 
 import socket
@@ -55,6 +56,7 @@ class ObjectTrackerOperator(erdos.Operator):
         self._obstacles_msgs = deque()
         self._frame_msgs = deque()
         self._detection_update_count = -1
+        self._server=None
 
     @staticmethod
     def connect(obstacles_stream, camera_stream, time_to_decision_stream):
@@ -108,18 +110,21 @@ class ObjectTrackerOperator(erdos.Operator):
         if self._server == None:
             self.connect_to_server()
         
+        pickled_frame = pickle.dumps(frame, protocol=pickle.HIGHEST_PROTOCOL)
         tracker_input = pylot.service.service.TrackerInput(
-            frame_msg=frame, 
+            frame_msg=pickled_frame, 
             obstacle_msg=obstacles, 
             reinit=reinit,
             type=self._flags.tracker_type
         )
         
-        print("Sent tracker input ", tracker_input)
-        input_string = pickle.dumps(tracker_input)
+        print("Sent tracker input ", sys.getsizeof(tracker_input))
+        input_string = pickle.dumps(tracker_input, protocol=pickle.HIGHEST_PROTOCOL)
+        print("Length of tracker input ", len(input_string))
 
+        #self._server.send(struct.pack('>I', len(input_string)))
         self._server.send(input_string)
-        output_string = self._server.recv(512000)
+        output_string = self._server.recv(4096)
 
         tracker_output = pickle.loads(output_string)
         print("Received obstacle message ", tracker_output)
@@ -147,7 +152,7 @@ class ObjectTrackerOperator(erdos.Operator):
                 detector_runtime = obstacles_msg.runtime
                 reinit = True
         
-        if self._flags.use_remote_tracker_server:
+        if self._flags.use_remote_tracking_server:
             tracker_output = self.fetch_from_server(camera_frame, obstacles_msg, reinit)
             tracker_msg = pylot.service.convert.to_pylot_obstacle_message(tracker_output, timestamp)
             tracked_obstacles = tracker_msg.obstacles

@@ -124,7 +124,7 @@ flags.DEFINE_list('tracking_metrics', [
 
 flags.DEFINE_bool('use_remote_tracking_server', True, 'True to fetch tracking information from remote server')
 
-flags.DEFINE_string('remote_tracking_server_local', '127.0.0.1', 'Remote server to fetch tracking information')
-flags.DEFINE_integer('remote_tracking_port_local', 5002, 'Remote server to fetch tracking information')
-flags.DEFINE_string('remote_tracking_server_cloud', '127.0.0.1', 'Remote server to fetch tracking information')
-flags.DEFINE_integer('remote_tracking_port_cloud', 5002, 'Remote server to fetch tracking information')
+flags.DEFINE_string('remote_tracking_server_local', '0.0.0.0', 'Remote server to fetch tracking information')
+flags.DEFINE_integer('remote_tracking_port_local', 5020, 'Remote server to fetch tracking information')
+flags.DEFINE_string('remote_tracking_server_cloud', '0.0.0.0', 'Remote server to fetch tracking information')
+flags.DEFINE_integer('remote_tracking_port_cloud', 5020, 'Remote server to fetch tracking information')

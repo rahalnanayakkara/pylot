@@ -1,4 +1,4 @@
-from sort_tracker import Sort
+from sort.sort import Sort
 from nanonets_object_tracking.deepsort import deepsort_rbc
 
 import time
@@ -10,12 +10,7 @@ from messages import ObstaclesMessage
 
 import params
 
-def get_obstacle_tracker_message(frame, obstacles, reinit, type):
-    if type == "sort":
-        tracker = MultiObjectSORTTracker()
-    elif type == "deep_sort":
-        tracker = MultiObjectDeepSORTTracker()
-        
+def get_obstacle_tracker_message(frame, obstacles, reinit, tracker):  
     start = time.time()
     if reinit:
         detected_obstacles = []
@@ -90,7 +85,7 @@ class MultiObjectSORTTracker(MultiObjectTracker):
                 bbox = BoundingBox2D(xmin, xmax, ymin, ymax)
                 obstacles.append(Obstacle(bbox, 0, track.label, track.id))
             else:
-                self._logger.error(
+                print(
                     "Tracker found invalid bounding box {} {} {} {}".format(
                         xmin, xmax, ymin, ymax))
         return True, obstacles
@@ -112,13 +107,14 @@ class MultiObjectSORTTracker(MultiObjectTracker):
 
 
 class MultiObjectDeepSORTTracker(MultiObjectTracker):
-    def __init__(self, flags, logger):
-        self._logger = logger
+    def __init__(self):
+        # self._logger = logger
         # Initialize the deepsort object, which has a tracker object within it
-        self._deepsort = deepsort_rbc(
-            wt_path=params.deep_sort_tracker_weights_path,
-            max_age=params.obstacle_track_max_age,
-            min_iou=params.min_matching_iou)
+        #self._deepsort = deepsort_rbc(
+        #    wt_path=params.deep_sort_tracker_weights_path,
+        #    max_age=params.obstacle_track_max_age,
+        #    min_iou=params.min_matching_iou)
+        self.hi="helo"
 
     def reinitialize(self, frame, obstacles):
         """ Reinitializes a multiple obstacle tracker.
@@ -169,7 +165,7 @@ class MultiObjectDeepSORTTracker(MultiObjectTracker):
                     tracked_obstacles.append(
                         Obstacle(bbox, 0, track.label, track.track_id))
                 else:
-                    self._logger.error(
+                    print(
                         "Tracker found invalid bounding box {} {} {} {}".
                         format(xmin, xmax, ymin, ymax))
         return True, tracked_obstacles

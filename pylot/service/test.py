@@ -9,6 +9,7 @@ from service import ControllerInput
 from controller import get_control_message
 from tracker import get_obstacle_tracker_message
 
+import tracker
 import socket
 import pickle
 
@@ -62,14 +63,17 @@ def test_tracker():
         create_obstacle(5, 7, 1, 18, 21, 12, 15),
         create_obstacle(8, 7, 1, 15, 20, 15, 20)
     ]
-    
-    print(get_obstacle_tracker_message(frame=None, obstacles=obstacles, type="sort"))
-    print(get_obstacle_tracker_message(frame=None, obstacles=obstacles, type="deep_sort"))
+
+    sort_tracker = tracker.MultiObjectSORTTracker()
+    #deepsort_tracker = tracker.MultiObjectDeepSORTTracker()    
+
+    print(get_obstacle_tracker_message(frame=None, obstacles=obstacles, reinit=True, tracker=sort_tracker))
+    #print(get_obstacle_tracker_message(frame=None, obstacles=obstacles, reinit=True, tracker=deepsort_tracker))
     return ""
 
 def test_remote_controller():
     host = "0.0.0.0"
-    port = 5001  # initiate port no above 1024
+    port = 5010  # initiate port no above 1024
         
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, port))
@@ -107,5 +111,5 @@ def test_remote_controller():
 
 if __name__=='__main__':
     test_controller()
-    test_remote_controller()
+    # test_remote_controller()
     test_tracker()

@@ -3,12 +3,14 @@ import socket
 import pickle
 import threading
 
+import tracker
+
 from controller import get_control_message
 from tracker import get_obstacle_tracker_message
 
 def controller_server():
     host = "0.0.0.0"
-    port = 5001
+    port = 5010
 
     server_socket = socket.socket() 
     server_socket.bind((host, port))
@@ -40,7 +42,7 @@ def controller_server():
 
 def tracker_server():
     host = "0.0.0.0"
-    port = 5002
+    port = 5020
 
     server_socket = socket.socket() 
     server_socket.bind((host, port))
@@ -49,21 +51,43 @@ def tracker_server():
     server_socket.listen(10)
     conn, address = server_socket.accept()  
 
+    sort_tracker = tracker.MultiObjectSORTTracker()
+    #deepsort_tracker = tracker.MultiObjectDeepSORTTracker()
+
     while True:
         # receive data stream. it won't accept data packet greater than 1024 bytes
-        input_message = conn.recv(512000)
+        input_message = b""
+        while len(input_message) < 1772060:
+            packet = conn.recv(4096)
+            if not packet: break
+            input_message += packet
+        
+        print("input_message", len(input_message))
+
         if not input_message:
             # if data is not received break
             break
         
         input = pickle.loads(input_message)
-        print("Received input message: ", input)
-        tracker_message = get_obstacle_tracker_message(
-            frame=input.frame,
-            obstacles=input.obstacles,
-            reinit=input.reinit,
-            type=input.type
-        )
+        if not input:
+            print("NO input!!!!!!!!!!!!")
+        else:
+            print("Received input message: ")
+        if input.type=="sort":
+            print("SORT")
+            tracker_message = get_obstacle_tracker_message(
+                frame=pickle.loads(input.frame),
+                obstacles=input.obstacles,
+                reinit=input.reinit,
+                tracker=sort_tracker
+            )
+        else:
+            tracker_message = get_obstacle_tracker_message(
+                frame=input.frame,
+                obstacles=input.obstacles,
+                reinit=input.reinit,
+                tracker=sort_tracker
+            )
 
         print("Generated tracker message: ", tracker_message)
         conn.send(pickle.dumps(tracker_message))  # send data to the client
@@ -71,6 +95,8 @@ def tracker_server():
 
 
 if __name__=='__main__':
-    thread_one = threading.Thread(target=controller_server)
-    thread_two = threading.Thread(target=tracker_server)
-    thread_two.start()
+    #thread_one = threading.Thread(target=controller_server)
+    #thread_two = threading.Thread(target=tracker_server)
+    #thread_one.start()
+    #thread_two.start()
+    tracker_server()
