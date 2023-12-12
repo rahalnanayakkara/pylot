@@ -71,7 +71,7 @@ class PIDControlOperator(erdos.Operator):
             port = self._flags.remote_control_port_local
         else:
             print("Remote PID Server not enabled!")
-            return
+            return None
         
         self._server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._server.connect((host, port))

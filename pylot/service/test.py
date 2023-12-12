@@ -106,5 +106,6 @@ def test_remote_controller():
 
 
 if __name__=='__main__':
+    test_controller()
     test_remote_controller()
     test_tracker()

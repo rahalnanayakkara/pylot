@@ -1,6 +1,7 @@
 from sort_tracker import Sort
 from nanonets_object_tracking.deepsort import deepsort_rbc
 
+import time
 import numpy as np
 
 from objects import Obstacle
@@ -9,20 +10,25 @@ from messages import ObstaclesMessage
 
 import params
 
-def get_obstacle_tracker_message(frame, obstacles, type):
+def get_obstacle_tracker_message(frame, obstacles, reinit, type):
     if type == "sort":
         tracker = MultiObjectSORTTracker()
     elif type == "deep_sort":
         tracker = MultiObjectDeepSORTTracker()
-    
-    detected_obstacles = []
-    tracked_obstacles = []
-    for obstacle in obstacles:
-        if obstacle.is_vehicle() or obstacle.is_person():
-            detected_obstacles.append(obstacle)
-    tracker.reinitialize(frame, detected_obstacles)
+        
+    start = time.time()
+    if reinit:
+        detected_obstacles = []
+        tracked_obstacles = []
+        for obstacle in obstacles:
+            if obstacle.is_vehicle() or obstacle.is_person():
+                detected_obstacles.append(obstacle)
+        tracker.reinitialize(frame, detected_obstacles)
+
     tracked_obstacles = tracker.track(frame)
-    return ObstaclesMessage(tracked_obstacles)
+    runtime = 1000 * (time.time() - start)
+    return ObstaclesMessage(tracked_obstacles, runtime)
+
 
 class MultiObjectTracker(object):
     def __init__(self):

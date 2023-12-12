@@ -17,14 +17,14 @@ def to_pylot_transform(transform: utils.Transform):
     return pylot.utils.Transform(
         location=to_pylot_location(transform.location),
         rotation=to_pylot_rotation(transform.rotation),
-        matrix=to_pylot_rotation(transform.matrix)
+        matrix=transform.matrix
     )
 
 def from_pylot_transform(transform: pylot.utils.Transform):
     return utils.Transform(
         location=from_pylot_location(transform.location),
         rotation=from_pylot_rotation(transform.rotation),
-        matrix=from_pylot_rotation(transform.matrix)
+        matrix=transform.matrix
     )
 
 def to_pylot_location(location: utils.Location):

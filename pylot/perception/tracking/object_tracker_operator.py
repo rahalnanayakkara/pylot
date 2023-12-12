@@ -3,8 +3,13 @@ from collections import deque
 
 import erdos
 
-from pylot.perception.messages import ObstaclesMessage
+import socket
+import pickle
 
+import pylot.service.service
+import pylot.service.convert
+
+from pylot.perception.messages import ObstaclesMessage
 
 class ObjectTrackerOperator(erdos.Operator):
     def __init__(self, obstacles_stream, camera_stream,
@@ -86,6 +91,40 @@ class ObjectTrackerOperator(erdos.Operator):
         result = self._tracker.track(camera_frame)
         return (time.time() - start) * 1000, result
 
+    def connect_to_server(self):
+        if self._flags.use_remote_tracking_server:
+            host = self._flags.remote_tracking_server_local
+            port = self._flags.remote_tracking_port_local
+        else:
+            print("Remote tracking Server not enabled!")
+            return None
+        
+        self._server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self._server.connect((host, port))
+
+        return self._server
+
+    def fetch_from_server(self, frame, obstacles, reinit):
+        if self._server == None:
+            self.connect_to_server()
+        
+        tracker_input = pylot.service.service.TrackerInput(
+            frame_msg=frame, 
+            obstacle_msg=obstacles, 
+            reinit=reinit,
+            type=self._flags.tracker_type
+        )
+        
+        print("Sent tracker input ", tracker_input)
+        input_string = pickle.dumps(tracker_input)
+
+        self._server.send(input_string)
+        output_string = self._server.recv(512000)
+
+        tracker_output = pickle.loads(output_string)
+        print("Received obstacle message ", tracker_output)
+        return tracker_output
+
     @erdos.profile_method()
     def on_watermark(self, timestamp, obstacle_tracking_stream):
         self._logger.debug('@{}: received watermark'.format(timestamp))
@@ -99,24 +138,29 @@ class ObjectTrackerOperator(erdos.Operator):
         # Check if the most recent obstacle message has this timestamp.
         # If it doesn't, then the detector might have skipped sending
         # an obstacle message.
-        if (len(self._obstacles_msgs) > 0
-                and self._obstacles_msgs[0].timestamp == timestamp):
+        if (len(self._obstacles_msgs) > 0 and self._obstacles_msgs[0].timestamp == timestamp):
             obstacles_msg = self._obstacles_msgs.popleft()
             self._detection_update_count += 1
-            if (self._detection_update_count %
-                    self._flags.track_every_nth_detection == 0):
+            if (self._detection_update_count % self._flags.track_every_nth_detection == 0):
                 # Reinitialize the tracker with new detections.
-                self._logger.debug(
-                    'Restarting trackers at frame {}'.format(timestamp))
+                self._logger.debug('Restarting trackers at frame {}'.format(timestamp))
+                detector_runtime = obstacles_msg.runtime
+                reinit = True
+        
+        if self._flags.use_remote_tracker_server:
+            tracker_output = self.fetch_from_server(camera_frame, obstacles_msg, reinit)
+            tracker_msg = pylot.service.convert.to_pylot_obstacle_message(tracker_output, timestamp)
+            tracked_obstacles = tracker_msg.obstacles
+            tracker_runtime = tracker_msg.runtime
+        else:
+            if reinit:
                 detected_obstacles = []
                 for obstacle in obstacles_msg.obstacles:
                     if obstacle.is_vehicle() or obstacle.is_person():
                         detected_obstacles.append(obstacle)
-                reinit_runtime, _ = self._reinit_tracker(
-                    camera_frame, detected_obstacles)
-                detector_runtime = obstacles_msg.runtime
-        tracker_runtime, (ok, tracked_obstacles) = \
-            self._run_tracker(camera_frame)
+                reinit_runtime, _ = self._reinit_tracker(camera_frame, detected_obstacles)
+            tracker_runtime, (ok, tracked_obstacles) = self._run_tracker(camera_frame)
+        
         assert ok, 'Tracker failed at timestamp {}'.format(timestamp)
         tracker_runtime = tracker_runtime + reinit_runtime
         tracker_delay = self.__compute_tracker_delay(timestamp.coordinates[0],
