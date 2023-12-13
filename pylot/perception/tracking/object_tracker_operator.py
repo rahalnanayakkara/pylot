@@ -94,9 +94,12 @@ class ObjectTrackerOperator(erdos.Operator):
         return (time.time() - start) * 1000, result
 
     def connect_to_server(self):
-        if self._flags.use_remote_tracking_server:
+        if self._flags.use_cloud_tracking_server:
             host = self._flags.remote_tracking_server_cloud
             port = self._flags.remote_tracking_port_cloud
+        elif self._flags.use_local_tracking_server:
+            host = self._flags.remote_tracking_server_local
+            port = self._flags.remote_tracking_port_local
         else:
             print("Remote tracking Server not enabled!")
             return None
@@ -153,10 +156,10 @@ class ObjectTrackerOperator(erdos.Operator):
                 detector_runtime = obstacles_msg.runtime
                 reinit = True
         
-        if self._flags.use_remote_tracking_server:
+        if self._flags.use_local_tracking_server or self._flags.use_cloud_tracking_server:
             start_time = time.time()
             tracker_output = self.fetch_from_server(camera_frame, tracked_obstacles, reinit)
-            total_tracker_time = time.time() - start_time
+            total_tracker_time = 1000*(time.time() - start_time)
             print("Total Tracker time: ", total_tracker_time)
             tracker_msg = convert.to_pylot_obstacle_message(om=tracker_output, ts=timestamp)
             tracked_obstacles = tracker_msg.obstacles

@@ -120,7 +120,7 @@ class PIDControlOperator(erdos.Operator):
         if self._flags.use_remote_pid_server:
             control_start_time = time.time()
             control_output = self.fetch_from_server(pose_msg=pose_msg, waypoints=waypoints)
-            total_cotnrol_time = time.time() - control_start_time
+            total_cotnrol_time = 1000*(time.time() - control_start_time)
             print("Total PID Control Time: ", total_cotnrol_time)
             control_message = convert.to_pylot_control_message(control_output, timestamp)
             control_stream.send(control_message)

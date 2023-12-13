@@ -51,9 +51,9 @@ flags.DEFINE_float('brake_max', 10.0, 'Maximum brake [0, 1]')
 flags.DEFINE_float('coast_factor', 1.75, 'Factor to control coasting')
 
 flags.DEFINE_bool('use_remote_pid_server', True, 'True to fetch PID control instruction from remote server')
-flags.DEFINE_bool('use_remote_mpc_server', True, 'True to fetch MPC control instruction from remote server')
+flags.DEFINE_bool('use_remote_mpc_server', False, 'True to fetch MPC control instruction from remote server')
 
-flags.DEFINE_string('remote_control_server_local', '172.17.0.1', 'Remote server to fetch control instructions')
+flags.DEFINE_string('remote_control_server_local', '169.254.106.239', 'Remote server to fetch control instructions')
 flags.DEFINE_integer('remote_control_port_local', 5010, 'Remote server to fetch control instructions')
 flags.DEFINE_string('remote_control_server_cloud', '54.183.253.75', 'Remote server to fetch control instructions')
 flags.DEFINE_integer('remote_control_port_cloud', 5010, 'Remote server to fetch control instructions')
