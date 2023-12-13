@@ -20,7 +20,7 @@ def get_obstacle_tracker_message(frame, obstacles, reinit, tracker):
                 detected_obstacles.append(obstacle)
         tracker.reinitialize(frame, detected_obstacles)
 
-    tracked_obstacles = tracker.track(frame)
+    _, tracked_obstacles = tracker.track(frame)
     runtime = 1000 * (time.time() - start)
     return ObstaclesMessage(tracked_obstacles, runtime)
 

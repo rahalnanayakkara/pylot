@@ -47,6 +47,32 @@ Needs access to following independent components -
     - open3d
 '''
 
+import struct
+
+def send_msg(sock, msg):
+    # Prefix each message with a 4-byte length (network byte order)
+    msg = struct.pack('>I', len(msg)) + msg
+    sock.sendall(msg)
+
+def recv_msg(sock):
+    # Read message length and unpack it into an integer
+    raw_msglen = recvall(sock, 4)
+    if not raw_msglen:
+        return None
+    msglen = struct.unpack('>I', raw_msglen)[0]
+    # Read the message data
+    return recvall(sock, msglen)
+
+def recvall(sock, n):
+    # Helper function to recv n bytes or return None if EOF is hit
+    data = bytearray()
+    while len(data) < n:
+        packet = sock.recv(n - len(data))
+        if not packet:
+            return None
+        data.extend(packet)
+    return data
+
 # send pose + waypoints data, receive messages.ControlMessage
 class ControllerInput():
     def __init__(self, pose_msg, waypoints_msg, type):
@@ -56,9 +82,9 @@ class ControllerInput():
 
 # send frame + obstacle message, receive messages.ObstacleMessage
 class TrackerInput():
-    def __init__(self, frame_msg, obstacle_msg, reinit, type):
-        self.frame_msg = frame_msg
-        self.obstacles = obstacle_msg.obstacles
+    def __init__(self, frame, obstacles, reinit, type):
+        self.frame = frame
+        self.obstacles = obstacles
         self.reinit = True
         self.type = type
 
