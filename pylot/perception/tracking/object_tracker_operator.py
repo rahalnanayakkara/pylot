@@ -1,14 +1,14 @@
 import time
 from collections import deque
 
-import sys
+import sys, time
 import erdos
 
 import socket
 import pickle
 
-import pylot.service.service
-import pylot.service.convert
+import service
+import convert
 
 from pylot.perception.messages import ObstaclesMessage
 
@@ -95,8 +95,8 @@ class ObjectTrackerOperator(erdos.Operator):
 
     def connect_to_server(self):
         if self._flags.use_remote_tracking_server:
-            host = self._flags.remote_tracking_server_local
-            port = self._flags.remote_tracking_port_local
+            host = self._flags.remote_tracking_server_cloud
+            port = self._flags.remote_tracking_port_cloud
         else:
             print("Remote tracking Server not enabled!")
             return None
@@ -110,10 +110,10 @@ class ObjectTrackerOperator(erdos.Operator):
         if self._server == None:
             self.connect_to_server()
         
-        pickled_frame = pickle.dumps(frame, protocol=pickle.HIGHEST_PROTOCOL)
-        tracker_input = pylot.service.service.TrackerInput(
-            frame_msg=pickled_frame, 
-            obstacle_msg=obstacles, 
+        #pickled_frame = pickle.dumps(frame, protocol=pickle.HIGHEST_PROTOCOL)
+        tracker_input = service.TrackerInput(
+            frame=convert.from_pylot_frame(frame), 
+            obstacles=[convert.from_pylot_obstacle(o) for o in obstacles], 
             reinit=reinit,
             type=self._flags.tracker_type
         )
@@ -123,7 +123,7 @@ class ObjectTrackerOperator(erdos.Operator):
         print("Length of tracker input ", len(input_string))
 
         #self._server.send(struct.pack('>I', len(input_string)))
-        self._server.send(input_string)
+        service.send_msg(self._server, input_string)
         output_string = self._server.recv(4096)
 
         tracker_output = pickle.loads(output_string)
@@ -145,6 +145,7 @@ class ObjectTrackerOperator(erdos.Operator):
         # an obstacle message.
         if (len(self._obstacles_msgs) > 0 and self._obstacles_msgs[0].timestamp == timestamp):
             obstacles_msg = self._obstacles_msgs.popleft()
+            tracked_obstacles = obstacles_msg.obstacles
             self._detection_update_count += 1
             if (self._detection_update_count % self._flags.track_every_nth_detection == 0):
                 # Reinitialize the tracker with new detections.
@@ -153,10 +154,14 @@ class ObjectTrackerOperator(erdos.Operator):
                 reinit = True
         
         if self._flags.use_remote_tracking_server:
-            tracker_output = self.fetch_from_server(camera_frame, obstacles_msg, reinit)
-            tracker_msg = pylot.service.convert.to_pylot_obstacle_message(tracker_output, timestamp)
+            start_time = time.time()
+            tracker_output = self.fetch_from_server(camera_frame, tracked_obstacles, reinit)
+            total_tracker_time = time.time() - start_time
+            print("Total Tracker time: ", total_tracker_time)
+            tracker_msg = convert.to_pylot_obstacle_message(om=tracker_output, ts=timestamp)
             tracked_obstacles = tracker_msg.obstacles
             tracker_runtime = tracker_msg.runtime
+            ok = True
         else:
             if reinit:
                 detected_obstacles = []

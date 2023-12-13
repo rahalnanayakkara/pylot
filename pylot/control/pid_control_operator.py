@@ -3,15 +3,15 @@ from collections import deque
 import erdos
 from erdos import Message, ReadStream, Timestamp, WriteStream
 
-import socket, pickle
+import socket, pickle, time
 
 import pylot.control.utils
 import pylot.planning.utils
 from pylot.control.messages import ControlMessage
 from pylot.control.pid import PIDLongitudinalController
 
-import pylot.service.service
-import pylot.service.convert
+import service
+import convert
 
 class PIDControlOperator(erdos.Operator):
     """Operator that uses PID to follow a list of waypoints.
@@ -82,17 +82,17 @@ class PIDControlOperator(erdos.Operator):
         if self._server == None:
             self.connect_to_server()
         
-        controller_input = pylot.service.service.ControllerInput(
-            pose_msg=pylot.service.convert.from_pylot_pose(pose_msg.data), 
-            waypoints_msg=pylot.service.convert.from_pylot_waypoint(waypoints), 
+        controller_input = service.ControllerInput(
+            pose_msg=convert.from_pylot_pose(pose_msg.data), 
+            waypoints_msg=convert.from_pylot_waypoint(waypoints), 
             type="pid"
             )
         
         print("Sent controller input ", controller_input)
         input_string = pickle.dumps(controller_input)
 
-        self._server.send(input_string)
-        output_string = self._server.recv(102400)
+        service.send_msg(self._server, input_string)
+        output_string = self._server.recv(4096)
 
         control_output = pickle.loads(output_string)
         print("Received control message ", control_output)
@@ -118,8 +118,11 @@ class PIDControlOperator(erdos.Operator):
         waypoints = self._waypoint_msgs.popleft().waypoints
 
         if self._flags.use_remote_pid_server:
+            control_start_time = time.time()
             control_output = self.fetch_from_server(pose_msg=pose_msg, waypoints=waypoints)
-            control_message = pylot.service.convert.to_pylot_control_message(control_output, timestamp)
+            total_cotnrol_time = time.time() - control_start_time
+            print("Total PID Control Time: ", total_cotnrol_time)
+            control_message = convert.to_pylot_control_message(control_output, timestamp)
             control_stream.send(control_message)
         else:
             try:

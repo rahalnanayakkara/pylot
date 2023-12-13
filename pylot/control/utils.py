@@ -62,4 +62,4 @@ def compute_throttle_and_brake(pid, current_speed: float, target_speed: float,
     # Keep the brake pressed when stopped or when sliding back on a hill.
     if (current_speed < 1 and target_speed == 0) or current_speed < -0.3:
         brake = flags.brake_max
-    return throttle*0.1, brake*0.1
+    return throttle, brake

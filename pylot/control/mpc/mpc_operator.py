@@ -2,7 +2,7 @@ from collections import deque
 
 import erdos
 import socket
-import pickle
+import pickle, time
 
 import numpy as np
 
@@ -12,8 +12,8 @@ from pylot.control.mpc.mpc import ModelPredictiveController
 from pylot.control.mpc.utils import CubicSpline2D, global_config, zero_to_2_pi
 from pylot.control.pid import PIDLongitudinalController
 
-import pylot.service.service
-import pylot.service.convert
+import service
+import convert
 
 class MPCOperator(erdos.Operator):
     def __init__(self, pose_stream, waypoints_stream, control_stream, flags):
@@ -63,8 +63,8 @@ class MPCOperator(erdos.Operator):
     
     def connect_to_server(self):
         if self._flags.use_remote_mpc_server:
-            host = self._flags.remote_control_server_local
-            port = self._flags.remote_control_port_local
+            host = self._flags.remote_control_server_cloud
+            port = self._flags.remote_control_port_cloud
         else:
             print("Remote MPC Server not enabled!")
             return None
@@ -78,18 +78,24 @@ class MPCOperator(erdos.Operator):
         if self._server == None:
             self.connect_to_server()
         
-        controller_input = pylot.service.service.ControllerInput(
-            pose_msg=pylot.service.convert.from_pylot_pose(pose_msg.data), 
-            waypoints_msg=pylot.service.convert.from_pylot_waypoint(waypoints), 
+        controller_input = service.ControllerInput(
+            pose_msg=convert.from_pylot_pose(pose_msg.data), 
+            waypoints_msg=convert.from_pylot_waypoint(waypoints), 
             type="pid"
             )
         
         print("Sent controller input ", controller_input)
         input_string = pickle.dumps(controller_input)
+        print("Length of input: ", len(input_string))
+        print(input_string[:100])
+        print(input_string[-100:])
 
-        self._server.send(input_string)
-        output_string = self._server.recv(102400)
+        #input_string = struct.pack('>I', len(input_string)) + input_string
+        #self._server.sendall(input_string)
+        service.send_msg(self._server, input_string)
 
+        output_string = self._server.recv(4096)
+        
         control_output = pickle.loads(output_string)
         print("Received control message ", control_output)
         return control_output
@@ -113,8 +119,11 @@ class MPCOperator(erdos.Operator):
 
         # Compute and send control message
         if self._flags.use_remote_mpc_server:
+            start_time = time.time()
             control_output = self.fetch_from_server(pose_msg=pose_msg, waypoints=waypoints)
-            control_msg = pylot.service.convert.to_pylot_control_message(control_output, timestamp)
+            total_time = 1000*(time.time() - start_time)
+            print("Total MPC time: ", total_time)
+            control_msg = convert.to_pylot_control_message(control_output, timestamp)
         else:
             control_msg = self.get_control_message(waypoints, target_speeds,
                                                 vehicle_transform,

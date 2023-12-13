@@ -1,6 +1,6 @@
-import pylot.service.objects as objects
-import pylot.service.utils as utils
-import pylot.service.messages as messages
+import objects
+import utils
+import messages
 
 import pylot.utils
 import pylot.perception
@@ -14,6 +14,7 @@ import pylot.perception.messages
 from collections import deque
 
 def to_pylot_transform(transform: utils.Transform):
+    if transform==None: return None
     return pylot.utils.Transform(
         location=to_pylot_location(transform.location),
         rotation=to_pylot_rotation(transform.rotation),
@@ -21,6 +22,7 @@ def to_pylot_transform(transform: utils.Transform):
     )
 
 def from_pylot_transform(transform: pylot.utils.Transform):
+    if transform==None: return None
     return utils.Transform(
         location=from_pylot_location(transform.location),
         rotation=from_pylot_rotation(transform.rotation),
@@ -28,9 +30,11 @@ def from_pylot_transform(transform: pylot.utils.Transform):
     )
 
 def to_pylot_location(location: utils.Location):
+    if location==None: return None
     return pylot.utils.Location(location.x, location.y, location.z)
 
 def from_pylot_location(location: pylot.utils.Location):
+    if location==None: return None
     return utils.Location(location.x, location.y, location.z)
 
 def to_pylot_rotation(rotation: utils.Rotation):
@@ -114,9 +118,49 @@ def to_pylot_control_message(cm: messages.ControlMessage, ts):
         timestamp=ts
     )
 
-def to_pylot_obstacle_message(om: messages.ObstaclesMessage, ts, rt):
+def to_pylot_obstacle_message(om: messages.ObstaclesMessage, ts):
     return pylot.perception.messages.ObstaclesMessage(
         timestamp=ts,
         obstacles=[to_pylot_obstacle(o) for o in om.obstacles],
-        runtime=rt
+        runtime=om.runtime
+    )
+
+
+import frames
+import pylot.perception.camera_frame
+import pylot.drivers.sensor_setup
+
+def to_pylot_camera_setup(cs: frames.CameraSetup):
+    return pylot.drivers.sensor_setup.CameraSetup(
+        name=cs.name,
+        camera_type=cs.camera_type,
+        width=cs.width,
+        height=cs.height,
+        transform=to_pylot_transform(cs.transform),
+        fov=cs.fov
+    )
+
+def from_pylot_camera_setup(cs: pylot.drivers.sensor_setup.CameraSetup):
+    return frames.CameraSetup(
+        name=cs.name,
+        camera_type=cs.camera_type,
+        width=cs.width,
+        height=cs.height,
+        transform=from_pylot_transform(cs.transform),
+        fov=cs.fov
+    )
+
+def to_pylot_frame(cf: frames.CameraFrame):
+    return pylot.perception.camera_frame.CameraFrame(
+        frame=cf.frame,
+        encoding=cf.encoding,
+        camera_setup=to_pylot_camera_setup(cf.camera_setup)
+    )
+
+
+def from_pylot_frame(cf: pylot.perception.camera_frame.CameraFrame):
+    return frames.CameraFrame(
+        frame=cf.frame,
+        encoding=cf.encoding,
+        camera_setup=from_pylot_camera_setup(cf.camera_setup)
     )

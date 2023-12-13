@@ -5,6 +5,7 @@ import erdos
 from pylot.perception.detection.utils import get_obstacle_locations
 from pylot.perception.messages import ObstaclesMessage
 
+from pylot.utils import time_epoch_ms
 
 class ObstacleLocationFinderOperator(erdos.Operator):
     """Computes the world location of the obstacle.
@@ -49,6 +50,8 @@ class ObstacleLocationFinderOperator(erdos.Operator):
         self._camera_setup = camera_setup
         self._logger = erdos.utils.setup_logging(self.config.name,
                                                  self.config.log_file_name)
+        self._csv_logger = erdos.utils.setup_csv_logging(
+            self.config.name + '-csv', self.config.csv_log_file_name)
         # Queues in which received messages are stored.
         self._obstacles_msgs = deque()
         self._depth_msgs = deque()
@@ -81,6 +84,7 @@ class ObstacleLocationFinderOperator(erdos.Operator):
         obstacles_with_location = get_obstacle_locations(
             obstacles_msg.obstacles, depth_msg, vehicle_transform,
             self._camera_setup, self._logger)
+        self.log_metrics(timestamp, vehicle_transform, obstacles_with_location)
         self._logger.debug('@{}: {}'.format(timestamp,
                                             obstacles_with_location))
         obstacles_output_stream.send(
@@ -97,3 +101,9 @@ class ObstacleLocationFinderOperator(erdos.Operator):
     def on_pose_update(self, msg: erdos.Message):
         self._logger.debug('@{}: pose update'.format(msg.timestamp))
         self._pose_msgs.append(msg)
+
+    def log_metrics(self, timestamp, vehicle_transform, obstacles):
+        for ob in obstacles:
+            ob_dist = vehicle_transform.location.distance(ob.transform.location)
+            self._csv_logger.info("{},{},distance,{},{:.4f}".format(
+                time_epoch_ms(), timestamp.coordinates[0], str(ob.id)+":"+str(ob.label),ob_dist))
