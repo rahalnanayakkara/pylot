@@ -61,6 +61,7 @@ class PlanningOperator(erdos.Operator):
         self._logger = erdos.utils.setup_logging(self.config.name,
                                                  self.config.log_file_name)
         self._flags = flags
+        self._file = open("/home/erdos/workspace/pylot/temp_log.txt", "a")
         # We do not know yet the vehicle's location.
         self._ego_transform = None
         self._map = None
@@ -125,23 +126,23 @@ class PlanningOperator(erdos.Operator):
             msg (:py:class:`~erdos.message.Message`): Message that contains
                 info about the ego vehicle.
         """
-        self._logger.debug('@{}: received pose message'.format(msg.timestamp))
+        self._logger.debug('\n@{}: planner received pose message'.format(msg.timestamp))
         self._pose_msgs.append(msg)
         self._ego_transform = msg.data.transform
 
     @erdos.profile_method()
     def on_prediction_update(self, msg: erdos.Message):
-        self._logger.debug('@{}: received prediction message'.format(
+        self._logger.debug('\n@{}: planner received prediction message'.format(
             msg.timestamp))
         self._prediction_msgs.append(msg)
 
     def on_static_obstacles_update(self, msg: erdos.Message):
-        self._logger.debug('@{}: received static obstacles update'.format(
+        self._logger.debug('\n@{}: planner received static obstacles update'.format(
             msg.timestamp))
         self._static_obstacles_msgs.append(msg)
 
     def on_lanes_update(self, msg: erdos.Message):
-        self._logger.debug('@{}: received lanes update'.format(msg.timestamp))
+        self._logger.debug('\n@{}: planner received lanes update'.format(msg.timestamp))
         self._lanes_msgs.append(msg)
 
     def on_route(self, msg: erdos.Message):
@@ -156,7 +157,7 @@ class PlanningOperator(erdos.Operator):
                 msg.timestamp, msg.agent_state))
             self._state = msg.agent_state
         if msg.waypoints:
-            self._logger.debug('@{}: route has {} waypoints'.format(
+            self._logger.debug('\n@{}: planner route has {} waypoints'.format(
                 msg.timestamp, len(msg.waypoints.waypoints)))
             # The last waypoint is the goal location.
             self._world.update_waypoints(msg.waypoints.waypoints[-1].location,
@@ -169,14 +170,14 @@ class PlanningOperator(erdos.Operator):
             msg (:py:class:`~erdos.message.Message`): Message that contains
                 the open drive string.
         """
-        self._logger.debug('@{}: received open drive message'.format(
+        self._logger.debug('\n@{}: planner received open drive message'.format(
             msg.timestamp))
         from pylot.simulation.utils import map_from_opendrive
         self._map = map_from_opendrive(msg.data)
 
     @erdos.profile_method()
     def on_time_to_decision(self, msg: erdos.Message):
-        self._logger.debug('@{}: {} received ttd update {}'.format(
+        self._logger.debug('\n @{}: {} planner received ttd update {}'.format(
             msg.timestamp, self.config.name, msg))
         self._ttd_msgs.append(msg)
 
@@ -200,14 +201,14 @@ class PlanningOperator(erdos.Operator):
          speed_factor_stop) = self._world.stop_for_agents(timestamp)
         if self._flags.planning_type == 'waypoint':
             target_speed = speed_factor * self._flags.target_speed
-            self._logger.debug(
-                '@{}: speed factor: {}, target speed: {}'.format(
+            self._file.write(
+                '\n@{}: waypoint planning, speed factor: {}, target speed: {}'.format(
                     timestamp, speed_factor, target_speed))
             output_wps = self._world.follow_waypoints(target_speed)
         else:
             output_wps = self._planner.run(timestamp, ttd)
             speed_factor = min(speed_factor_stop, speed_factor_tl)
-            self._logger.debug('@{}: speed factor: {}'.format(
+            self._file.write('@{}: non-waypoint planning, speed factor: {}'.format(
                 timestamp, speed_factor))
             output_wps.apply_speed_factor(speed_factor)
         waypoints_stream.send(WaypointsMessage(timestamp, output_wps))

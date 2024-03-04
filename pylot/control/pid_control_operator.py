@@ -33,6 +33,7 @@ class PIDControlOperator(erdos.Operator):
     """
     def __init__(self, pose_stream: ReadStream, waypoints_stream: ReadStream,
                  control_stream: WriteStream, flags):
+        self._file = open("/home/erdos/workspace/pylot/temp_log.txt", "a")
         pose_stream.add_callback(self.on_pose_update)
         waypoints_stream.add_callback(self.on_waypoints_update)
         erdos.add_watermark_callback([pose_stream, waypoints_stream],
@@ -124,6 +125,12 @@ class PIDControlOperator(erdos.Operator):
             print("Total PID Control Time: ", total_cotnrol_time)
             control_message = convert.to_pylot_control_message(control_output, timestamp)
             control_stream.send(control_message)
+        elif len(waypoints.waypoints) == 1:
+            self._file.write('\nBraking! Only one waypoints to follow.')
+            throttle, brake = 0.0, 0.5
+            steer = 0.0
+            control_stream.send(
+                ControlMessage(steer, throttle, brake, False, False, timestamp))
         else:
             try:
                 angle_steer = waypoints.get_angle(
@@ -135,8 +142,11 @@ class PIDControlOperator(erdos.Operator):
                     self._logger)
                 steer = pylot.control.utils.radians_to_steer(
                     angle_steer, self._flags.steer_gain)
+                wp_index = waypoints._get_index(ego_transform, self._flags.min_pid_steer_waypoint_distance)
+                self._file.write("\nego transform, waypoints : " + str(ego_transform) +" " + str(len(waypoints.waypoints)) + " " + str(waypoints.waypoints[wp_index]))
+                self._file.write("\ncontrol input and output - speed, throttle, brake, steer "+str(timestamp)+" "+ str(target_speed) + " " + str(throttle)+" "+ str(brake)+" "+ str(steer))
             except ValueError:
-                self._logger.warning('Braking! No more waypoints to follow.')
+                self._file.write('\nBraking! No more waypoints to follow.')
                 throttle, brake = 0.0, 0.5
                 steer = 0.0
             self._logger.debug(

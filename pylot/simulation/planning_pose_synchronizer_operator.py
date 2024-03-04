@@ -2,6 +2,7 @@ import time
 from collections import deque
 
 import erdos
+import threading
 
 from pylot.planning.messages import WaypointsMessage
 from pylot.planning.waypoints import Waypoints
@@ -66,6 +67,7 @@ class PlanningPoseSynchronizerOperator(erdos.Operator):
         # Save the write streams.
         self._waypoints_write_stream = waypoints_write_stream
         self._pipeline_finish_notify_stream = pipeline_finish_notify_stream
+        self._file = open("/home/erdos/workspace/pylot/temp_log.txt", "a")
 
         # Initialize a logger.
         self._flags = flags
@@ -81,6 +83,7 @@ class PlanningPoseSynchronizerOperator(erdos.Operator):
         self._waypoint_num = 0
         self._last_highest_applicable_time = None
         self._last_localization_update = None
+        self._lock = threading.Lock()
 
     @staticmethod
     def connect(waypoints_read_stream, pose_read_stream,
@@ -96,78 +99,72 @@ class PlanningPoseSynchronizerOperator(erdos.Operator):
             pipeline_finish_notify_stream,
         ]
 
-    @erdos.profile_method()
-    def on_waypoints_update(self, msg):
+    def on_waypoints_update(self, msg: erdos.Message):
         """ Invoked upon receipt of a waypoints message from the pipeline.
-
         This method retrieves the pose message for the timestamp, calculates
         the runtime of the pipeline, logs it and saves the waypoints for the
         future.
-
         Args:
             msg (:py:class:`pylot.planning.messages.WaypointsMessage`): The
                 waypoints message received for the given timestamp.
         """
+        self._file.write("\n@{}: pps received waypoints update {} {} {} {}.".format(msg.timestamp, self._waypoint_num, self._first_waypoint, len(self._waypoints), len(self._pose_map)))
         waypoint_recv_time = time.time()
-        self._logger.debug("@{}: received waypoints update.".format(
-            msg.timestamp))
 
         # Retrieve the game time.
         game_time = msg.timestamp.coordinates[0]
 
         # Ensure that a single invocation of the pipeline is happening.
-        assert self._last_localization_update == game_time, \
-            "Concurrent Execution of the pipeline."
-
-        watermark = erdos.WatermarkMessage(msg.timestamp)
-        if self._waypoint_num < 10:
-            self._logger.debug(
-                "@{}: received waypoint num {}. "
-                "Skipping because the simulator might not be in sync.".format(
-                    msg.timestamp, self._waypoint_num))
-            self._first_waypoint = False
-            self._waypoint_num += 1
-            # Send a message on the notify stream to ask the simulator to send
-            # a new sensor stream.
-            self._pipeline_finish_notify_stream.send(watermark)
-            return
+        if self._last_localization_update == game_time:
+            self._file.write("Concurrent Execution of the pipeline " + str(game_time))
 
         # Retrieve the pose message for this timestamp.
         (pose_msg, pose_recv_time) = self._pose_map[game_time]
-
         # Calculate and log the processing time for this waypoints message.
         processing_time = int((waypoint_recv_time - pose_recv_time) * 1000)
+        applicable_time = game_time + processing_time
+
+        watermark = erdos.WatermarkMessage(msg.timestamp)
+        with self._lock:
+            if self._waypoint_num < 10:
+                self._file.write("\n@{}: pps received waypoint num {}. Skipping because the simulator might not be in sync.".format(msg.timestamp, self._waypoint_num))
+                self._first_waypoint = False
+                self._waypoint_num += 1
+                self._waypoints.append((applicable_time, msg))
+                #self._pipeline_finish_notify_stream.send(watermark)
+                return
+        # Send a message on the notify stream to ask the simulator to send
+        # a new sensor stream.
+
         self._csv_logger.info('{},{},{},{:.4f}'.format(time_epoch_ms(),
                                                        game_time,
                                                        'end-to-end-runtime',
                                                        processing_time))
 
         # Apply the waypoints at the timestamp + processing time.
-        applicable_time = game_time + processing_time
         if (self._last_highest_applicable_time is None
                 or self._last_highest_applicable_time < applicable_time):
             self._last_highest_applicable_time = applicable_time
             self._waypoints.append((applicable_time, msg))
-            self._logger.debug(
-                "@{}: waypoints will be applicable at {}".format(
+            self._file.write(
+                "\n@{}: waypoints will be applicable at {}".format(
                     msg.timestamp, applicable_time))
         else:
             # The last waypoint applicable time was higher, we should purge
             # the ones higher than this one and add this entry.
-            self._logger.debug(
-                "@{}: Popping the last applicable time: {}".format(
+            self._file.write(
+                "\n@{}: Popping the last applicable time: {}".format(
                     msg.timestamp, self._waypoints[-1][0]))
-
             assert (
                 self._waypoints.pop()[0] == self._last_highest_applicable_time)
-            while self._waypoints[-1][0] >= applicable_time:
-                self._logger.debug(
-                    "@{}: Popping the last applicable time: {}".format(
+            while len(self._waypoints) > 0 and self._waypoints[-1][0] >= applicable_time:
+                self._file.write(
+                    "\n@{}: Popping the last applicable time: {}".format(
                         msg.timestamp, self._waypoints[-1][0]))
                 self._waypoints.pop()
             self._last_highest_applicable_time = applicable_time
             self._waypoints.append((applicable_time, msg))
-            self._logger.debug("@{}: the waypoints were adjusted "
+            self._file.write("\n@{}: the waypoints were adjusted "
                                "and will be applicable at {}".format(
                                    msg.timestamp, applicable_time))
 
@@ -176,7 +173,7 @@ class PlanningPoseSynchronizerOperator(erdos.Operator):
 
         # Send a message on the notify stream to ask the simulator to send a
         # new sensor stream.
-        self._pipeline_finish_notify_stream.send(watermark)
+        #self._pipeline_finish_notify_stream.send(watermark)
 
     def on_pose_update(self, msg):
         """ Invoked when we receive a pose message from the simulation.
@@ -187,7 +184,7 @@ class PlanningPoseSynchronizerOperator(erdos.Operator):
             msg (:py:class:`erdos.Message`): A message containing the pose
                 of the ego-vehicle.
         """
-        self._logger.debug("@{}: received pose message.".format(msg.timestamp))
+        self._logger.debug("\n@{}: received pose message.".format(msg.timestamp))
 
         # Retrieve the game time.
         game_time = msg.timestamp.coordinates[0]
@@ -209,7 +206,7 @@ class PlanningPoseSynchronizerOperator(erdos.Operator):
             msg (:py:class:`erdos.Message`): A message containing the pose
                 of the ego-vehicle.
         """
-        self._logger.debug("@{}: received localization message.".format(
+        self._logger.debug("\n@{}: received localization message.".format(
             msg.timestamp))
 
         # Retrieve the game time.
@@ -236,7 +233,7 @@ class PlanningPoseSynchronizerOperator(erdos.Operator):
             pose_stream (:py:class:`erdos.WriteStream`): The stream to send
                 the pose out on.
         """
-        self._logger.info("@{}: received pose watermark.".format(timestamp))
+        self._file.write("\n@{}: received pose watermark, having {} waypoints".format(timestamp, len(self._waypoints)))
 
         # Retrieve the game time.
         game_time = timestamp.coordinates[0]
@@ -248,22 +245,26 @@ class PlanningPoseSynchronizerOperator(erdos.Operator):
         waypoint_index, waypoints = -1, None
         for i, (sim_time, _waypoints) in enumerate(self._waypoints):
             if sim_time <= game_time:
-                waypoint_index, waypoints = i, _waypoints
+                waypoint_index, waypoints = i, _waypoints.waypoints
             else:
                 break
-        self._logger.debug("@{} waypoint index is {}".format(
+        self._file.write("\n@{} waypoint index is {}".format(
             timestamp, waypoint_index))
 
         if waypoints is None:
+            self._file.write("\nplanning_pose_synchronizer_operator: sending empty waypoint")
             # If we haven't received a single waypoint, send an empty message.
             self._waypoints_write_stream.send(
                 WaypointsMessage(timestamp, Waypoints(deque([]), deque([]))))
         else:
+            self._file.write("\nplanning_pose_synchronizer_operator: sending waypoint for " + str(timestamp))
             # Send the trimmed waypoints on the write stream.
             waypoints.remove_completed(pose_msg.data.transform.location,
                                        pose_msg.data.transform)
-            self._waypoints_write_stream.send(
-                WaypointsMessage(timestamp, waypoints))
+            if len(waypoints.waypoints) <= 1:
+                self._waypoints_write_stream.send(WaypointsMessage(timestamp, Waypoints(deque([]), deque([]))))
+            else:
+                self._waypoints_write_stream.send(WaypointsMessage(timestamp, waypoints))
 
         # Send the pose and the watermark messages.
         watermark = erdos.WatermarkMessage(timestamp)

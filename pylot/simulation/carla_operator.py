@@ -3,6 +3,7 @@ import heapq
 import random
 import threading
 import time
+#import file
 from functools import total_ordering
 
 from carla import Location, VehicleControl, command
@@ -44,6 +45,7 @@ class CarlaOperator(erdos.Operator):
             ground_stop_signs_stream: WriteStream,
             vehicle_id_stream: WriteStream, open_drive_stream: WriteStream,
             global_trajectory_stream: WriteStream, flags):
+        self._file = open("/home/erdos/workspace/pylot/temp_carla_log.txt", "a")
         if flags.random_seed:
             random.seed(flags.random_seed)
         # Register callback on control stream.
@@ -102,10 +104,10 @@ class CarlaOperator(erdos.Operator):
 
         if self._flags.scenario_runner or self._flags.control == "manual":
             # Wait until the ego vehicle is spawned by the scenario runner.
-            self._logger.info("Waiting for the scenario to be ready ...")
+            self._file.write("\nWaiting for the scenario to be ready ...")
             self._ego_vehicle = pylot.simulation.utils.wait_for_ego_vehicle(
                 self._world)
-            self._logger.info("Found ego vehicle")
+            self._file.write("\nFound ego vehicle")
         else:
             # Spawn ego vehicle, people and vehicles.
             (self._ego_vehicle, self._vehicle_ids,
@@ -167,7 +169,7 @@ class CarlaOperator(erdos.Operator):
         Args:
             msg: A control.messages.ControlMessage message.
         """
-        self._logger.debug('@{}: received control message'.format(
+        self._file.write('\n@{}: received control message'.format(
             msg.timestamp))
         if self._flags.simulator_mode == 'pseudo-asynchronous':
             heapq.heappush(
@@ -202,7 +204,7 @@ class CarlaOperator(erdos.Operator):
                 self._apply_control_msg(control_msg)
 
     def on_pipeline_finish(self, timestamp: Timestamp):
-        self._logger.debug("@{}: Received pipeline finish.".format(timestamp))
+        self._file.write("\n@{}: Received pipeline finish.".format(timestamp))
         game_time = timestamp.coordinates[0]
         if (self._flags.simulator_control_frequency == -1
                 or self._next_control_sensor_reading is None
@@ -233,6 +235,7 @@ class CarlaOperator(erdos.Operator):
         Args:
             msg: Data recieved from the simulation at a tick.
         """
+        self._file.write("\nsend_actor_data")
         # Ensure that the callback executes serially.
         with self._lock:
             game_time = int(msg.elapsed_seconds * 1000)
@@ -258,11 +261,11 @@ class CarlaOperator(erdos.Operator):
                         or game_time == self._next_control_sensor_reading):
                     self._update_next_control_pseudo_asynchronous_ticks(
                         game_time)
-                    self.__send_hero_vehicle_data(self.pose_stream_for_control,
-                                                  timestamp)
+                    self.__send_hero_vehicle_data(self.pose_stream_for_control, timestamp)
                     self.__update_spectactor_pose()
 
     def _update_next_localization_pseudo_async_ticks(self, game_time: int):
+        self._file.write("\n_update_next_localization_pseudo_async_ticks")
         if self._flags.simulator_localization_frequency > -1:
             self._next_localization_sensor_reading = (
                 game_time +
@@ -281,6 +284,7 @@ class CarlaOperator(erdos.Operator):
             (self._next_localization_sensor_reading, TickEvent.SENSOR_READ))
 
     def _update_next_control_pseudo_asynchronous_ticks(self, game_time: int):
+        self._file.write("\n_update_next_control_ps_async_ticks")
         if self._flags.simulator_control_frequency > -1:
             self._next_control_sensor_reading = (
                 game_time +
@@ -295,6 +299,7 @@ class CarlaOperator(erdos.Operator):
                 (self._next_control_sensor_reading, TickEvent.SENSOR_READ))
 
     def run(self):
+        self._file.write("\nrun")
         self.__send_world_data()
         # Tick here once to ensure that the driver operators can get a handle
         # to the ego vehicle.
@@ -312,6 +317,7 @@ class CarlaOperator(erdos.Operator):
         self._tick_simulator()
 
     def _initialize_world(self):
+        self._file.write("\n_initialize_world")
         """ Setups the world town, and activates the desired weather."""
         if self._simulator_version == '0.9.5':
             # TODO (Sukrit) :: ERDOS provides no way to retrieve handles to the
@@ -329,13 +335,16 @@ class CarlaOperator(erdos.Operator):
                                            self._flags.simulator_weather)
 
     def _tick_simulator(self):
+        self._file.write("\n_tick_simulator")
         if (self._flags.simulator_mode == 'asynchronous-fixed-time-step'
                 or self._flags.simulator_mode == 'asynchronous'):
             # No need to tick when running in these modes.
             return
         self._world.tick()
+        # time.sleep(240)
 
     def _tick_simulator_until(self, goal_time: int):
+        self._file.write("\ntick_simulator_until "+str(goal_time))
         while True:
             snapshot = self._world.get_snapshot()
             sim_time = int(snapshot.timestamp.elapsed_seconds * 1000)
@@ -345,17 +354,21 @@ class CarlaOperator(erdos.Operator):
                 return
 
     def _apply_control_msg(self, msg: ControlMessage):
+        self._file.write("\n_apply_control_msg " + str(msg.throttle)+" "+str(msg.brake)+" "+str(self._ego_vehicle.id))
         # Transform the message to a simulator control cmd.
         vec_control = VehicleControl(throttle=msg.throttle,
                                      steer=msg.steer,
                                      brake=msg.brake,
                                      hand_brake=msg.hand_brake,
                                      reverse=msg.reverse)
-        self._client.apply_batch_sync(
+        responses = self._client.apply_batch_sync(
             [command.ApplyVehicleControl(self._ego_vehicle.id, vec_control)])
+        for resp in responses:
+            self._file.write("\n\t" + str(resp.error))
 
     def __send_hero_vehicle_data(self, stream: WriteStream,
                                  timestamp: Timestamp):
+        self._file.write("\n__send_hero_vehicle_data")
         vec_transform = pylot.utils.Transform.from_simulator_transform(
             self._ego_vehicle.get_transform())
         velocity_vector = pylot.utils.Vector3D.from_simulator_vector(
@@ -367,6 +380,7 @@ class CarlaOperator(erdos.Operator):
         stream.send(erdos.WatermarkMessage(timestamp))
 
     def __send_ground_actors_data(self, timestamp: Timestamp):
+        self._file.write("\n__send_ground_actors_data")
         # Get all the actors in the simulation.
         actor_list = self._world.get_actors()
 
@@ -393,6 +407,7 @@ class CarlaOperator(erdos.Operator):
         self.ground_stop_signs_stream.send(erdos.WatermarkMessage(timestamp))
 
     def __send_world_data(self):
+        self._file.write("\n__send_world_data")
         """ Sends ego vehicle id, open drive and trajectory messages."""
         # Send the id of the ego vehicle. This id is used by the driver
         # operators to get a handle to the ego vehicle, which they use to
@@ -412,6 +427,7 @@ class CarlaOperator(erdos.Operator):
         self.global_trajectory_stream.send(top_watermark)
 
     def __update_spectactor_pose(self):
+        self._file.write("\n__update_spectator_pose")
         # Set the world simulation view with respect to the vehicle.
         v_pose = self._ego_vehicle.get_transform()
         v_pose.location -= 10 * Location(v_pose.get_forward_vector())

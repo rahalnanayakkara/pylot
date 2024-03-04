@@ -9,16 +9,16 @@ flags.DEFINE_integer('carla_traffic_manager_port', 8000,
                      'CARLA traffic manager port.')
 flags.DEFINE_integer('simulator_timeout', 10,
                      'Timeout for connecting to the simulator.')
-flags.DEFINE_enum('simulator_mode', 'synchronous', [
+flags.DEFINE_enum('simulator_mode', 'pseudo-asynchronous', [
     'synchronous', 'asynchronous', 'asynchronous-fixed-time-step',
     'pseudo-asynchronous'
 ], 'Sets the way in which to run the simulator')
-flags.DEFINE_bool('scenario_runner', False,
+flags.DEFINE_bool('scenario_runner', True,
                   'Set to True to execute pylot with scenario runner.')
 flags.DEFINE_integer('simulator_town', 1,
                      'Sets which simulator town to use. Options [1..7]')
 flags.DEFINE_integer('simulator_fps',
-                     20,
+                     10,
                      'Simulator FPS; do not set below 10',
                      lower_bound=10)
 flags.DEFINE_integer(

@@ -345,7 +345,7 @@ def wait_for_ego_vehicle(world):
         time.sleep(0.1)
         possible_actors = world.get_actors().filter('vehicle.*')
         for actor in possible_actors:
-            if actor.attributes['role_name'] == 'hero':
+            if actor.attributes['role_name'] == 'hero' and len(possible_actors) > 1:
                 return actor
         world.tick()
 
