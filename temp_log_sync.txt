@@ -1,0 +1,1425 @@
+
+tick_simulator_until
+Waiting for the scenario to be ready ...
+Found ego vehicle
+run
+__send_world_data
+_tick_simulator
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[21192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[21292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[21392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[21492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[21592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[21692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[21792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[21892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[21992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[22092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[22192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[22292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[22392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[22492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[22592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[22692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[22792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[22892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[22992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[23092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[23192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[23292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[23392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[23492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[23592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[23692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[23792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[23892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[23992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[24092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[24192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[24292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[24392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[24492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[24592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[24692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[24792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[24892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[24992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[25092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[25192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[25292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[25392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[25492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[25592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[25692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[25792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[25892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[25992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[26092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[26192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[26292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[26392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[26492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[26592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[26692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[26792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[26892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[26992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[27092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[27192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[27292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[27392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[27492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[27592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[27692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[27792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[27892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[27992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[28092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[28192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[28292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[28392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[28492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[28592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[28692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[28792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[28892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[28992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[29092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[29192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[29292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[29392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[29492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[29592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[29692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[29792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[29892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[29992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[30092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[30192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[30292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[30392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[30492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[30592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[30692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[30792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[30892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[30992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[31092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[31192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[31292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[31392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[31492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[31592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[31692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[31792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[31892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[31992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[32092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[32192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[32292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[32392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[32492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[32592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[32692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[32792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[32892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[32992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[33092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[33192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[33292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[33392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[33492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[33592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[33692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[33792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[33892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[33992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[34092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[34192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[34292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[34392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[34492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[34592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[34692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[34792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[34892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[34992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[35092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[35192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[35292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[35392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[35492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[35592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[35692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[35792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[35892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[35992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[36092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[36192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[36292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[36392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[36492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[36592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[36692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[36792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[36892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[36992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[37092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[37192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[37292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[37392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[37492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[37592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[37692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[37792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[37892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[37992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[38092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[38192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[38292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[38392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[38492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[38592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[38692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[38792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[38892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[38992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[39092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[39192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[39292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[39392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[39492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[39592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[39692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[39792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[39892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[39992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[40092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[40192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[40292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[40392]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[40492]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[40592]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[40692]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[40792]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[40892]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[40992]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[41092]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[41192]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
+__update_spectator_pose
+@[41292]: received control message
+_apply_control_msg
+_tick_simulator
+send_actor_data
+__send_hero_vehicle_data
+__send_ground_actors_data
