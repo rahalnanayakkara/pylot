@@ -1,11 +1,16 @@
 import signal
 
-# import carla_wrapper.utils
+from objects import Location, Rotation, Transform
+
+import carla_wrapper.camera_driver
 
 simulator_host = 'localhost'
 simulator_port = 2000
 simulator_timeout = 10
 carla_traffic_manager_port = 8000
+
+# The location of the center camera relative to the ego-vehicle.
+CENTER_CAMERA_LOCATION = Location(1.3, 0.0, 1.8)
 
 def get_world(host: str = "localhost", port: int = 2000, timeout: int = 10):
     """Get a handle to the world running inside the simulation.
@@ -51,13 +56,24 @@ def get_world(host: str = "localhost", port: int = 2000, timeout: int = 10):
 # def shutdown(sig, frame):
 #     raise KeyboardInterrupt
 
+def add_camera():
+    #TODO: Add operator?
+    return
+
+def init_sim():
+    transform = Transform(CENTER_CAMERA_LOCATION, Rotation(pitch=-15))
+    try:
+        add_camera()
+    except:
+        print("Unable to add camera")
+
 def main():
     # Connect an instance to the simulator to make sure that we can turn the
     # synchronous mode off after the script finishes running.
     client, world = get_world(simulator_host, simulator_port,
                               simulator_timeout)
+    init_sim()
     # try:
-    #     # node_handle, control_display_stream = driver()
     #     signal.signal(signal.SIGINT, shutdown)
     #     node_handle.wait()
     # except KeyboardInterrupt:

@@ -56,6 +56,7 @@ def run_visualizer_control_loop(control_display_stream):
     The user commands are send on the control_display_stream
     to control the pygame visualization window.
     """
+    #TODO: remove erdos
     import erdos
     import pygame
     clock = pygame.time.Clock()
