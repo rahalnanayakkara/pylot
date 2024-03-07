@@ -3,7 +3,7 @@ import copy
 import numpy as np
 
 # Local copies
-from objects import Vector2D
+from objects.objects import Vector2D, Vector3D, Transform, Rotation, Location
 
 OBSTACLE_LABELS = {
     'car', 'bicycle', 'motorcycle', 'bus', 'truck', 'vehicle', 'person',
@@ -68,7 +68,7 @@ class BoundingBox2D(object):
     def get_min_point(self) -> Vector2D:
         return Vector2D(self.x_min, self.y_min)
 
-    def get_max_point(self) -> utils.Vector2D:
+    def get_max_point(self) -> Vector2D:
         return Vector2D(self.x_max, self.y_max)
 
     def get_height(self):
@@ -77,8 +77,8 @@ class BoundingBox2D(object):
     def get_width(self):
         return self.x_max - self.x_min
 
-    def get_center_point(self) -> utils.Vector2D:
-        return utils.Vector2D((self.x_min + self.x_max) // 2,
+    def get_center_point(self) -> Vector2D:
+        return Vector2D((self.x_min + self.x_max) // 2,
                                     (self.y_min + self.y_max) // 2)
 
     def as_width_height_bbox(self):
@@ -147,8 +147,8 @@ class BoundingBox3D(object):
             box.
     """
     def __init__(self,
-                 transform: utils.Transform = None,
-                 extent: utils.Vector3D = None,
+                 transform: Transform = None,
+                 extent: Vector3D = None,
                  corners=None):
         self.transform = transform
         self.extent = extent
@@ -192,10 +192,10 @@ class BoundingBox3D(object):
         Returns:
             :py:class:`.BoundingBox3D`: A bounding box instance.
         """
-        transform = utils.Transform(
-            utils.Location.from_simulator_location(bbox.location),
-            utils.Rotation())
-        extent = utils.Vector3D.from_simulator_vector(bbox.extent)
+        transform = Transform(
+            Location.from_simulator_location(bbox.location),
+            Rotation())
+        extent = Vector3D.from_simulator_vector(bbox.extent)
         return cls(transform, extent)
 
     def as_simulator_bounding_box(self):
@@ -226,7 +226,7 @@ class BoundingBox3D(object):
                              actor_transform.rotation.as_simulator_rotation(),
                              life_time=time_between_frames / 1000.0)
 
-    def to_camera_view(self, obstacle_transform: utils.Transform,
+    def to_camera_view(self, obstacle_transform: Transform,
                        extrinsic_matrix, intrinsic_matrix):
         """Converts the coordinates of the bounding box for the given obstacle
         to the coordinates in the view of the camera.
@@ -261,20 +261,20 @@ class BoundingBox3D(object):
                             self.corners.transpose(1, 0)).transpose(1, 0)
             pts_2d = pts_2d[:, :2] / pts_2d[:, 2:]
             camera_coordinates = [
-                utils.Vector2D(pt[0], pt[1]) for pt in pts_2d
+                Vector2D(pt[0], pt[1]) for pt in pts_2d
             ]
             return camera_coordinates
 
         extent = self.extent
         bbox = np.array([
-            utils.Location(x=+extent.x, y=+extent.y, z=-extent.z),
-            utils.Location(x=-extent.x, y=+extent.y, z=-extent.z),
-            utils.Location(x=-extent.x, y=-extent.y, z=-extent.z),
-            utils.Location(x=+extent.x, y=-extent.y, z=-extent.z),
-            utils.Location(x=+extent.x, y=+extent.y, z=+extent.z),
-            utils.Location(x=-extent.x, y=+extent.y, z=+extent.z),
-            utils.Location(x=-extent.x, y=-extent.y, z=+extent.z),
-            utils.Location(x=+extent.x, y=-extent.y, z=+extent.z)
+            Location(x=+extent.x, y=+extent.y, z=-extent.z),
+            Location(x=-extent.x, y=+extent.y, z=-extent.z),
+            Location(x=-extent.x, y=-extent.y, z=-extent.z),
+            Location(x=+extent.x, y=-extent.y, z=-extent.z),
+            Location(x=+extent.x, y=+extent.y, z=+extent.z),
+            Location(x=-extent.x, y=+extent.y, z=+extent.z),
+            Location(x=-extent.x, y=-extent.y, z=+extent.z),
+            Location(x=+extent.x, y=-extent.y, z=+extent.z)
         ])
 
         # Transform the vertices with respect to the bounding box transform.
@@ -532,11 +532,12 @@ def get_mAP(ground_obstacles, obstacles):
     return avg_precision
 
 
-def get_obstacle_locations(obstacles, depth_msg, ego_transform, camera_setup,
+# TODO: pass in depth frame here
+def get_obstacle_locations(obstacles, depth_frame, ego_transform, camera_setup,
                            logger):
-    from messages import DepthFrameMessage, PointCloudMessage
-    if isinstance(depth_msg, PointCloudMessage):
-        point_cloud = depth_msg.point_cloud
+    from objects.frames import PointCloud, DepthFrame
+    if isinstance(depth_frame, PointCloud):
+        point_cloud = depth_frame
         # Get the position of the camera in world frame of reference.
         transformed_camera_setup = copy.deepcopy(camera_setup)
         transformed_camera_setup.set_transform(
@@ -548,16 +549,16 @@ def get_obstacle_locations(obstacles, depth_msg, ego_transform, camera_setup,
                 obstacle.bounding_box_2D.get_center_point(),
                 transformed_camera_setup)
             if location is not None:
-                obstacle.transform = utils.Transform(
-                    location, utils.Rotation())
+                obstacle.transform = Transform(
+                    location, Rotation())
                 obstacles_with_location.append(obstacle)
             else:
                 logger.error(
                     'Could not find world location for obstacle {}'.format(
                         obstacle))
         return obstacles_with_location
-    elif isinstance(depth_msg, DepthFrameMessage):
-        depth_frame = depth_msg.frame
+    elif isinstance(depth_frame, DepthFrame):
+        depth_frame = depth_frame
         depth_frame.camera_setup.set_transform(
             ego_transform * depth_frame.camera_setup.transform)
 
@@ -570,7 +571,7 @@ def get_obstacle_locations(obstacles, depth_msg, ego_transform, camera_setup,
             sample_points = []
             for delta_x in range(-30, 30, 5):
                 for delta_y in range(-30, 30, 5):
-                    sample_point = center_point + utils.Vector2D(
+                    sample_point = center_point + Vector2D(
                         delta_x, delta_y)
                     if obstacle.bounding_box.is_within(sample_point):
                         sample_points.append(sample_point)
@@ -583,8 +584,8 @@ def get_obstacle_locations(obstacles, depth_msg, ego_transform, camera_setup,
                 if dist < min_distance:
                     min_distance = dist
                     closest_location = location
-            obstacle.transform = utils.Transform(closest_location,
-                                                       utils.Rotation())
+            obstacle.transform = Transform(closest_location,
+                                                    Rotation())
         return obstacles
     else:
         raise ValueError('Unexpected depth message type')

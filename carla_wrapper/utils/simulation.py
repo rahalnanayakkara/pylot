@@ -67,6 +67,17 @@ def get_world(host: str = "localhost", port: int = 2000, timeout: int = 10):
         raise Exception('Error importing CARLA.')
     return (client, world)
 
+def set_mode_fps(world, fps):
+    """Sets the simulator in synchronous mode.
+
+    Args:
+        world: A handle to the world running inside the simulator.
+        fps (:obj:`int`): Frames per second rate the simulation should tick at.
+    """
+    settings = world.get_settings()
+    settings.synchronous_mode = True
+    settings.fixed_delta_seconds = 1.0 / fps
+    world.apply_settings(settings)
 
 def get_map(host: str = "localhost", port: int = 2000, timeout: int = 10):
     """Get a handle to the CARLA map.
@@ -102,52 +113,6 @@ def set_weather(world, weather: str):
     weathers = {x: getattr(WeatherParameters, x) for x in names}
     world.set_weather(weathers[weather])
     return weathers
-
-
-def set_simulation_mode(world, flags):
-    # Turn on the synchronous mode so we can control the simulation.
-    if (flags.simulator_mode == 'synchronous'
-            or flags.simulator_mode == 'pseudo-asynchronous'):
-        set_synchronous_mode(world, flags.simulator_fps)
-    elif flags.simulator_mode == 'asynchronous-fixed-time-step':
-        set_asynchronous_fixed_time_step_mode(world, flags.simulator_fps)
-    elif flags.simulator_mode == 'asynchronous':
-        set_asynchronous_mode(world)
-    else:
-        raise ValueError('Unexpected simulation mode {}'.format(
-            flags.simulator_mode))
-
-
-def set_synchronous_mode(world, fps):
-    """Sets the simulator in synchronous mode.
-
-    Args:
-        world: A handle to the world running inside the simulator.
-        fps (:obj:`int`): Frames per second rate the simulation should tick at.
-    """
-    settings = world.get_settings()
-    settings.synchronous_mode = True
-    settings.fixed_delta_seconds = 1.0 / fps
-    world.apply_settings(settings)
-
-
-def set_asynchronous_fixed_time_step_mode(world, fps):
-    settings = world.get_settings()
-    settings.synchronous_mode = False
-    settings.fixed_delta_seconds = 1.0 / fps
-    world.apply_settings(settings)
-
-
-def set_asynchronous_mode(world):
-    """Sets the simulator to asynchronous mode.
-
-    Args:
-        world: A handle to the world running inside the simulation.
-    """
-    settings = world.get_settings()
-    settings.synchronous_mode = False
-    world.apply_settings(settings)
-
 
 def reset_world(world):
     """Resets the simulation to the original state.

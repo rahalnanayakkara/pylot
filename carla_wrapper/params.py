@@ -1,3 +1,15 @@
+# Simulator params
+
+simulator_host = '127.0.0.1'
+simulator_port = 2000
+simulator_timeout = 10
+
+simulator_camera_frequency = -1
+
+camera_image_width = 1024
+camera_image_height = 576
+camera_fov = 90.0
+
 # Service params
 
 host="0.0.0.0"

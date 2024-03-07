@@ -1,7 +1,6 @@
 import numpy as np
 
-from objects import Location, Rotation, Transform
-
+from objects.objects import Location, Rotation, Transform
 
 def create_left_right_camera_setups(camera_name_prefix: str,
                                     location: Location,

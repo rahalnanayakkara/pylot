@@ -480,3 +480,382 @@ class SegmentedFrame(object):
     def __str__(self):
         return 'SegmentedFrame(encoding: {}, camera_setup: {}, frame: {})'.format(  # noqa: E501
             self.encoding, self.camera_setup, self._frame)
+
+
+class PointCloud(object):
+    """Class that stores points clouds.
+
+    Args:
+        points: A (number of points) by 3 numpy array, where each row is
+            the (x, y, z) coordinates of a point.
+        transform (:py:class:`~Transform`): Transform of the
+            point cloud, relative to the ego-vehicle.
+
+    Attributes:
+        points: A (number of points) by 3 numpy array, where each row is
+            the (x, y, z) coordinates of a point.
+        transform (:py:class:`~Transform`): Transform of the
+            point cloud, relative to the ego-vehicle.
+    """
+    def __init__(self, points, lidar_setup: LidarSetup):
+        # Transform point cloud from lidar to camera coordinates.
+        self._lidar_setup = lidar_setup
+        self.global_points = copy.deepcopy(points)
+        self.points = self._to_camera_coordinates(points)
+        self.transform = lidar_setup.get_transform()
+
+    @classmethod
+    def from_simulator_point_cloud(cls, simulator_pc, lidar_setup: LidarSetup):
+        """Creates a pylot point cloud from a simulator point cloud.
+
+        Returns:
+          :py:class:`.PointCloud`: A point cloud.
+        """
+        points = np.frombuffer(simulator_pc.raw_data, dtype=np.dtype('f4'))
+        points = copy.deepcopy(points)
+        if lidar_setup.legacy:
+            points = np.reshape(points, (int(points.shape[0] / 3), 3))
+        else:
+            points = np.reshape(points, (int(points.shape[0] / 4), 4))
+            # Remove the intensity component of the point cloud.
+            points = points[:, :3]
+        return cls(points, lidar_setup)
+
+    def merge(self, point_cloud):
+        """Merges this point cloud with another point cloud.
+
+        Note:
+            The method modifies the point cloud inplace.
+        """
+        self.global_points = np.concatenate(
+            (self.global_points, point_cloud.global_points), 0)
+        self.points = np.concatenate((self.points, point_cloud.points), 0)
+
+    def _to_camera_coordinates(self, points):
+        # Converts points in lidar coordinates to points in camera coordinates.
+        # See CameraSetup in pylot/drivers/sensor_setup.py for coordinate
+        # axis orientations.
+        #
+        # The Velodyne coordinate space is defined as:
+        # +x into the screen, +y to the left, and +z up.
+        #
+        # Note: We're using the ROS velodyne driver coordinate
+        # system, not the one specified in the Velodyne manual.
+        # Link to the ROS coordinate system:
+        # https://www.ros.org/reps/rep-0103.html#axis-orientation
+        if self._lidar_setup.lidar_type == 'sensor.lidar.ray_cast':
+            if self._lidar_setup.legacy:
+                # The legacy CARLA Lidar coordinate space is defined as:
+                # +x to right, +y out of the screen, +z down.
+                to_camera_transform = Transform(matrix=np.array(
+                    [[1, 0, 0, 0], [0, 0, 1, 0], [0, -1, 0, 0], [0, 0, 0, 1]]))
+            else:
+                # The latest coordiante space is the unreal space.
+                to_camera_transform = Transform(matrix=np.array(
+                    [[0, 1, 0, 0], [0, 0, -1, 0], [1, 0, 0, 0], [0, 0, 0, 1]]))
+        elif self._lidar_setup.lidar_type == 'velodyne':
+            to_camera_transform = Transform(matrix=np.array(
+                [[0, -1, 0, 0], [0, 0, -1, 0], [1, 0, 0, 0], [0, 0, 0, 1]]))
+        else:
+            raise ValueError('Unexpected lidar type {}'.format(
+                self._lidar_setup.lidar_type))
+        transformed_points = to_camera_transform.transform_points(points)
+        return transformed_points
+
+    def get_pixel_location(self, pixel, camera_setup: CameraSetup):
+        """ Gets the 3D world location from pixel coordinates.
+
+        Args:
+            pixel (:py:class:`~utils.Vector2D`): Pixel coordinates.
+            camera_setup (:py:class:`~sensors.CameraSetup`):
+                The setup of the camera with its transform in the world frame
+                of reference.
+
+        Returns:
+            :py:class:`~utils.Location`: The 3D world location, or None
+            if all the point cloud points are behind.
+        """
+        # Select only points that are in front.
+        # Setting the threshold to 0.1 because super close points cause
+        # floating point errors.
+        fwd_points = self.points[np.where(self.points[:, 2] > 0.1)]
+        if len(fwd_points) == 0:
+            return None
+        intrinsic_mat = camera_setup.get_intrinsic_matrix()
+        # Project our 2D pixel location into 3D space, onto the z=1 plane.
+        p3d = np.dot(inv(intrinsic_mat), np.array([[pixel.x], [pixel.y],
+                                                   [1.0]]))
+
+        if self._lidar_setup.lidar_type == 'sensor.lidar.ray_cast':
+            location = PointCloud.get_closest_point_in_point_cloud(
+                fwd_points, Vector2D(p3d[0], p3d[1]), normalized=True)
+            # Use the depth from the retrieved location.
+            p3d *= np.array([location.z])
+            p3d = p3d.transpose()
+            # Convert from camera to unreal coordinates if the lidar type is
+            # sensor.lidar.ray_cast
+            to_world_transform = camera_setup.get_unreal_transform()
+            camera_point_cloud = to_world_transform.transform_points(p3d)[0]
+            pixel_location = Location(camera_point_cloud[0],
+                                      camera_point_cloud[1],
+                                      camera_point_cloud[2])
+        elif self._lidar_setup.lidar_type == 'velodyne':
+            location = PointCloud.get_closest_point_in_point_cloud(
+                fwd_points, Vector2D(p3d[0], p3d[1]), normalized=False)
+            # Use the depth from the retrieved location.
+            p3d[2] = location.z
+            p3d = p3d.transpose()
+            pixel_location = Location(p3d[0, 0], p3d[0, 1], p3d[0, 2])
+        return pixel_location
+
+    @staticmethod
+    def get_closest_point_in_point_cloud(fwd_points,
+                                         pixel,
+                                         normalized: bool = False):
+        """Finds the closest point in the point cloud to the given point.
+
+        Args:
+            pixel (:py:class:`~utils.Vector2D`): Camera coordinates.
+
+        Returns:
+            :py:class:`~utils.Location`: Closest point cloud point.
+        """
+        # Select x and y.
+        pc_xy = fwd_points[:, 0:2]
+        # Create an array from the x, y coordinates of the point.
+        xy = np.array([pixel.x, pixel.y]).transpose()
+
+        # Compute distance
+        if normalized:
+            # Select z
+            pc_z = fwd_points[:, 2]
+            # Divize x, y by z
+            normalized_pc = pc_xy / pc_z[:, None]
+            dist = np.sum((normalized_pc - xy)**2, axis=1)
+        else:
+            dist = np.sum((pc_xy - xy)**2, axis=1)
+
+        # Select index of the closest point.
+        closest_index = np.argmin(dist)
+
+        # Return the closest point.
+        return Location(fwd_points[closest_index][0],
+                        fwd_points[closest_index][1],
+                        fwd_points[closest_index][2])
+
+    def save(self, timestamp: int, data_path: str, file_base: str):
+        """Saves the point cloud to a file.
+
+        Args:
+            timestamp (:obj:`int`): Timestamp associated with the point cloud.
+            data_path (:obj:`str`): Path where to save the point cloud.
+            file_base (:obj:`str`): Base name of the file.
+        """
+        import open3d as o3d
+        file_name = os.path.join(data_path,
+                                 '{}-{}.ply'.format(file_base, timestamp))
+        pcd = o3d.geometry.PointCloud()
+        pcd.points = o3d.utility.Vector3dVector(self.points)
+        o3d.io.write_point_cloud(file_name, pcd)
+
+    def visualize(self, pygame_display, timestamp=None):
+        """Visualizes the point cloud on a pygame display."""
+        import pygame
+        (width, height) = pygame_display.get_size()
+        # Transform point cloud to top down view.
+        lidar_data = np.array(self.global_points[:, :2])
+        lidar_data *= (min(width, height) /
+                       (2.0 * self._lidar_setup.get_range_in_meters()))
+        lidar_data += (0.5 * width, 0.5 * height)
+        lidar_data = np.fabs(lidar_data)
+        lidar_data = lidar_data.astype(np.int32)
+        lidar_data = np.reshape(lidar_data, (-1, 2))
+        lidar_img_size = (width, height, 3)
+        lidar_img = np.zeros((lidar_img_size), dtype=np.uint8)
+        lidar_img[tuple(lidar_data.T)] = (255, 255, 255)
+        pygame.surfarray.blit_array(pygame_display, lidar_img)
+        pygame.display.flip()
+
+    def __repr__(self):
+        return 'PointCloud(lidar setup: {}, points: {})'.format(
+            self._lidar_setup, self.points)
+
+    def __str__(self):
+        return 'PointCloud(transform: {}, number of points: {})'.format(
+            self.transform, len(self.points))
+
+
+class CameraFrame(object):
+    """Class that stores camera frames.
+
+    Args:
+        frame: A numpy array storring the frame.
+        camera_setup (:py:class:`~sensors.CameraSetup`):
+            The camera setup used by the sensor that generated this frame.
+
+    Attributes:
+        frame: A numpy array storring the frame.
+        encoding (:obj:`str`): The encoding of the frame (BGR | RGB).
+        camera_setup (:py:class:`~sensors.CameraSetup`):
+            The camera setup used by the sensor that generated this frame.
+    """
+    def __init__(self,
+                 frame,
+                 encoding: str,
+                 camera_setup: Union[CameraSetup, None] = None):
+        self.frame = frame
+        if encoding != 'BGR' and encoding != 'RGB':
+            raise ValueError('Unsupported encoding {}'.format(encoding))
+        self.encoding = encoding
+        self.camera_setup = camera_setup
+
+    @classmethod
+    def from_simulator_frame(cls, simulator_frame, camera_setup: CameraSetup):
+        """Creates a pylot camera frame from a simulator frame.
+
+        Returns:
+            :py:class:`.CameraFrame`: A BGR camera frame.
+        """
+        from carla import Image
+        if not isinstance(simulator_frame, Image):
+            raise ValueError('simulator_frame should be of type Image')
+        _frame = np.frombuffer(simulator_frame.raw_data,
+                               dtype=np.dtype("uint8"))
+        _frame = np.reshape(_frame,
+                            (simulator_frame.height, simulator_frame.width, 4))
+        return cls(np.array(_frame[:, :, :3]), 'BGR', camera_setup)
+
+    def as_numpy_array(self):
+        """Returns the camera frame as a numpy array."""
+        return self.frame.astype(np.uint8)
+
+    def as_bgr_numpy_array(self):
+        """Returns the camera frame as a BGR encoded numpy array."""
+        if self.encoding == 'RGB':
+            return np.array(self.frame[:, :, ::-1])
+        else:
+            return self.frame
+
+    def as_rgb_numpy_array(self):
+        """Returns the camera frame as a RGB encoded numpy array."""
+        if self.encoding == 'BGR':
+            return self.frame[:, :, ::-1]
+        else:
+            return self.frame
+
+    def annotate_with_bounding_boxes(self,
+                                     timestamp,
+                                     detected_obstacles,
+                                     transform=None,
+                                     bbox_color_map=PYLOT_BBOX_COLOR_MAP):
+        add_timestamp(self.frame, timestamp)
+        for obstacle in detected_obstacles:
+            obstacle.draw_on_frame(self,
+                                   bbox_color_map,
+                                   ego_transform=transform)
+
+    def draw_box(self,
+                 start_point: Vector2D,
+                 end_point: Vector2D,
+                 color: Tuple[int, int, int],
+                 thickness: float = 2):
+        """Draw a colored box defined by start_point, end_point."""
+        start = (int(start_point.x), int(start_point.y))
+        end = (int(end_point.x), int(end_point.y))
+        cv2.rectangle(self.frame, start, end, color, thickness)
+
+    def draw_3d_box(self, corners, color: Tuple[int, int, int]):
+        for corner in corners:
+            self.draw_point(corner, color)
+
+    def draw_point(self, point: Vector2D, color, r: float = 3):
+        """Draws a point on the frame.
+
+        Args:
+            point (:py:class:`~utils.Vector2D`): Where to draw the point.
+            color: RGB tuple for the color of the point.
+        """
+        cv2.circle(self.frame, (int(point.x), int(point.y)), r, color, -1)
+
+    def draw_text(self,
+                  point: Vector2D,
+                  text: str,
+                  color: Tuple[int, int, int] = (255, 255, 255)):
+        """Draws text on the frame.
+
+        Args:
+            point (:py:class:`~utils.Vector2D`): Where to draw the text.
+            text (:obj:`str`): The text to draw.
+            color: RGB tuple for the color of the text.
+        """
+        cv2.putText(self.frame,
+                    text, (int(point.x), int(point.y)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.5,
+                    color,
+                    thickness=1,
+                    lineType=cv2.LINE_AA)
+
+    def draw_line(self, points: List[Vector2D], color, thickness: float = 3):
+        """Draws lines between given points on the frame.
+
+        Args:
+            points: List of points of where to draw lines between.
+            color: RGB tuple for the color of he line.
+        """
+        draw_points = np.array([[point.x, point.y] for point in points])
+        cv2.polylines(self.frame,
+                      np.array([draw_points], dtype=np.int32),
+                      False,
+                      color,
+                      thickness=thickness)
+
+    def in_frame(self, point: Vector2D) -> bool:
+        """Checks if a point is within the frame."""
+        return (0 <= point.x <= self.camera_setup.width
+                and 0 <= point.y <= self.camera_setup.height)
+
+    def resize(self, width: int, height: int):
+        """Resizes the frame."""
+        self.camera_setup.set_resolution(width, height)
+        self.frame = cv2.resize(self.frame,
+                                dsize=(width, height),
+                                interpolation=cv2.INTER_NEAREST)
+
+    def visualize(self, pygame_display, timestamp=None):
+        """Visualizes the frame on a pygame display."""
+        import pygame
+        if timestamp is not None:
+            add_timestamp(self.frame, timestamp)
+        if self.encoding != 'RGB':
+            image_np = self.as_rgb_numpy_array()
+        else:
+            image_np = self.frame
+        image_np = np.transpose(image_np, (1, 0, 2))
+        pygame.surfarray.blit_array(pygame_display, image_np)
+        pygame.display.flip()
+
+    def save(self, timestamp: int, data_path: str, file_base: str):
+        """Saves the camera frame to a file.
+
+        Args:
+            timestamp (:obj:`int`): Timestamp associated with the camera frame.
+            data_path (:obj:`str`): Path where to save the camera frame.
+            file_base (:obj:`str`): Base name of the file.
+        """
+        if self.encoding != 'RGB':
+            image_np = self.as_rgb_numpy_array()
+        else:
+            image_np = self.frame
+        file_name = os.path.join(data_path,
+                                 '{}-{}.png'.format(file_base, timestamp))
+        img = Image.fromarray(image_np)
+        img.save(file_name)
+
+    def __repr__(self):
+        return 'CameraFrame(encoding: {}, camera_setup: {}, frame: {})'.format(
+            self.encoding, self.camera_setup, self.frame)
+
+    def __str__(self):
+        return 'CameraFrame(encoding: {}, camera_setup: {})'.format(
+            self.encoding, self.camera_setup)

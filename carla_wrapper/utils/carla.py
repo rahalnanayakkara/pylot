@@ -4,6 +4,8 @@ from enum import Enum
 
 import numpy as np
 
+from objects.objects import Transform, Location, Rotation
+
 def add_timestamp(image_np, timestamp):
     """Adds a timestamp text to an image np array.
 
@@ -49,7 +51,8 @@ def set_tf_loglevel(level):
         os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
     logging.getLogger('tensorflow').setLevel(level)
 
-
+# TODO: this needs to communicate with visualizer, either by calling it or being called by it 
+# !!! this likely is only used for manual key-based control of the vehicle
 def run_visualizer_control_loop(control_display_stream):
     """Runs a pygame loop that waits for user commands.
 
