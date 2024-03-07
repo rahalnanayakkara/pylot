@@ -10,6 +10,9 @@ camera_image_width = 1024
 camera_image_height = 576
 camera_fov = 90.0
 
+simulator_control_frequency = -1
+simulator_fps = 10
+
 # Service params
 
 host="0.0.0.0"
@@ -18,9 +21,6 @@ port=5010
 device='cpu' # used by torch for r2p2 computation
 
 # Taken from control/flags.py
-
-simulator_control_frequency = -1
-simulator_fps = 20
 
 min_pid_steer_waypoint_distance = 5
 min_pid_speed_waypoint_distance = 5

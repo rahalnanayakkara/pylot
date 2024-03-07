@@ -6,19 +6,15 @@ import numpy as np
 from numpy.linalg import inv
 from numpy.matlib import repmat
 
-from objects import Location
-
 from typing import List, Tuple, Union
 
 import PIL.Image as Image
 
 import cv2
 
-from objects.objects import Transform, Vector2D, Location
-from detection.utils import add_timestamp
-from detection.utils import BoundingBox2D, PYLOT_BBOX_COLOR_MAP
-
-from objects.objects import CameraSetup, LidarSetup
+from objects.objects import Location, Transform, Vector2D, Location, BoundingBox2D, CameraSetup, LidarSetup
+from detection.utils import PYLOT_BBOX_COLOR_MAP
+from utils.carla import add_timestamp
 
 class DepthFrame(object):
     """Class that stores depth frames.

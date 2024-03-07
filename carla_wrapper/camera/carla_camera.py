@@ -41,8 +41,7 @@ class CarlaCamera:
     def process_images(self, simulator_image):
         """Invoked when an image is received from the simulator."""
         game_time = int(simulator_image.timestamp * 1000)
-        if self._camera_setup.camera_type == 'sensor.camera.rgb':
-            frame = CameraFrame.from_simulator_frame(simulator_image, self._camera_setup)
+        frame = CameraFrame.from_simulator_frame(simulator_image, camera_setup)
         self._processed_images[game_time] = frame
     
     def get_processed_image(self, game_time):

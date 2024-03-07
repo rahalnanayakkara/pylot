@@ -4,10 +4,10 @@ import params
 
 from utils.simulation import get_world, set_mode_fps
 
-from carla import VehicleControl, command
+from carla import Location, VehicleControl, command
 
 from objects.objects import Obstacle, TrafficLight, StopSign, SpeedLimitSign
-from objects.objects import Transform, Location, Vector3D, Pose 
+from objects.objects import Transform, Vector3D, Pose 
 from camera.carla_camera import CarlaCamera
 
 simulator_host = 'localhost'
@@ -33,7 +33,7 @@ class CarlaSimulation:
         self._ego_vehicle = self.wait_for_ego_vehicle(self._world)
 
         print("\nAdding camera to vehicle ...")
-        self._camera = CarlaCamera(self._world, self._ego_vehicle.id)
+        self._camera = CarlaCamera(self._world, self._ego_vehicle)
 
         print("\nAdding ontick callback")
         self._world.on_tick(self.on_simulator_tick)

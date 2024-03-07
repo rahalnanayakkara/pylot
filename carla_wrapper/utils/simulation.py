@@ -3,14 +3,8 @@ import re
 import time
 from enum import Enum
 
-import pylot.utils
-from pylot.perception.depth_frame import DepthFrame
-from pylot.perception.detection.obstacle import Obstacle
-from pylot.perception.detection.speed_limit_sign import SpeedLimitSign
-from pylot.perception.detection.stop_sign import StopSign
-from pylot.perception.detection.traffic_light import TrafficLight
-from pylot.perception.detection.utils import BoundingBox2D
-
+from objects.objects import Obstacle, SpeedLimitSign, StopSign, TrafficLight, BoundingBox2D, Location
+from objects.frames import DepthFrame
 
 def check_simulator_version(simulator_version: str,
                             required_major: int = 0,
@@ -487,16 +481,16 @@ def get_detected_traffic_stops(traffic_stops, depth_frame):
         # Move trigger_volume by -0.85 so that the top plane is on the ground.
         ext_z_value = bbox3d.extent.z - 0.85
         ext = [
-            pylot.utils.Location(x=+bbox3d.extent.x,
+            Location(x=+bbox3d.extent.x,
                                  y=+bbox3d.extent.y,
                                  z=ext_z_value),
-            pylot.utils.Location(x=+bbox3d.extent.x,
+            Location(x=+bbox3d.extent.x,
                                  y=-bbox3d.extent.y,
                                  z=ext_z_value),
-            pylot.utils.Location(x=-bbox3d.extent.x,
+            Location(x=-bbox3d.extent.x,
                                  y=+bbox3d.extent.y,
                                  z=ext_z_value),
-            pylot.utils.Location(x=-bbox3d.extent.x,
+            Location(x=-bbox3d.extent.x,
                                  y=-bbox3d.extent.y,
                                  z=ext_z_value),
         ]
