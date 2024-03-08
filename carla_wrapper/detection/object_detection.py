@@ -44,7 +44,7 @@ class ObjectDetector:
 
 
     def get_obstacles(self, timestamp, frame):
-        self._module_logger.info('@{}: {} received message'.format(timestamp, self._config_name))
+        self._module_logger.info('@{}: {} getting obstacles'.format(timestamp, self._config_name))
         start_time = time.time()
         # The models expect BGR images.
         assert frame.encoding == 'BGR', 'Expects BGR frames'

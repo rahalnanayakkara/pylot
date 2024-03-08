@@ -83,7 +83,7 @@ class CarlaSimulation:
         self._client.apply_batch_sync([command.ApplyVehicleControl(self._ego_vehicle.id, vec_control)])
     
     def tick_simulator(self):
-        print("\nForce ticking simulator ...")
+        print("\nTicking simulator ...")
         self._module_logger.info("\nForce ticking simulator ...")
         self._world.tick()
         frame = self._camera.get_processed_image(self._game_time)
@@ -93,9 +93,7 @@ class CarlaSimulation:
 
     def on_simulator_tick(self, msg):
         self._game_time = int(msg.elapsed_seconds * 1000)
-        print("\nWorld is ticking ... " + str(self._game_time))
         self._module_logger.info("\nWorld is ticking ... " + str(self._game_time))
-        (vehicles, people, traffic, limits, stops) = self.read_ground_actors_data()
         self.update_spectator_pose()
     
     def read_ego_vehicle_data(self):

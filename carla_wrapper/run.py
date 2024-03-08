@@ -6,12 +6,12 @@ from utils.simulation import get_world
 
 from simulation import CarlaSimulation
 from visualizer import Visualizer
+from detection.object_detection import ObjectDetector
 
 class SimulationRunner():
 
     def __init__(self):
 
-        from detection.object_detection import ObjectDetector
         from perception.object_tracking import ObjectTracker
         from perception.location_history import ObstacleLocationHistory
         from planning.planner import WaypointPlanner
@@ -60,14 +60,20 @@ class MockSimulationRunner():
                              params.simulator_timeout)
         self._simulation = CarlaSimulation(client, world)
         self._visualizer = Visualizer(world)
+        self._detector = ObjectDetector()
     
     def run_one_tick(self):
         (timestamp, frame, depth_frame, pose) = self._simulation.tick_simulator()
+        if not frame:
+            print("Empty frame received from simulation!")
+            return
+        (timestamp, obstacles, detector_runtime)         = self._detector.get_obstacles(timestamp, frame)
+        print(detector_runtime)
         self._simulation.apply_control(1, 0, 0, False, False)
-        self._visualizer.visualize(timestamp, frame, depth_frame, pose, None, 1, 0, 0)
+        self._visualizer.visualize(timestamp, frame, depth_frame, pose, obstacles, 1, 0, 0)
 
 def main():
-    #setup_pipeline_logging()
+    setup_pipeline_logging()
     runner = MockSimulationRunner()
     while True:
         time.sleep(2)
