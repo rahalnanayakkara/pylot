@@ -4,7 +4,7 @@ import pygame
 from objects.objects import Location
 
 visualize_rgb_camera = True
-visualize_detected_obstacles = False
+visualize_detected_obstacles = True
 visualize_tracked_obstacles = True
 visualize_waypoints = True
 visualize_prediction = False

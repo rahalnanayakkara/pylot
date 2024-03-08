@@ -11,13 +11,13 @@ import params
 
 def get_tracker_output_message(frame, obstacles, reinit, tracker):  
     start = time.time()
-    if reinit:
-        detected_obstacles = []
-        tracked_obstacles = []
-        for obstacle in obstacles:
-            if obstacle.is_vehicle() or obstacle.is_person():
-                detected_obstacles.append(obstacle)
-        tracker.reinitialize(frame, detected_obstacles)
+    
+    detected_obstacles = []
+    tracked_obstacles = []
+    for obstacle in obstacles:
+        if obstacle.is_vehicle() or obstacle.is_person():
+            detected_obstacles.append(obstacle)
+    tracker.reinitialize(frame, detected_obstacles)
 
     _, tracked_obstacles = tracker.track(frame)
     runtime = 1000 * (time.time() - start)

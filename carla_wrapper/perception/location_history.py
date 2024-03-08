@@ -15,29 +15,27 @@ class ObstacleLocationHistory:
     def __init__(self):
         self._obstacle_history = defaultdict(deque)
 
-    def get_location_history(self, timestamp, pose, depth_frame, obstacles):
+    def get_location_history(self, pose, depth_frame, obstacles):
         vehicle_transform = pose.transform
         obstacles_with_location = self._get_obstacle_locations(obstacles, depth_frame, vehicle_transform)
 
-        ids_cur_timestamp = []
+        print(obstacles_with_location)
+
         obstacle_trajectories = []
         for obstacle in obstacles_with_location:
             # Ignore obstacles that are far away.
             if (vehicle_transform.location.distance(obstacle.transform.location) > params.dynamic_obstacle_distance_threshold):
                 continue
-            ids_cur_timestamp.append(obstacle.id)
             self._obstacle_history[obstacle.id].append(obstacle)
             # Transform obstacle location from global world coordinates to ego-centric coordinates.
-            cur_obstacle_trajectory = []
+            obstacle_trajectory = []
             for obstacle in self._obstacle_history[obstacle.id]:
-                new_location = \
-                    vehicle_transform.inverse_transform_locations(
-                        [obstacle.transform.location])[0]
-                cur_obstacle_trajectory.append(Transform(new_location, Rotation()))
+                new_location = vehicle_transform.inverse_transform_locations([obstacle.transform.location])[0]
+                obstacle_trajectory.append(Transform(new_location, Rotation()))
             # The trajectory is relative to the current location.
             obstacle_trajectories.append(ObstacleTrajectory(obstacle, cur_obstacle_trajectory))
             
-        return timestamp, obstacle_trajectories
+        return obstacle_trajectories
 
 
     def _get_obstacle_locations(self, obstacles, depth_frame, ego_transform):
@@ -86,4 +84,5 @@ class ObstacleLocationHistory:
                 obstacle.transform = Transform(closest_location, Rotation())
             return obstacles
         else:
+            print(depth_frame)
             raise ValueError('Unexpected depth message type')

@@ -1,7 +1,6 @@
 import params
 
 from objects.frames import CameraFrame, DepthFrame
-from objects.objects import Transform, Rotation, Location
 
 class CarlaCamera:
     

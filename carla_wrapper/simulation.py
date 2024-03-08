@@ -9,7 +9,7 @@ from carla import Location, VehicleControl, command
 
 from objects.objects import Obstacle, TrafficLight, StopSign, SpeedLimitSign
 from objects.objects import Transform, Vector3D, Pose, Rotation
-from objects.objects import RGBCameraSetup
+from objects.objects import RGBCameraSetup, DepthCameraSetup
 from camera.carla_camera import CarlaCamera
 
 simulator_host = 'localhost'
@@ -27,7 +27,7 @@ rgb_camera_setup = RGBCameraSetup('center_camera',
                                     params.camera_image_height, transform,
                                     params.camera_fov)
 
-depth_camera_setup = RGBCameraSetup('depth_center_camera',
+depth_camera_setup = DepthCameraSetup('depth_center_camera',
                                     params.camera_image_width,
                                     params.camera_image_height, transform,
                                     params.camera_fov)
@@ -87,7 +87,7 @@ class CarlaSimulation:
         self._module_logger.info("\nForce ticking simulator ...")
         self._world.tick()
         frame = self._camera.get_processed_image(self._game_time)
-        depth_frame = self._camera.get_processed_image(self._game_time)
+        depth_frame = self._depth_camera.get_processed_image(self._game_time)
         pose = self.read_ego_vehicle_data()
         return self._game_time, frame, depth_frame, pose
 

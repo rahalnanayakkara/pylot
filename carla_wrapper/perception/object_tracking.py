@@ -46,8 +46,7 @@ class ObjectTracker():
         return (time.time() - start) * 1000, result
 
     def get_tracked_obstacles(self, timestamp, camera_frame, obstacles):
-        self._module_logger.info('@{}: ObjectTracker received message'.format(timestamp))
-        tracked_obstacles = []
+        tracked_obstacles = obstacles
         reinit_runtime = 0
         start_time = time.time()
 
@@ -64,6 +63,8 @@ class ObjectTracker():
                     detected_obstacles.append(obstacle)
             reinit_runtime, _ = self._reinit_tracker(camera_frame, detected_obstacles)
             tracker_runtime, (ok, tracked_obstacles) = self._run_tracker(camera_frame)
+        
+        self._module_logger.info('@{}: {} obstacles: {}'.format(timestamp, self._config_name, obstacles))
         
         assert ok, 'Tracker failed at timestamp {}'.format(timestamp)
         tracker_runtime = tracker_runtime + reinit_runtime
