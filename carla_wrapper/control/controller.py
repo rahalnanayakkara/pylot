@@ -43,7 +43,7 @@ class Controller():
 
         return steer, throttle, brake, 1000 * (time.time() - start_time)
 
-    def get_pid_control_instructions(vehicle, speed, waypoints, dt):
+    def get_pid_control_instructions(self, vehicle, speed, waypoints, dt):
 
         # initialize pid controller
         pid = PIDLongitudinalController(1.0, 0.0, 0.05, dt)
@@ -53,9 +53,7 @@ class Controller():
             target_speed = waypoints.get_target_speed(vehicle, params.min_pid_speed_waypoint_distance)
             throttle, brake = control_utils.compute_throttle_and_brake(pid, speed, target_speed, 1.0, 1.0)
             steer = control_utils.radians_to_steer(angle_steer, params.steer_gain)
-            print(angle_steer)
-            print(target_speed)
-        except ValueError:
+        except (ValueError, AttributeError):
             print('Braking! No more waypoints to follow.')
             throttle, brake = 0.0, 0.5
             steer = 0.0
@@ -63,7 +61,7 @@ class Controller():
         return steer, throttle, brake
 
 
-    def get_mpc_control_instructions(vehicle, speed, waypoints, dt):
+    def get_mpc_control_instructions(self, vehicle, speed, waypoints, dt):
             
         # Get first 50 waypoints (50 meters) waypoints.
         target_speeds = waypoints.target_speeds

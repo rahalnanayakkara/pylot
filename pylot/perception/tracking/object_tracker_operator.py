@@ -27,6 +27,8 @@ class ObjectTrackerOperator(erdos.Operator):
                                                  self.config.log_file_name)
         self._csv_logger = erdos.utils.setup_csv_logging(
             self.config.name + '-csv', self.config.csv_log_file_name)
+
+        self._log_file = open("/home/erdos/workspace/pylot/temp_log.txt", 'a')
         self._tracker_type = tracker_type
         # Absolute time when the last tracker run completed.
         self._last_tracker_run_completion_time = 0
@@ -179,6 +181,11 @@ class ObjectTrackerOperator(erdos.Operator):
         tracker_delay = self.__compute_tracker_delay(timestamp.coordinates[0],
                                                      detector_runtime,
                                                      tracker_runtime)
+
+        self._log_file.write("\n------Tracker Dump------" + str(timestamp))    
+        for o in tracked_obstacles:
+            self._log_file.write("\n"+str(o))
+
         obstacle_tracking_stream.send(
             ObstaclesMessage(timestamp, tracked_obstacles, tracker_delay))
 

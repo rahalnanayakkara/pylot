@@ -8,7 +8,7 @@ class BehaviorPlannerState(enum.Enum):
     READY = 1
     KEEP_LANE = 2
     PREPARE_LANE_CHANGE_LEFT = 3
-    LANGE_CHANGE_LEFT = 4
+    LANE_CHANGE_LEFT = 4
     PREPARE_LANE_CHANGE_RIGHT = 5
     LANE_CHANGE_RIGHT = 6
     OVERTAKE = 7
@@ -46,8 +46,8 @@ def compute_vehicle_speed_factor(ego_location_2d, vehicle_location_2d,
     v_angle = v_vector.get_angle(wp_vector)
     logger.debug('Vehicle vector {}; dist {}; angle {}'.format(
         v_vector, v_dist, v_angle))
-    print('Vehicle vector {}; dist {}; angle {}'.format(
-        v_vector, v_dist, v_angle))
+    # print('Vehicle vector {}; dist {}; angle {}'.format(
+    #     v_vector, v_dist, v_angle))
     min_angle = -0.5 * flags.vehicle_max_angle / flags.coast_factor
     if (min_angle < v_angle < flags.vehicle_max_angle
             and v_dist < flags.vehicle_max_distance):

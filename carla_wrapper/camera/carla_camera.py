@@ -1,5 +1,6 @@
 import params
 
+from objects.objects import Transform, Location, Rotation, DepthCameraSetup
 from objects.frames import CameraFrame, DepthFrame
 
 class CarlaCamera:
@@ -32,12 +33,18 @@ class CarlaCamera:
         self._camera.listen(self.process_images)
 
     def process_images(self, simulator_image):
+        transform = Transform(Location(1.3, 0.0, 1.8), Rotation(pitch=-15))
+        depth_camera_setup = DepthCameraSetup('depth_center_camera',
+                                    params.camera_image_width,
+                                    params.camera_image_height, transform,
+                                    params.camera_fov)
+
         """Invoked when an image is received from the simulator."""
         game_time = int(simulator_image.timestamp * 1000)
         if self._camera_setup.camera_type == 'sensor.camera.rgb':
             frame = CameraFrame.from_simulator_frame(simulator_image, self._camera_setup)
         elif self._camera_setup.camera_type == 'sensor.camera.depth':
-            frame = DepthFrame.from_simulator_frame(simulator_image, self._camera_setup)
+            frame = DepthFrame.from_simulator_frame(simulator_image, depth_camera_setup)
         self._processed_images[game_time] = frame
         self._latest_image = frame
     

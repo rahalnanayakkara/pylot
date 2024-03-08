@@ -42,6 +42,7 @@ class DetectionOperator(erdos.Operator):
         self._obstacles_stream = obstacles_stream
 
         pylot.utils.set_tf_loglevel(logging.ERROR)
+        self._log_file = open("/home/erdos/workspace/pylot/temp_log.txt", 'a')
 
         # Only sets memory growth for flagged GPU
         physical_devices = tf.config.experimental.list_physical_devices('GPU')
@@ -139,6 +140,10 @@ class DetectionOperator(erdos.Operator):
 
         self._logger.debug('@{}: {} obstacles: {}'.format(
             msg.timestamp, self.config.name, obstacles))
+
+        self._log_file.write("\n------Obstacle Dump------" + str(msg.timestamp))    
+        for o in obstacles:
+            self._log_file.write("\n"+str(o))
 
         # Get runtime in ms.
         runtime = (time.time() - start_time) * 1000

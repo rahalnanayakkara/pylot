@@ -46,7 +46,7 @@ class WaypointPlanner():
         self._world = World()
         self._map = HDMap(map)
         self._state = BehaviorPlannerState.FOLLOW_WAYPOINTS
-        self._goal_location = Location(234.0, 59.0, 39.0)
+        self._goal_location = Location(376, 0.0, 0.0)
         self._route = Waypoints(deque([Transform(self._goal_location, Rotation())]))
 
         if params.planner_type == 'waypoints' or params.planner_type == 'fot':
@@ -57,13 +57,10 @@ class WaypointPlanner():
             self._planner = RRTStarPlanner(self._world)
 
     def get_waypoints(self, pose, predictions):  
-        print("Planner: get_waypoint")
         start = time.time()
-        self.update_state_route(pose.transform)
-        self._world.update(pose, predictions, [], None, None)
-        ttd = 400 - (pose.forward_speed - 10) * 10
-        ttd = ttd - (time.time() - self._world.pose.localization_time)
-
+        self.update_state_route(pose.transform, predictions)
+        self._world.update(pose, predictions, [], self._map, None)
+        
         (speed_factor, _, _, speed_factor_tl, speed_factor_stop) = self._world.stop_for_agents()
         if params.planner_type == 'waypoints':
             print("Following world for waypoints ...")
@@ -71,27 +68,40 @@ class WaypointPlanner():
             output_wps = self._world.follow_waypoints(target_speed)
         else:
             print("Running tracker for waypoints ...")
+            ttd = 400 - (pose.forward_speed - 10) * 10
+            ttd = ttd - (time.time() - self._world.pose.localization_time)
             output_wps = self._planner.run(ttd)
             speed_factor = min(speed_factor_stop, speed_factor_tl)
             output_wps.apply_speed_factor(speed_factor)
+
+        print("\n------Waypoint dump------")
+        for i in range(len(output_wps.waypoints)):
+            print("\n" + str(output_wps.waypoints[i]))
         
         return output_wps, (time.time() - start) * 1000
     
-    def update_state_route(self, ego_transform):
+    def update_state_route(self, ego_transform, predictions):
         print("Planner: update_state_route")
         self._route.remove_waypoint_if_close(ego_transform.location, 3)
         new_goal_location = self.get_goal_location(ego_transform)
+
+        if len(predictions) > 0:
+            new_goal_location = predictions[0].transform.location
+        else:
+            new_goal_location = self._goal_location
+
         if new_goal_location != self._goal_location:
             self._goal_location = new_goal_location
             if self._map:
                 # Use the map to compute more fine-grained waypoints.
-                waypoints = self._map.compute_waypoints(
+                waypoints_deque = self._map.compute_waypoints(
                     ego_transform.location, self._goal_location)
                 road_options = deque([
                     RoadOption.LANE_FOLLOW
-                    for _ in range(len(waypoints))
+                    for _ in range(len(waypoints_deque))
                 ])
-                self._route = Waypoints(waypoints, road_options=road_options)
+                waypoints = Waypoints(waypoints_deque, road_options=road_options)
+                self._route = waypoints
             else:
                 # Map is not available, do not change route.
                 waypoints = self._route

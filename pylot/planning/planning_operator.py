@@ -155,10 +155,16 @@ class PlanningOperator(erdos.Operator):
             self._logger.debug('@{}: updating planner state to {}'.format(
                 msg.timestamp, msg.agent_state))
             self._state = msg.agent_state
+            print("\nmsg.agent_state"+str(msg.agent_state))
         if msg.waypoints:
             self._logger.debug('@{}: route has {} waypoints'.format(
                 msg.timestamp, len(msg.waypoints.waypoints)))
             # The last waypoint is the goal location.
+
+            print("\n------On_route Waypoint dump------")
+            for i in range(len(msg.waypoints.waypoints)):
+                print("\n" + str(msg.waypoints.waypoints[i]))
+
             self._world.update_waypoints(msg.waypoints.waypoints[-1].location,
                                          msg.waypoints)
 
@@ -210,6 +216,11 @@ class PlanningOperator(erdos.Operator):
             self._logger.debug('@{}: speed factor: {}'.format(
                 timestamp, speed_factor))
             output_wps.apply_speed_factor(speed_factor)
+
+        print("\n------Waypoint dump------")
+        for i in range(len(output_wps.waypoints)):
+            print("\n" + str(output_wps.waypoints[i]))
+
         waypoints_stream.send(WaypointsMessage(timestamp, output_wps))
 
     def get_predictions(self, prediction_msg, ego_transform):
@@ -233,6 +244,8 @@ class PlanningOperator(erdos.Operator):
                 predictions.append(prediction)
         elif isinstance(prediction_msg, PredictionMessage):
             predictions = prediction_msg.predictions
+            for i in range(len(predictions)):
+                print("\nPrediction: "+str(predictions[i]))
         else:
             raise ValueError('Unexpected obstacles msg type {}'.format(
                 type(prediction_msg)))

@@ -47,23 +47,23 @@ stop_at_uncontrolled_junctions = False
 traffic_light_min_distance = 5
 traffic_light_max_distance = 20
 traffic_light_max_angle = 0.6
-vehicle_max_distance = 18
+vehicle_max_distance = 45
 vehicle_max_angle = 0.4
 person_distance_hit_zone = 35
 person_angle_hit_zone = 0.15
 person_distance_emergency_zone = 15
 person_angle_emergency_zone = 0.5
 
-throttle_max = 10.0
+throttle_max = 1.0
 steer_gain = 0.7
-brake_max = 10.0
+brake_max = 1.0
 coast_factor = 1.75
 
 # Taken from prediction/flags.py
 
 prediction_radius = 50
 prediction_num_past_steps = 5
-prediction_num_future_steps = 10
+prediction_num_future_steps = 30
 prediction_ego_agent = False
 r2p2_model_path = '/home/erdos/workspace/pylot/dependencies/models/prediction/r2p2/r2p2-model.pt'
 

@@ -34,7 +34,7 @@ class DepthFrame(object):
     def __init__(self, frame, camera_setup, original_frame=None):
         self.frame = frame
         self.camera_setup = camera_setup
-        self.original_frame = original_frame
+        self.original_frame = None
         # Attribute used to cache the depth frame as a point cloud. We're doing
         # this because it is computationally expensive to transform a depth
         # frame to a point cloud.

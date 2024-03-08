@@ -79,7 +79,11 @@ class CarlaSimulation:
             world.tick()
 
     def apply_control(self, throttle, steer, brake, hand_brake, reverse):
-        vec_control = VehicleControl(throttle, steer, brake, hand_brake, reverse)
+        vec_control = VehicleControl(throttle=throttle,
+                                     steer=steer,
+                                     brake=brake,
+                                     hand_brake=hand_brake,
+                                     reverse=reverse)
         self._client.apply_batch_sync([command.ApplyVehicleControl(self._ego_vehicle.id, vec_control)])
     
     def tick_simulator(self):

@@ -3,13 +3,14 @@ from collections import defaultdict, deque
 import params
 import copy
 import numpy as np
+import math
 
-from objects.objects import Transform, Location, Rotation, RGBCameraSetup, ObstacleTrajectory, Vector2D
+from objects.objects import Transform, Location, Rotation, RGBCameraSetup, DepthCameraSetup, ObstacleTrajectory, Vector2D
 from objects.frames import DepthFrame, PointCloud
 
 camera_transform = Transform(Location(1.3, 0.0, 1.8), Rotation(pitch=-15))
 camera_setup = RGBCameraSetup('center_camera', params.camera_image_width, params.camera_image_height, camera_transform, params.camera_fov)
-depth_camera_setup = RGBCameraSetup('center_camera', params.camera_image_width, params.camera_image_height, camera_transform, params.camera_fov)
+depth_camera_setup = DepthCameraSetup('depth_center_camera', params.camera_image_width, params.camera_image_height, camera_transform, params.camera_fov)
 
 class ObstacleLocationHistory:
 
@@ -21,7 +22,7 @@ class ObstacleLocationHistory:
     def get_location_history(self, timestamp, pose, depth_frame, obstacles):
         vehicle_transform = pose.transform
         obstacles_with_location = self._get_obstacle_locations(obstacles, depth_frame, vehicle_transform)
-        
+
         ids_cur_timestamp = []
         obstacle_trajectories = []
         for obstacle in obstacles_with_location:
@@ -70,7 +71,10 @@ class ObstacleLocationHistory:
                     obstacles_with_location.append(obstacle)
             return obstacles_with_location
         elif isinstance(depth_frame, DepthFrame):
-            depth_frame.camera_setup.set_transform(ego_transform * depth_camera_setup.transform)
+            transformed_camera_setup = copy.deepcopy(depth_camera_setup)
+            transformed_camera_setup.set_transform(
+                ego_transform * transformed_camera_setup.transform)
+            depth_frame.camera_setup = transformed_camera_setup
             for obstacle in obstacles:
                 center_point = obstacle.bounding_box_2D.get_center_point()
                 # Sample several points around the center of the bounding box
@@ -93,6 +97,11 @@ class ObstacleLocationHistory:
                         min_distance = dist
                         closest_location = location
                 obstacle.transform = Transform(closest_location, Rotation())
+                # print("Bounding box: " + str(center_point))
+                # print("Vehicle location: " + str(ego_transform.location))
+                # print("Obstacle location: " + str(obstacle.transform.location))
+                print("Distance: "+str(math.sqrt((obstacle.transform.location.x - ego_transform.location.x)**2 + (obstacle.transform.location.y - ego_transform.location.y)**2)))
+                print("Relative location: " + str(ego_transform.inverse_transform_locations([obstacle.transform.location])[0]))
             return obstacles
         else:
             print(depth_frame)

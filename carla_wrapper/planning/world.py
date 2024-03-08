@@ -246,7 +246,7 @@ class World(object):
             wp_angle = self.waypoints.get_angle(
                 self.ego_transform,
                 params.min_pid_steer_waypoint_distance)
-        except ValueError:
+        except (ValueError, AttributeError):
             # No more waypoints to follow.
             return (0, 0, 0, 0, 0)
 
@@ -426,8 +426,8 @@ def compute_vehicle_speed_factor(ego_location_2d, vehicle_location_2d,
     v_vector = vehicle_location_2d - ego_location_2d
     v_dist = vehicle_location_2d.l2_distance(ego_location_2d)
     v_angle = v_vector.get_angle(wp_vector)
-    print('Vehicle vector {}; dist {}; angle {}'.format(
-        v_vector, v_dist, v_angle))
+    # print('Vehicle vector {}; dist {}; angle {}'.format(
+    #     v_vector, v_dist, v_angle))
     min_angle = -0.5 * params.vehicle_max_angle / params.coast_factor
     if (min_angle < v_angle < params.vehicle_max_angle
             and v_dist < params.vehicle_max_distance):
