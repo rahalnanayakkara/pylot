@@ -3,18 +3,18 @@ import params
 
 from utils.logging import setup_pipeline_logging, ModuleCompletionLogger
 from simulation import CarlaSimulation
-from detection.object_detection import ObjectDetector
-from perception.object_tracking import ObjectTracker
-from perception.location_history import ObstacleLocationHistory
-from objects.messages import ObstacleTrajectoriesMessage
-from prediction.predictor import get_predictions
-from planning.planner import WaypointPlanner
-from control.controller import Controller
 from visualizer import Visualizer
 
 class SimulationRunner():
 
     def __init__(self):
+
+        from detection.object_detection import ObjectDetector
+        from perception.object_tracking import ObjectTracker
+        from perception.location_history import ObstacleLocationHistory
+        from planning.planner import WaypointPlanner
+        from control.controller import Controller
+
         self._simulation = CarlaSimulation()
         self._detector = ObjectDetector()
         self._tracker = ObjectTracker()
@@ -25,6 +25,10 @@ class SimulationRunner():
         self._visualizer = Visualizer()
 
     def run_one_tick(self):
+
+        from objects.messages import ObstacleTrajectoriesMessage
+        from prediction.predictor import get_predictions
+        
         (frame, depth_frame, pose, timestamp)            = self._simulation.tick_simulator()
         (timestamp, obstacles, detector_runtime)         = self._detector.get_obstacles(timestamp, frame)
         (timestamp, tracked_obstacles, tracker_runtime)  = self._tracker.get_tracked_obstacles(timestamp, frame, obstacles)
@@ -38,14 +42,24 @@ class SimulationRunner():
 
         self._simulation.apply_control(throttle, steer, brake, False, False)
         self._visualizer.visualize(timestamp, frame, depth_frame, pose, obstacles, throttle, steer, brake)
-        
+
         print("\nRuntime: {}\t{}\t{}\t{}\t{}".format(detector_runtime, tracker_runtime, predictor_runtime, planner_runtime, controller_runtime))
         print("\nLocation: {}, Control: {} {} {}", pose.transform.location, throttle, steer, brake)
     
+class MockSimulationRunner():
+    
+    def __init__(self):
+        self._simulation = CarlaSimulation()
+        self._visualizer = Visualizer()
+    
+    def run_one_tick(self):
+        (frame, depth_frame, pose, timestamp) = self._simulation.tick_simulator()
+        self._simulation.apply_control(1, 0, 0, False, False)
+        self._visualizer.visualize(timestamp, frame, depth_frame, pose, None, 1, 0, 0)
 
 def main():
     #setup_pipeline_logging()
-    runner = SimulationRunner()
+    runner = MockSimulationRunner()
     while True:
         time.sleep(2)
         runner.run_one_tick()

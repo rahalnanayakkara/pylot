@@ -1,5 +1,5 @@
-from dependencies.sort.sort import Sort
-from nanonets_object_tracking.deepsort import deepsort_rbc
+from sort.sort import Sort
+from dependencies.nanonets_object_tracking.deepsort import deepsort_rbc
 
 import time
 import numpy as np

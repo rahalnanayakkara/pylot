@@ -7,7 +7,7 @@ import math
 import numpy as np
 
 import params
-from pylot.service.objects import Waypoints
+from objects.objects import Waypoints
 
 # Number of predicted locations to consider when computing speed factors.
 NUM_FUTURE_TRANSFORMS = 10

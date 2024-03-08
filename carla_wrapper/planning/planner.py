@@ -1,6 +1,6 @@
 from collections import deque
 from objects.objects import Location, Rotation, Transform, Waypoints
-from world import World
+from planning.world import World
 
 import time
 import params
