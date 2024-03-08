@@ -26,6 +26,7 @@ class CarlaCamera:
                                          transform,
                                          attach_to=vehicle)
 
+        self._latest_image = None
         self._processed_images = {}
 
         # Register the callback on the camera.
@@ -39,6 +40,8 @@ class CarlaCamera:
         elif self._camera_setup.camera_type == 'sensor.camera.depth':
             frame = DepthFrame.from_simulator_frame(simulator_image, self._camera_setup)
         self._processed_images[game_time] = frame
+        self._latest_image = frame
     
     def get_processed_image(self, game_time):
-        return self._processed_images[game_time]
+        return self._latest_image 
+        #return self._processed_images[game_time]

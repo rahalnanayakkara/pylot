@@ -14,12 +14,21 @@ visualize_pose = True
 DEFAULT_VIS_TIME = 30000.0
 
 class Visualizer():
-    def __init__(self):        
+    def __init__(self, world):        
         pygame.init()
         self.display = pygame.display.set_mode(
             (params.camera_image_width, params.camera_image_height),
             pygame.HWSURFACE | pygame.DOUBLEBUF)
         pygame.display.set_caption("CARLA WRAPPER")
+
+        self._world = world
+
+        # Set the font.
+        fonts = [x for x in pygame.font.get_fonts() if 'mono' in x]
+        default_font = 'ubuntumono'
+        mono = default_font if default_font in fonts else fonts[0]
+        mono = pygame.font.match_font(mono)
+        self.font = pygame.font.Font(mono, 14)
 
         # Array of keys to figure out which message to display.
         self.current_display = 0
@@ -45,11 +54,15 @@ class Visualizer():
             self.window_titles.append("Depth Camera")
         
     def visualize(self, timestamp, frame, depth_frame, pose, obstacles, throttle, steer, brake):
-        ego_transform = pose.transform
-        self.visualize_pose(ego_transform)
-        frame.visualize(self.display, timestamp=timestamp)
-        depth_frame.visualize(self.display, timestamp=timestamp)
-        frame.annotate_with_bounding_boxes(timestamp, obstacles, ego_transform)
+        if pose:
+            ego_transform = pose.transform
+            self.visualize_pose(ego_transform)
+        if frame:
+            frame.visualize(self.display, timestamp=timestamp)
+        if depth_frame:
+            depth_frame.visualize(self.display, timestamp=timestamp)
+        if frame and obstacles and pose:
+            frame.annotate_with_bounding_boxes(timestamp, obstacles, ego_transform)
         self.render_text(pose, throttle, steer, brake, timestamp)
     
     def render_text(self, pose, throttle, steer, brake, timestamp):
@@ -77,7 +90,7 @@ class Visualizer():
         ]
 
         # Display the information box.
-        info_surface = pygame.Surface((220, self._flags.camera_image_height // 3))
+        info_surface = pygame.Surface((220, params.camera_image_height // 3))
         info_surface.set_alpha(100)
         self.display.blit(info_surface, (0, 0))
 

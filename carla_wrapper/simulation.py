@@ -2,7 +2,7 @@ import time
 
 import params
 
-from utils.simulation import get_world, set_mode_fps
+from utils.simulation import set_mode_fps
 import utils.logging
 
 from carla import Location, VehicleControl, command
@@ -34,15 +34,13 @@ depth_camera_setup = RGBCameraSetup('depth_center_camera',
 
 class CarlaSimulation:
 
-    def __init__(self):
+    def __init__(self, client, world):
         # Dump logs for CarlaSimulation
         self._module_logger = utils.logging.get_module_logger("CarlaSimulation")
 
         print("\nInitializing world ...")
-
-        self._client, self._world = get_world(params.simulator_host,
-                             params.simulator_port,
-                             params.simulator_timeout)
+        self._client = client
+        self._world = world
         set_mode_fps(self._world, params.simulator_fps)
 
         self._game_time = 0
