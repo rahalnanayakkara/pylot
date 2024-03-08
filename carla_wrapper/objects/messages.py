@@ -180,20 +180,9 @@ class ObstaclePositionsSpeedsMessage():
 
 
 class ObstacleTrajectoriesMessage():
-    """Message to be used to send obstacle trajectory info.
+    """Message to be used to send obstacle trajectory info."""
 
-    Args:
-        timestamp (:py:class:`erdos.timestamp.Timestamp`): The timestamp of the
-            message.
-        obstacle_trajectories (list(:py:class:`~pylot.perception.tracking.obstacle_trajectory.ObstacleTrajectory`)):  # noqa: E501
-            Obstacle trajectories.
-
-    Attributes:
-        obstacle_trajectories (list(:py:class:`~pylot.perception.tracking.obstacle_trajectory.ObstacleTrajectory`)):
-            Obstacle trajectories.
-    """
-    def __init__(self, timestamp, obstacle_trajectories):
-        super(ObstacleTrajectoriesMessage, self).__init__(timestamp, None)
+    def __init__(self, obstacle_trajectories):
         self.obstacle_trajectories = obstacle_trajectories
 
     def __repr__(self):
@@ -202,8 +191,8 @@ class ObstacleTrajectoriesMessage():
     def __str__(self):
         trajectories_str = '\n'.join(
             [str(traj) for traj in self.obstacle_trajectories])
-        return ('ObstacleTrajectoriesMessage(timestamp {}, '
-                'trajectories: {})'.format(self.timestamp, trajectories_str))
+        return ('ObstacleTrajectoriesMessage('
+                'trajectories: {})'.format(trajectories_str))
 
     def get_nearby_obstacles_info(self, radius, filter_fn=None):
         """Gets a lost of obstacle that are within the radius.
