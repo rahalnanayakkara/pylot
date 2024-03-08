@@ -1659,6 +1659,7 @@ class Obstacle(object):
         else:
             return obstacle
 
+
 class Waypoints(object):
     """Stores waypoints and provides methods to wrangle them."""
     def __init__(self, waypoints, target_speeds=None, road_options=None):

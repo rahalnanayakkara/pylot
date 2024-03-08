@@ -10,6 +10,7 @@ from objects.messages import ObstacleTrajectoriesMessage
 from prediction.predictor import get_predictions
 from planning.planner import WaypointPlanner
 from control.controller import Controller
+from visualizer import Visualizer
 
 class SimulationRunner():
 
@@ -21,6 +22,7 @@ class SimulationRunner():
         # self._predictor = ...
         self._planner = WaypointPlanner()
         self._controller = Controller()
+        self._visualizer = Visualizer()
 
     def run_one_tick(self):
         (frame, depth_frame, pose, timestamp)            = self._simulation.tick_simulator()
@@ -35,13 +37,13 @@ class SimulationRunner():
         (throttle, steer, brake, controller_runtime) = self._controller.get_control_instructions(pose, waypoints)
 
         self._simulation.apply_control(throttle, steer, brake, False, False)
-
+        self._visualizer.visualize(timestamp, frame, depth_frame, pose, obstacles, throttle, steer, brake)
+        
         print("\nRuntime: {}\t{}\t{}\t{}\t{}".format(detector_runtime, tracker_runtime, predictor_runtime, planner_runtime, controller_runtime))
         print("\nLocation: {}, Control: {} {} {}", pose.transform.location, throttle, steer, brake)
     
 
 def main():
-
     #setup_pipeline_logging()
     runner = SimulationRunner()
     while True:

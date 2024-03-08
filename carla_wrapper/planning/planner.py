@@ -1,5 +1,4 @@
 from collections import deque
-from objects import Waypoints
 from objects.objects import Location, Rotation, Transform, Waypoints
 from world import World
 

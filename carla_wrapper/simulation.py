@@ -35,7 +35,6 @@ depth_camera_setup = RGBCameraSetup('depth_center_camera',
 class CarlaSimulation:
 
     def __init__(self):
-
         # Dump logs for CarlaSimulation
         self._module_logger = utils.logging.get_module_logger("CarlaSimulation")
 
