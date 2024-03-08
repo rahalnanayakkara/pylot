@@ -1,45 +1,123 @@
 from collections import deque
 from objects.objects import Location, Rotation, Transform, Waypoints
 from planning.world import World
+from planning.map import HDMap
 
 from frenet_optimal_trajectory_planner.FrenetOptimalTrajectory.fot_wrapper import run_fot
 
 import time
 import params
+import enum
+
+
+class BehaviorPlannerState(enum.Enum):
+    """States in which the FSM behavior planner can be in."""
+    FOLLOW_WAYPOINTS = 0
+    READY = 1
+    KEEP_LANE = 2
+    PREPARE_LANE_CHANGE_LEFT = 3
+    LANE_CHANGE_LEFT = 4
+    PREPARE_LANE_CHANGE_RIGHT = 5
+    LANE_CHANGE_RIGHT = 6
+    OVERTAKE = 7
+
+class RoadOption(enum.Enum):
+    """Enum that defines the possible high-level route plans.
+
+    RoadOptions are usually attached to waypoints we receive from
+    the challenge environment.
+    """
+    VOID = -1
+    LEFT = 1
+    RIGHT = 2
+    STRAIGHT = 3
+    LANE_FOLLOW = 4
+    CHANGE_LANE_LEFT = 5
+    CHANGE_LANE_RIGHT = 6
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return self.name
 
 class WaypointPlanner():
-    def __init__(self):
+    def __init__(self, map):
         self._world = World()
+        self._map = HDMap(map)
+        self._state = BehaviorPlannerState.FOLLOW_WAYPOINTS
+        self._goal_location = Location(234.0, 59.0, 39.0)
+        self._route = Waypoints(deque([Transform(self._goal_location, Rotation())]))
 
         if params.planner_type == 'waypoints' or params.planner_type == 'fot':
-            self._planner = FOTPlanner()
+            self._planner = FOTPlanner(self._world)
         elif params.planner_type == 'hybrid':
-            self._planner = HybridAStarPlanner()
+            self._planner = HybridAStarPlanner(self._world)
         else:
-            self._planner = RRTStarPlanner()
+            self._planner = RRTStarPlanner(self._world)
 
-
-    def get_waypoints(self, pose, predictions, obstacles, ttd, lanes, type):  
+    def get_waypoints(self, pose, predictions):  
+        print("Planner: get_waypoint")
         start = time.time()
-        self._world.update(pose, predictions, obstacles, None, None)
-        # Total ttd - time spent up to now
+        self.update_state_route(pose.transform)
+        self._world.update(pose, predictions, [], None, None)
+        ttd = 400 - (pose.forward_speed - 10) * 10
         ttd = ttd - (time.time() - self._world.pose.localization_time)
 
-        # if self._state == BehaviorPlannerState.OVERTAKE:
-        #     # Ignore traffic lights and obstacle.
-        #     output_wps = self._planner.run(timestamp, ttd)
-        # else:
-        (speed_factor, _, _, speed_factor_tl,
-            speed_factor_stop) = self._world.stop_for_agents()
-        if type == 'waypoint':
+        (speed_factor, _, _, speed_factor_tl, speed_factor_stop) = self._world.stop_for_agents()
+        if params.planner_type == 'waypoints':
+            print("Following world for waypoints ...")
             target_speed = speed_factor * params.target_speed
             output_wps = self._world.follow_waypoints(target_speed)
         else:
+            print("Running tracker for waypoints ...")
             output_wps = self._planner.run(ttd)
             speed_factor = min(speed_factor_stop, speed_factor_tl)
             output_wps.apply_speed_factor(speed_factor)
         
         return output_wps, (time.time() - start) * 1000
+    
+    def update_state_route(self, ego_transform):
+        print("Planner: update_state_route")
+        self._route.remove_waypoint_if_close(ego_transform.location, 3)
+        new_goal_location = self.get_goal_location(ego_transform)
+        if new_goal_location != self._goal_location:
+            self._goal_location = new_goal_location
+            if self._map:
+                # Use the map to compute more fine-grained waypoints.
+                waypoints = self._map.compute_waypoints(
+                    ego_transform.location, self._goal_location)
+                road_options = deque([
+                    RoadOption.LANE_FOLLOW
+                    for _ in range(len(waypoints))
+                ])
+                self._route = Waypoints(waypoints, road_options=road_options)
+            else:
+                # Map is not available, do not change route.
+                waypoints = self._route
+            if not waypoints or waypoints.is_empty():
+                # If waypoints are empty (e.g., reached destination), set
+                # waypoints to current vehicle location.
+                self._route = Waypoints(
+                    deque([ego_transform]),
+                    road_options=deque([RoadOption.LANE_FOLLOW]))
+        if self._route:
+            self._world.update_waypoints(self._route.waypoints[-1].location,
+                                         self._route)
+    
+    def get_goal_location(self, ego_transform: Transform):
+        if len(self._route.waypoints) > 1:
+            dist = ego_transform.location.distance(
+                self._route.waypoints[0].location)
+            if dist < 5:
+                new_goal_location = self._route.waypoints[1].location
+            else:
+                new_goal_location = self._route.waypoints[0].location
+        elif len(self._route.waypoints) == 1:
+            new_goal_location = self._route.waypoints[0].location
+        else:
+            new_goal_location = ego_transform.location
+        return new_goal_location
 
 
 class Planner(object):
@@ -171,12 +249,12 @@ class FOTPlanner(Planner):
             ego_transform.location)
         # compute waypoints offset by current location
         wps = self._world.waypoints.slice_waypoints(
-            max(current_index - self._flags.num_waypoints_behind, 0),
-            min(current_index + self._flags.num_waypoints_ahead,
+            max(current_index - params.num_waypoints_behind, 0),
+            min(current_index + params.num_waypoints_ahead,
                 len(self._world.waypoints.waypoints)))
         initial_conditions = {
             'ps': self.s0,
-            'target_speed': self._flags.target_speed,
+            'target_speed': params.target_speed,
             'pos': ego_transform.location.as_numpy_array_2D(),
             'vel': self._world.ego_velocity_vector.as_numpy_array_2D(),
             'wp': wps.as_numpy_array_2D().T,
