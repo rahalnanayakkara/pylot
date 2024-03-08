@@ -7,9 +7,9 @@ import torch
 from objects.objects import Transform, Location, Rotation
 from objects.objects import ObstaclePrediction
 from objects.messages import ObstacleTrajectoriesMessage
-from r2p2 import R2P2
+from prediction.r2p2 import R2P2
 
-from prediction_utils import get_occupancy_grid
+from prediction.prediction_utils import get_occupancy_grid
 
 _r2p2 = R2P2().to(params.device)
 _lidar_setup = None # Likely unnecessary: create_center_lidar_setup(Transform(Location(1.3, 0.0, 1.8), Rotation(pitch=-15)))

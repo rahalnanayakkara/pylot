@@ -17,7 +17,7 @@ import utils.logging
 
 
 class Controller():
-    def __init__(self) -> None:
+    def __init__(self):
         self._config_name = "Controller"
         # Dump logs for Controller
         self._module_logger = utils.logging.get_module_logger(self._config_name)

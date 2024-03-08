@@ -65,7 +65,7 @@ class ModuleCompletionLogger:
             cls._instance = super(ModuleCompletionLogger, cls).__new__(cls)
         return cls._instance
 
-    def __init__(self) -> None:
+    def __init__(self):
         if not hasattr(self, 'is_initialized'):
             self.log_dir = metrics_dir
             self.filepath = os.path.join(self.log_dir, self.filename)

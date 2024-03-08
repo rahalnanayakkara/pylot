@@ -1,6 +1,6 @@
 import numpy as np
 
-from utils import Transform
+from objects.objects import Transform
 
 def get_occupancy_grid(point_cloud, lidar_z, lidar_meters_max):
     """Get occupancy grids for two different ranges of heights."""

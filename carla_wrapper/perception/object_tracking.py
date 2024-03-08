@@ -6,7 +6,7 @@ import utils.logging
 import params
 
 class ObjectTracker():
-    def __init__(self) -> None:
+    def __init__(self):
 
         self._config_name = "ObjectTracker"
         self._module_logger = utils.logging.get_module_logger(self._config_name)

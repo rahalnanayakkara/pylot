@@ -34,7 +34,7 @@ depth_camera_setup = RGBCameraSetup('depth_center_camera',
 
 class CarlaSimulation:
 
-    def __init__(self) -> None:
+    def __init__(self):
 
         # Dump logs for CarlaSimulation
         self._module_logger = utils.logging.get_module_logger("CarlaSimulation")
@@ -47,7 +47,6 @@ class CarlaSimulation:
         set_mode_fps(self._world, params.simulator_fps)
 
         self._game_time = 0
-
         self._spectator = self._world.get_spectator()
         
         print("\nTick until 4.0 seconds time so all runs are synchronized ...")
@@ -56,7 +55,7 @@ class CarlaSimulation:
         print("\nWaiting for ego vehicle to spawn ...")
         self._ego_vehicle = self.wait_for_ego_vehicle(self._world)
 
-        print("\nAdding camera to vehicle ...")
+        print("\nAdding cameras to vehicle ...")
         self._camera = CarlaCamera(self._world, self._ego_vehicle, rgb_camera_setup)
         self._depth_camera = CarlaCamera(self._world, self._ego_vehicle, depth_camera_setup)
 

@@ -1,3 +1,4 @@
+import time
 import params
 
 from utils.logging import setup_pipeline_logging, ModuleCompletionLogger
@@ -12,7 +13,7 @@ from control.controller import Controller
 
 class SimulationRunner():
 
-    def __init__(self) -> None:
+    def __init__(self):
         self._simulation = CarlaSimulation()
         self._detector = ObjectDetector()
         self._tracker = ObjectTracker()
@@ -41,10 +42,10 @@ class SimulationRunner():
 
 def main():
 
-    setup_pipeline_logging()
+    #setup_pipeline_logging()
     runner = SimulationRunner()
     while True:
-        x = input()
+        time.sleep(2)
         runner.run_one_tick()
 
 if __name__ == '__main__':

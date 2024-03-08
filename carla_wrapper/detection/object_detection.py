@@ -17,7 +17,7 @@ obstacle_detection_min_score_threshold = params.obstacle_detection_min_score_thr
 
 class ObjectDetector:
 
-    def __init__(self) -> None:
+    def __init__(self):
         self._config_name = "ObjectDetector"
         self._module_logger = utils.logging.get_module_logger(self._config_name)
         self._csv_logger = utils.logging.ModuleCompletionLogger()

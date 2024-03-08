@@ -23,7 +23,7 @@ flags.DEFINE_enum(
     ['simulation', 'real-world', 'challenge-map', 'challenge-sensors'],
     'Sets the mode in which the pipeline executes')
 
-flags.DEFINE_enum('module_fps', 10, 'Module Rate of Operation')
+flags.DEFINE_integer('module_fps', 10, 'Module Rate of Operation')
 
 ######################################################################
 # Perception

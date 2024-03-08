@@ -122,7 +122,7 @@ flags.DEFINE_list('tracking_metrics', [
 ], 'Tracking evaluation metrics')
 
 
-flags.DEFINE_bool('use_local_tracking_server', True, 'True to fetch tracking information from local server')
+flags.DEFINE_bool('use_local_tracking_server', False, 'True to fetch tracking information from local server')
 flags.DEFINE_bool('use_cloud_tracking_server', False, 'True to fetch tracking information from remote server')
 
 flags.DEFINE_string('remote_tracking_server_local', '169.254.106.239', 'Remote server to fetch tracking information')

@@ -7,7 +7,7 @@ import time
 import params
 
 class WaypointPlanner():
-    def __init__(self) -> None:
+    def __init__(self):
         self._world = World()
 
         if params.planner_type == 'waypoints' or params.planner_type == 'fot':
