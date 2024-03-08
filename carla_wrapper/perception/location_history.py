@@ -7,25 +7,28 @@ import numpy as np
 from objects.objects import Transform, Location, Rotation, RGBCameraSetup, ObstacleTrajectory, Vector2D
 from objects.frames import DepthFrame, PointCloud
 
-_camera_transform = Transform(Location(1.3, 0.0, 1.8), Rotation(pitch=-15))
-_camera_setup = RGBCameraSetup('center_camera', params.camera_image_width, params.camera_image_height, _camera_transform, params.camera_fov)
+camera_transform = Transform(Location(1.3, 0.0, 1.8), Rotation(pitch=-15))
+camera_setup = RGBCameraSetup('center_camera', params.camera_image_width, params.camera_image_height, camera_transform, params.camera_fov)
+depth_camera_setup = RGBCameraSetup('center_camera', params.camera_image_width, params.camera_image_height, camera_transform, params.camera_fov)
 
 class ObstacleLocationHistory:
 
     def __init__(self):
         self._obstacle_history = defaultdict(deque)
+        self._timestamp_history = deque()
+        self._timestamp_to_id = defaultdict(list)
 
-    def get_location_history(self, pose, depth_frame, obstacles):
+    def get_location_history(self, timestamp, pose, depth_frame, obstacles):
         vehicle_transform = pose.transform
         obstacles_with_location = self._get_obstacle_locations(obstacles, depth_frame, vehicle_transform)
-
-        print(obstacles_with_location)
-
+        
+        ids_cur_timestamp = []
         obstacle_trajectories = []
         for obstacle in obstacles_with_location:
             # Ignore obstacles that are far away.
             if (vehicle_transform.location.distance(obstacle.transform.location) > params.dynamic_obstacle_distance_threshold):
                 continue
+            ids_cur_timestamp.append(obstacle.id)
             self._obstacle_history[obstacle.id].append(obstacle)
             # Transform obstacle location from global world coordinates to ego-centric coordinates.
             obstacle_trajectory = []
@@ -33,16 +36,26 @@ class ObstacleLocationHistory:
                 new_location = vehicle_transform.inverse_transform_locations([obstacle.transform.location])[0]
                 obstacle_trajectory.append(Transform(new_location, Rotation()))
             # The trajectory is relative to the current location.
-            obstacle_trajectories.append(ObstacleTrajectory(obstacle, cur_obstacle_trajectory))
+            obstacle_trajectories.append(ObstacleTrajectory(obstacle, obstacle_trajectory))
+        
+        self._timestamp_history.append(timestamp)
+        self._timestamp_to_id[timestamp] = ids_cur_timestamp
+        if len(self._timestamp_history) >= params.tracking_num_steps:
+            gc_timestamp = self._timestamp_history.popleft()
+            for obstacle_id in self._timestamp_to_id[gc_timestamp]:
+                self._obstacle_history[obstacle_id].popleft()
+                if len(self._obstacle_history[obstacle_id]) == 0:
+                    del self._obstacle_history[obstacle_id]
+            del self._timestamp_to_id[gc_timestamp]
             
-        return obstacle_trajectories
+        return timestamp, obstacle_trajectories
 
 
     def _get_obstacle_locations(self, obstacles, depth_frame, ego_transform):
         if isinstance(depth_frame, PointCloud):
             point_cloud = depth_frame
             # Get the position of the camera in world frame of reference.
-            transformed_camera_setup = copy.deepcopy(_camera_setup)
+            transformed_camera_setup = copy.deepcopy(camera_setup)
             transformed_camera_setup.set_transform(
                 ego_transform * transformed_camera_setup.transform)
 
@@ -57,9 +70,7 @@ class ObstacleLocationHistory:
                     obstacles_with_location.append(obstacle)
             return obstacles_with_location
         elif isinstance(depth_frame, DepthFrame):
-            depth_frame.camera_setup.set_transform(
-                ego_transform * depth_frame.camera_setup.transform)
-
+            depth_frame.camera_setup.set_transform(ego_transform * depth_camera_setup.transform)
             for obstacle in obstacles:
                 center_point = obstacle.bounding_box_2D.get_center_point()
                 # Sample several points around the center of the bounding box

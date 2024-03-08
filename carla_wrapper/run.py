@@ -72,9 +72,9 @@ class MockSimulationRunner():
         (timestamp, tracked_obstacles, tracker_runtime)  = self._tracker.get_tracked_obstacles(timestamp, frame, obstacles)
         (timestamp, obstacle_trajectories)               = self._history.get_location_history(timestamp, pose, depth_frame, tracked_obstacles)
         
-        print("Detected obstacles   {} {}".format(len(obstacles), detector_runtime))
-        print("Tracked obstacles    {} {}".format(len(tracked_obstacles), tracker_runtime))
-        print("Trajectory obstacles {} ".format(len(obstacle_trajectories)))
+        print("Detected obstacles {} {}".format(len(obstacles), detector_runtime))
+        print("Tracked obstacles  {} {}".format(len(tracked_obstacles), tracker_runtime))
+        print("Trajectories       {} ".format(len(obstacle_trajectories)))
 
         self._simulation.apply_control(1, 0, 0, False, False)
         self._visualizer.visualize(timestamp, frame, depth_frame, pose, obstacles, 1, 0, 0)
