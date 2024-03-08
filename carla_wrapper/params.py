@@ -1,3 +1,13 @@
+# Scenario params
+
+tracker_type    = 'sort' # ['sort', 'deep_sort']
+prediction_type = 'linear' # ['linear', 'r2p2']
+planner_type    = 'waypoints' # ['waypoints', 'fot', 'hybrid', 'rrtstar']
+controller_type = 'pid' # ['pid', 'mpc']
+
+tracker_source  = 'local' # ['local', 'server']
+
+
 # Simulator params
 
 simulator_host = '127.0.0.1'
@@ -73,3 +83,10 @@ tracking_num_steps = 10
 min_matching_iou=0.5
 obstacle_track_max_age=3
 deep_sort_tracker_weights_path='/home/erdos/workspace/pylot/dependencies/models/tracking/deep-sort-carla/feature_extractor'
+
+obstacle_detection_gpu_index = 0
+obstacle_detection_model_paths="/home/erdos/workspace/pylot/dependencies/models/obstacle_detection/faster-rcnn"
+path_coco_labels = "/home/erdos/workspace/pylot/dependencies/models/pylot.names"
+obstacle_detection_min_score_threshold = 0.5
+
+tracker_type = "sort"

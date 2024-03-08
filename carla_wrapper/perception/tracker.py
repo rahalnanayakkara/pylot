@@ -1,12 +1,11 @@
-from sort.sort import Sort
+from dependencies.sort.sort import Sort
 from nanonets_object_tracking.deepsort import deepsort_rbc
 
 import time
 import numpy as np
 
-from objects import Obstacle
-from detection_utils import BoundingBox2D
-from messages import ObstaclesMessage
+from objects.objects import BoundingBox2D, Obstacle
+from objects.messages import ObstaclesMessage
 
 import params
 

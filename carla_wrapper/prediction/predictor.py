@@ -4,9 +4,9 @@ import numpy as np
 import time
 import torch
 
-from utils import Transform, Location, Rotation
-from objects import ObstaclePrediction
-from messages import ObstacleTrajectoriesMessage
+from objects.objects import Transform, Location, Rotation
+from objects.objects import ObstaclePrediction
+from objects.messages import ObstacleTrajectoriesMessage
 from r2p2 import R2P2
 
 from prediction_utils import get_occupancy_grid
@@ -15,16 +15,16 @@ _r2p2 = R2P2().to(params.device)
 _lidar_setup = None # Likely unnecessary: create_center_lidar_setup(Transform(Location(1.3, 0.0, 1.8), Rotation(pitch=-15)))
 
 # input and output to this will be ObstacleTrajectoriesMessage, output is ObstaclePrediction
-def get_predictor_output_message(message, type):  
-    start = time.time()
-    if type=="linear":
+def get_predictions(message):  
+    if params.prediction_type == 'linear':
         return generate_linear_predicted_trajectories(message)
     else:
         return generate_r2p2_predicted_trajectories(message)
-    return
 
 
 def generate_linear_predicted_trajectories(message: ObstacleTrajectoriesMessage):
+    obstacle_predictions_list = []
+    start_time = time.time()
     nearby_obstacle_trajectories, nearby_obstacles_ego_transforms = message.get_nearby_obstacles_info(params.prediction_radius)
     num_predictions = len(nearby_obstacle_trajectories)
 
@@ -60,7 +60,10 @@ def generate_linear_predicted_trajectories(message: ObstacleTrajectoriesMessage)
                                             y=predict_array[t][1]),
                             rotation=nearby_obstacles_ego_transforms[idx].
                             rotation))
-        return ObstaclePrediction(obstacle_trajectory, obstacle_trajectory.obstacle.transform, 1.0, predictions)
+
+        obstacle_predictions_list.append(ObstaclePrediction(obstacle_trajectory, obstacle_trajectory.obstacle.transform, 1.0, predictions))
+
+    return obstacle_predictions_list, (time.time() - start_time) * 1000
 
 
 def generate_r2p2_predicted_trajectories(point_cloud_msg, tracking_msg):
@@ -174,35 +177,3 @@ def postprocess_predictions(prediction_array, vehicle_trajectories,
             ObstaclePrediction(vehicle_trajectories[idx],
                                 obstacle_transform, 1.0, predictions))
     return obstacle_predictions_list
-
-
-def create_center_lidar_setup(location: Location,
-                              rotation_frequency: int = 20,
-                              legacy: bool = True):
-    """Creates a LidarSetup instance with the given location.
-
-    The Rotation is set to (pitch=0, roll=0, yaw=0).
-
-    Args:
-        location (:py:class:`~pylot.utils.Location`): The location of the
-            LIDAR with respect to the center of the vehicle.
-        legacy (bool): True if using CARLA < 0.9.10.
-
-    Returns:
-        :py:class:`~pylot.drivers.sensor_setup.LidarSetup`: A LidarSetup
-        with the given location.
-    """
-    rotation = Rotation()
-    # Place the lidar in the same position as the camera.
-    lidar_transform = Transform(location, rotation)
-    return LidarSetup(
-        name='front_center_lidar',
-        lidar_type='sensor.lidar.ray_cast',
-        transform=lidar_transform,
-        range=10000,  # in centimeters
-        rotation_frequency=rotation_frequency,
-        channels=32,
-        upper_fov=15,
-        lower_fov=-30,
-        points_per_second=250000,
-        legacy=legacy)

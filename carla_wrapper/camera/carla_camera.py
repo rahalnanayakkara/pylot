@@ -1,20 +1,13 @@
 import params
 
-from objects.frames import CameraFrame
-from objects.objects import Transform, RGBCameraSetup, Rotation, Location
-
-# The location of the center camera relative to the ego-vehicle.
-CENTER_CAMERA_LOCATION = Location(1.3, 0.0, 1.8)
-
-transform = Transform(CENTER_CAMERA_LOCATION, Rotation(pitch=-15))
-camera_setup = RGBCameraSetup('center_camera',
-                                    params.camera_image_width,
-                                    params.camera_image_height, transform,
-                                    params.camera_fov)
+from objects.frames import CameraFrame, DepthFrame
+from objects.objects import Transform, Rotation, Location
 
 class CarlaCamera:
     
-    def __init__(self, world, vehicle):
+    def __init__(self, world, vehicle, camera_setup):
+
+        self._camera_setup = camera_setup
 
         # Install the camera.
         camera_blueprint = world.get_blueprint_library().find(camera_setup.camera_type)
@@ -41,7 +34,10 @@ class CarlaCamera:
     def process_images(self, simulator_image):
         """Invoked when an image is received from the simulator."""
         game_time = int(simulator_image.timestamp * 1000)
-        frame = CameraFrame.from_simulator_frame(simulator_image, camera_setup)
+        if self._camera_setup.camera_type == 'sensor.camera.rgb':
+            frame = CameraFrame.from_simulator_frame(simulator_image, self._camera_setup)
+        elif self._camera_setup.camera_type == 'sensor.camera.depth':
+            frame = DepthFrame.from_simulator_frame(simulator_image, self._camera_setup)
         self._processed_images[game_time] = frame
     
     def get_processed_image(self, game_time):

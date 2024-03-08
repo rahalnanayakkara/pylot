@@ -2,7 +2,7 @@ import copy
 
 import numpy as np
 
-import carla_wrapper.utils.carla_wrapper_utils
+from objects.objects import Transform, Location, Rotation, Vector2D, Vector3D
 
 OBSTACLE_LABELS = {
     'car', 'bicycle', 'motorcycle', 'bus', 'truck', 'vehicle', 'person',
@@ -64,11 +64,11 @@ class BoundingBox2D(object):
         self.y_min = y_min
         self.y_max = y_max
 
-    def get_min_point(self) -> carla_wrapper.utils.carla_wrapper_utils.Vector2D:
-        return carla_wrapper.utils.carla_wrapper_utils.Vector2D(self.x_min, self.y_min)
+    def get_min_point(self) -> Vector2D:
+        return Vector2D(self.x_min, self.y_min)
 
-    def get_max_point(self) -> carla_wrapper.utils.carla_wrapper_utils.Vector2D:
-        return carla_wrapper.utils.carla_wrapper_utils.Vector2D(self.x_max, self.y_max)
+    def get_max_point(self) -> Vector2D:
+        return Vector2D(self.x_max, self.y_max)
 
     def get_height(self):
         return self.y_max - self.y_min
@@ -76,8 +76,8 @@ class BoundingBox2D(object):
     def get_width(self):
         return self.x_max - self.x_min
 
-    def get_center_point(self) -> carla_wrapper.utils.carla_wrapper_utils.Vector2D:
-        return carla_wrapper.utils.carla_wrapper_utils.Vector2D((self.x_min + self.x_max) // 2,
+    def get_center_point(self) -> Vector2D:
+        return Vector2D((self.x_min + self.x_max) // 2,
                                     (self.y_min + self.y_max) // 2)
 
     def as_width_height_bbox(self):
@@ -146,8 +146,8 @@ class BoundingBox3D(object):
             box.
     """
     def __init__(self,
-                 transform: carla_wrapper.utils.carla_wrapper_utils.Transform = None,
-                 extent: carla_wrapper.utils.carla_wrapper_utils.Vector3D = None,
+                 transform: Transform = None,
+                 extent: Vector3D = None,
                  corners=None):
         self.transform = transform
         self.extent = extent
@@ -191,10 +191,10 @@ class BoundingBox3D(object):
         Returns:
             :py:class:`.BoundingBox3D`: A bounding box instance.
         """
-        transform = carla_wrapper.utils.carla_wrapper_utils.Transform(
-            carla_wrapper.utils.carla_wrapper_utils.Location.from_simulator_location(bbox.location),
-            carla_wrapper.utils.carla_wrapper_utils.Rotation())
-        extent = carla_wrapper.utils.carla_wrapper_utils.Vector3D.from_simulator_vector(bbox.extent)
+        transform = Transform(
+            Location.from_simulator_location(bbox.location),
+            Rotation())
+        extent = Vector3D.from_simulator_vector(bbox.extent)
         return cls(transform, extent)
 
     def as_simulator_bounding_box(self):
@@ -225,7 +225,7 @@ class BoundingBox3D(object):
                              actor_transform.rotation.as_simulator_rotation(),
                              life_time=time_between_frames / 1000.0)
 
-    def to_camera_view(self, obstacle_transform: carla_wrapper.utils.carla_wrapper_utils.Transform,
+    def to_camera_view(self, obstacle_transform: Transform,
                        extrinsic_matrix, intrinsic_matrix):
         """Converts the coordinates of the bounding box for the given obstacle
         to the coordinates in the view of the camera.
@@ -260,20 +260,20 @@ class BoundingBox3D(object):
                             self.corners.transpose(1, 0)).transpose(1, 0)
             pts_2d = pts_2d[:, :2] / pts_2d[:, 2:]
             camera_coordinates = [
-                carla_wrapper.utils.carla_wrapper_utils.Vector2D(pt[0], pt[1]) for pt in pts_2d
+                Vector2D(pt[0], pt[1]) for pt in pts_2d
             ]
             return camera_coordinates
 
         extent = self.extent
         bbox = np.array([
-            carla_wrapper.utils.carla_wrapper_utils.Location(x=+extent.x, y=+extent.y, z=-extent.z),
-            carla_wrapper.utils.carla_wrapper_utils.Location(x=-extent.x, y=+extent.y, z=-extent.z),
-            carla_wrapper.utils.carla_wrapper_utils.Location(x=-extent.x, y=-extent.y, z=-extent.z),
-            carla_wrapper.utils.carla_wrapper_utils.Location(x=+extent.x, y=-extent.y, z=-extent.z),
-            carla_wrapper.utils.carla_wrapper_utils.Location(x=+extent.x, y=+extent.y, z=+extent.z),
-            carla_wrapper.utils.carla_wrapper_utils.Location(x=-extent.x, y=+extent.y, z=+extent.z),
-            carla_wrapper.utils.carla_wrapper_utils.Location(x=-extent.x, y=-extent.y, z=+extent.z),
-            carla_wrapper.utils.carla_wrapper_utils.Location(x=+extent.x, y=-extent.y, z=+extent.z)
+            Location(x=+extent.x, y=+extent.y, z=-extent.z),
+            Location(x=-extent.x, y=+extent.y, z=-extent.z),
+            Location(x=-extent.x, y=-extent.y, z=-extent.z),
+            Location(x=+extent.x, y=-extent.y, z=-extent.z),
+            Location(x=+extent.x, y=+extent.y, z=+extent.z),
+            Location(x=-extent.x, y=+extent.y, z=+extent.z),
+            Location(x=-extent.x, y=-extent.y, z=+extent.z),
+            Location(x=+extent.x, y=-extent.y, z=+extent.z)
         ])
 
         # Transform the vertices with respect to the bounding box transform.
@@ -531,61 +531,59 @@ def get_mAP(ground_obstacles, obstacles):
     return avg_precision
 
 
-# No depth or point cloud messgae
+def get_obstacle_locations(obstacles, depth_msg, ego_transform, camera_setup,
+                           logger):
+    from objects.messages import DepthFrameMessage, PointCloudMessage
+    if isinstance(depth_msg, PointCloudMessage):
+        point_cloud = depth_msg.point_cloud
+        # Get the position of the camera in world frame of reference.
+        transformed_camera_setup = copy.deepcopy(camera_setup)
+        transformed_camera_setup.set_transform(
+            ego_transform * transformed_camera_setup.transform)
 
-# def get_obstacle_locations(obstacles, depth_msg, ego_transform, camera_setup,
-#                            logger):
-#     from pylot.perception.messages import DepthFrameMessage, PointCloudMessage
-#     if isinstance(depth_msg, PointCloudMessage):
-#         point_cloud = depth_msg.point_cloud
-#         # Get the position of the camera in world frame of reference.
-#         transformed_camera_setup = copy.deepcopy(camera_setup)
-#         transformed_camera_setup.set_transform(
-#             ego_transform * transformed_camera_setup.transform)
+        obstacles_with_location = []
+        for obstacle in obstacles:
+            location = point_cloud.get_pixel_location(
+                obstacle.bounding_box_2D.get_center_point(),
+                transformed_camera_setup)
+            if location is not None:
+                obstacle.transform = Transform(
+                    location, Rotation())
+                obstacles_with_location.append(obstacle)
+            else:
+                logger.error(
+                    'Could not find world location for obstacle {}'.format(
+                        obstacle))
+        return obstacles_with_location
+    elif isinstance(depth_msg, DepthFrameMessage):
+        depth_frame = depth_msg.frame
+        depth_frame.camera_setup.set_transform(
+            ego_transform * depth_frame.camera_setup.transform)
 
-#         obstacles_with_location = []
-#         for obstacle in obstacles:
-#             location = point_cloud.get_pixel_location(
-#                 obstacle.bounding_box_2D.get_center_point(),
-#                 transformed_camera_setup)
-#             if location is not None:
-#                 obstacle.transform = carla_wrapper.utils.carla_wrapper_utils.Transform(
-#                     location, carla_wrapper.utils.carla_wrapper_utils.Rotation())
-#                 obstacles_with_location.append(obstacle)
-#             else:
-#                 logger.error(
-#                     'Could not find world location for obstacle {}'.format(
-#                         obstacle))
-#         return obstacles_with_location
-#     elif isinstance(depth_msg, DepthFrameMessage):
-#         depth_frame = depth_msg.frame
-#         depth_frame.camera_setup.set_transform(
-#             ego_transform * depth_frame.camera_setup.transform)
-
-#         for obstacle in obstacles:
-#             center_point = obstacle.bounding_box_2D.get_center_point()
-#             # Sample several points around the center of the bounding box
-#             # in case the bounding box is not well centered on the obstacle.
-#             # In such situations the center point might be in between legs,
-#             # and thus we might overestimate the distance.
-#             sample_points = []
-#             for delta_x in range(-30, 30, 5):
-#                 for delta_y in range(-30, 30, 5):
-#                     sample_point = center_point + carla_wrapper.utils.carla_wrapper_utils.Vector2D(
-#                         delta_x, delta_y)
-#                     if obstacle.bounding_box.is_within(sample_point):
-#                         sample_points.append(sample_point)
-#             locations = depth_frame.get_pixel_locations(sample_points)
-#             # Choose the closest from the locations of the sampled points.
-#             min_distance = np.infty
-#             closest_location = None
-#             for location in locations:
-#                 dist = location.distance(ego_transform.location)
-#                 if dist < min_distance:
-#                     min_distance = dist
-#                     closest_location = location
-#             obstacle.transform = carla_wrapper.utils.carla_wrapper_utils.Transform(closest_location,
-#                                                        carla_wrapper.utils.carla_wrapper_utils.Rotation())
-#         return obstacles
-#     else:
-#         raise ValueError('Unexpected depth message type')
+        for obstacle in obstacles:
+            center_point = obstacle.bounding_box_2D.get_center_point()
+            # Sample several points around the center of the bounding box
+            # in case the bounding box is not well centered on the obstacle.
+            # In such situations the center point might be in between legs,
+            # and thus we might overestimate the distance.
+            sample_points = []
+            for delta_x in range(-30, 30, 5):
+                for delta_y in range(-30, 30, 5):
+                    sample_point = center_point + Vector2D(
+                        delta_x, delta_y)
+                    if obstacle.bounding_box.is_within(sample_point):
+                        sample_points.append(sample_point)
+            locations = depth_frame.get_pixel_locations(sample_points)
+            # Choose the closest from the locations of the sampled points.
+            min_distance = np.infty
+            closest_location = None
+            for location in locations:
+                dist = location.distance(ego_transform.location)
+                if dist < min_distance:
+                    min_distance = dist
+                    closest_location = location
+            obstacle.transform = Transform(closest_location,
+                                                       Rotation())
+        return obstacles
+    else:
+        raise ValueError('Unexpected depth message type')

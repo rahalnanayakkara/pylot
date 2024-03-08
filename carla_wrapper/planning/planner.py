@@ -1,35 +1,44 @@
 from collections import deque
-from pylot.service.objects import Waypoints
-from pylot.service.utils import Location, Rotation, Transform
-from pylot.service.world import World
-from pylot.service.messages import WaypointsMessage
+from objects import Waypoints
+from objects.objects import Location, Rotation, Transform, Waypoints
+from world import World
 
 import time
 import params
 
-_world = World()
+class WaypointPlanner():
+    def __init__(self) -> None:
+        self._world = World()
 
-def get_planner_output_message(pose, predictions, obstacles, ttd, lanes, type, planner):  
-    start = time.time()
-    _world.update(pose, predictions, obstacles, None, lanes)
-    # Total ttd - time spent up to now
-    ttd = ttd - (time.time() - _world.pose.localization_time)
+        if params.planner_type == 'waypoints' or params.planner_type == 'fot':
+            self._planner = FOTPlanner()
+        elif params.planner_type == 'hybrid':
+            self._planner = HybridAStarPlanner()
+        else:
+            self._planner = RRTStarPlanner()
 
-    # if self._state == BehaviorPlannerState.OVERTAKE:
-    #     # Ignore traffic lights and obstacle.
-    #     output_wps = self._planner.run(timestamp, ttd)
-    # else:
-    (speed_factor, _, _, speed_factor_tl,
-        speed_factor_stop) = _world.stop_for_agents()
-    if type == 'waypoint':
-        target_speed = speed_factor * params.target_speed
-        output_wps = _world.follow_waypoints(target_speed)
-    else:
-        output_wps = planner.run(ttd)
-        speed_factor = min(speed_factor_stop, speed_factor_tl)
-        output_wps.apply_speed_factor(speed_factor)
-    
-    return WaypointsMessage(output_wps)
+
+    def get_waypoints(self, pose, predictions, obstacles, ttd, lanes, type):  
+        start = time.time()
+        self._world.update(pose, predictions, obstacles, None, None)
+        # Total ttd - time spent up to now
+        ttd = ttd - (time.time() - self._world.pose.localization_time)
+
+        # if self._state == BehaviorPlannerState.OVERTAKE:
+        #     # Ignore traffic lights and obstacle.
+        #     output_wps = self._planner.run(timestamp, ttd)
+        # else:
+        (speed_factor, _, _, speed_factor_tl,
+            speed_factor_stop) = self._world.stop_for_agents()
+        if type == 'waypoint':
+            target_speed = speed_factor * params.target_speed
+            output_wps = self._world.follow_waypoints(target_speed)
+        else:
+            output_wps = self._planner.run(ttd)
+            speed_factor = min(speed_factor_stop, speed_factor_tl)
+            output_wps.apply_speed_factor(speed_factor)
+        
+        return output_wps, (time.time() - start) * 1000
 
 
 class Planner(object):

@@ -2451,6 +2451,40 @@ class RGBCameraSetup(CameraSetup):
         super(RGBCameraSetup, self).__init__(name, 'sensor.camera.rgb', width,
                                              height, transform, fov)
 
+
+class DepthCameraSetup(CameraSetup):
+    """A CameraSetup that denotes a Depth camera.
+
+    Args:
+        name (str): The name of the camera instance.
+        width (int): The width of the image returned by the camera.
+        height (int): The height of the image returned by the camera.
+        transform (:py:class:`~pylot.utils.Transform`): The transform
+            containing the location and rotation of the camera instance with
+            respect to the vehicle.
+        fov (float): The field-of-view of the camera.
+
+    Attributes:
+        name (str): The name of the camera instance.
+        camera_type (str): The type of the camera. One of `('sensor.camera.rgb'
+            , 'sensor.camera.depth', 'sensor.camera.semantic_segmentation')`
+        width (int): The width of the image returned by the camera.
+        height (int): The height of the image returned by the camera.
+        transform (:py:class:`~pylot.utils.Transform`): The transform
+            containing the location and rotation of the camera instance with
+            respect to the vehicle.
+        fov (float): The field-of-view of the camera.
+    """
+    def __init__(self,
+                 name: str,
+                 width: int,
+                 height: int,
+                 transform: Transform,
+                 fov: float = 90):
+        super(DepthCameraSetup, self).__init__(name, 'sensor.camera.depth',
+                                               width, height, transform, fov)
+
+
 class TrafficLightColor(Enum):
     """Enum to represent the states of a traffic light."""
     RED = 1

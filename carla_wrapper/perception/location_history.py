@@ -1,8 +1,11 @@
+from collections import defaultdict, deque
+
 import params
 import copy
 import numpy as np
 
 from objects.objects import Transform, Location, Rotation, RGBCameraSetup, ObstacleTrajectory, Vector2D
+from objects.frames import DepthFrame, PointCloud
 
 _camera_transform = Transform(Location(1.3, 0.0, 1.8), Rotation(pitch=-15))
 _camera_setup = RGBCameraSetup('center_camera', params.camera_image_width, params.camera_image_height, _camera_transform, params.camera_fov)
@@ -10,11 +13,11 @@ _camera_setup = RGBCameraSetup('center_camera', params.camera_image_width, param
 class ObstacleLocationHistory:
 
     def __init__(self):
-        self._obstacle_history = []
+        self._obstacle_history = defaultdict(deque)
 
-    def get_location_history(self, pose, depth_msg, obstacles):
+    def get_location_history(self, timestamp, pose, depth_frame, obstacles):
         vehicle_transform = pose.transform
-        obstacles_with_location = self.get_obstacle_locations(obstacles, depth_msg, vehicle_transform,_camera_setup)
+        obstacles_with_location = self._get_obstacle_locations(obstacles, depth_frame, vehicle_transform)
 
         ids_cur_timestamp = []
         obstacle_trajectories = []
@@ -30,20 +33,18 @@ class ObstacleLocationHistory:
                 new_location = \
                     vehicle_transform.inverse_transform_locations(
                         [obstacle.transform.location])[0]
-                cur_obstacle_trajectory.append(Transform(new_location,Rotation()))
+                cur_obstacle_trajectory.append(Transform(new_location, Rotation()))
             # The trajectory is relative to the current location.
             obstacle_trajectories.append(ObstacleTrajectory(obstacle, cur_obstacle_trajectory))
             
-        return obstacle_trajectories
+        return timestamp, obstacle_trajectories
 
 
-    def get_obstacle_locations(self, obstacles, depth_msg, ego_transform, camera_setup,
-                            logger):
-        from pylot.perception.messages import DepthFrameMessage, PointCloudMessage
-        if isinstance(depth_msg, PointCloudMessage):
-            point_cloud = depth_msg.point_cloud
+    def _get_obstacle_locations(self, obstacles, depth_frame, ego_transform):
+        if isinstance(depth_frame, PointCloud):
+            point_cloud = depth_frame
             # Get the position of the camera in world frame of reference.
-            transformed_camera_setup = copy.deepcopy(camera_setup)
+            transformed_camera_setup = copy.deepcopy(_camera_setup)
             transformed_camera_setup.set_transform(
                 ego_transform * transformed_camera_setup.transform)
 
@@ -56,13 +57,8 @@ class ObstacleLocationHistory:
                     obstacle.transform = Transform(
                         location, Rotation())
                     obstacles_with_location.append(obstacle)
-                else:
-                    logger.error(
-                        'Could not find world location for obstacle {}'.format(
-                            obstacle))
             return obstacles_with_location
-        elif isinstance(depth_msg, DepthFrameMessage):
-            depth_frame = depth_msg.frame
+        elif isinstance(depth_frame, DepthFrame):
             depth_frame.camera_setup.set_transform(
                 ego_transform * depth_frame.camera_setup.transform)
 

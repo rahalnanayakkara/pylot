@@ -12,103 +12,114 @@ import control_utils
 from mpc_utils import Trajectory, Vehicle, compute_curvature
 from mpc_utils import CubicSpline2D, global_config, zero_to_2_pi
 
-from messages import ControlMessage
-
 import params
-
-def get_control_message(pose, waypoints, type):
-    ego = pose.transform
-    speed = pose.forward_speed
-
-    if params.simulator_control_frequency == -1:
-        dt = 1.0 / params.simulator_fps
-    else:
-        dt = 1.0 / params.simulator_control_frequency
-    
-    if type == "pid":
-        steer, throttle, brake = get_pid_control_message(ego, speed, waypoints, dt)
-    elif type == "mpc":
-        steer, throttle, brake = get_mpc_control_message(ego, speed, waypoints, dt)
-
-    return ControlMessage(steer, throttle, brake, False, False)
-
-def get_pid_control_message(vehicle, speed, waypoints, dt):
-
-    # initialize pid controller
-    pid = PIDLongitudinalController(1.0, 0.0, 0.05, dt)
-
-    try:
-        angle_steer = waypoints.get_angle(vehicle, params.min_pid_steer_waypoint_distance)
-        target_speed = waypoints.get_target_speed(vehicle, params.min_pid_speed_waypoint_distance)
-        throttle, brake = control_utils.compute_throttle_and_brake(pid, speed, target_speed, 1.0, 1.0)
-        steer = control_utils.radians_to_steer(angle_steer, params.steer_gain)
-        print(angle_steer)
-        print(target_speed)
-    except ValueError:
-        print('Braking! No more waypoints to follow.')
-        throttle, brake = 0.0, 0.5
-        steer = 0.0
-    
-    return steer, throttle, brake
+import utils.logging
 
 
-def get_mpc_control_message(vehicle, speed, waypoints, dt):
+class Controller():
+    def __init__(self) -> None:
+        self._config_name = "Controller"
+        # Dump logs for Controller
+        self._module_logger = utils.logging.get_module_logger(self._config_name)
+        self._csv_logger = utils.logging.ModuleCompletionLogger()
+
+        print("\nInitializing Controller")
+        self._module_logger.info("\nInitializing Controller")
+
+    def get_control_instructions(self, pose, waypoints):
+        start_time = time.time()
+        ego = pose.transform
+        speed = pose.forward_speed
+
+        if params.simulator_control_frequency == -1:
+            dt = 1.0 / params.simulator_fps
+        else:
+            dt = 1.0 / params.simulator_control_frequency
         
-    # Get first 50 waypoints (50 meters) waypoints.
-    target_speeds = waypoints.target_speeds
-    path = waypoints.as_numpy_array_2D()
-    
-    # convert target waypoints into spline
-    spline = CubicSpline2D(path[0, :], path[1, :])
-    ss = []
-    vs = []
-    xs = []
-    ys = []
-    yaws = []
-    ks = []
-    for i, s in enumerate(spline.s[:-1]):
-        x, y = spline.calc_position(s)
-        yaw = np.abs(spline.calc_yaw(s))
-        k = spline.calc_curvature(s)
-        xs.append(x)
-        ys.append(y)
-        yaws.append(yaw)
-        ks.append(k)
-        ss.append(s)
-        vs.append(target_speeds[i])
+        if params.controller_type == "pid":
+            steer, throttle, brake = self.get_pid_control_instructions(ego, speed, waypoints, dt)
+        else:
+            steer, throttle, brake = self.get_mpc_control_instructions(ego, speed, waypoints, dt)
 
-    mpc_config = global_config
-    mpc_config["reference"] = {
-        't_list': [],  # Time [s]
-        's_list': ss,  # Arc distance [m]
-        'x_list': xs,  # Desired X coordinates [m]
-        'y_list': ys,  # Desired Y coordinates [m]
-        'k_list': ks,  # Curvatures [1/m]
-        'vel_list': vs,  # Desired tangential velocities [m/s]
-        'yaw_list': yaws,  # Yaws [rad]
-    }
+        return steer, throttle, brake, 1000 * (time.time() - start_time)
 
-    # initialize pid controller
-    pid = PIDLongitudinalController(1.0, 0.0, 0.05, dt)
+    def get_pid_control_instructions(vehicle, speed, waypoints, dt):
 
-    # initialize mpc controller
-    _mpc = ModelPredictiveController(config=mpc_config)
-    _mpc.vehicle.x = vehicle.location.x
-    _mpc.vehicle.y = vehicle.location.y
-    _mpc.vehicle.yaw = np.deg2rad(zero_to_2_pi(vehicle.rotation.yaw))
+        # initialize pid controller
+        pid = PIDLongitudinalController(1.0, 0.0, 0.05, dt)
 
-    try:
-        _mpc.step()
-    except Exception as e:
-        print('Failed to solve MPC. Emergency braking.')
-        return 0, 0, 1
+        try:
+            angle_steer = waypoints.get_angle(vehicle, params.min_pid_steer_waypoint_distance)
+            target_speed = waypoints.get_target_speed(vehicle, params.min_pid_speed_waypoint_distance)
+            throttle, brake = control_utils.compute_throttle_and_brake(pid, speed, target_speed, 1.0, 1.0)
+            steer = control_utils.radians_to_steer(angle_steer, params.steer_gain)
+            print(angle_steer)
+            print(target_speed)
+        except ValueError:
+            print('Braking! No more waypoints to follow.')
+            throttle, brake = 0.0, 0.5
+            steer = 0.0
+        
+        return steer, throttle, brake
 
-    # Compute pid controls.
-    target_speed = _mpc.solution.vel_list[-1]
-    target_steer_rad = _mpc.horizon_steer[0]  # in rad
-    steer = control_utils.radians_to_steer(target_steer_rad, params.steer_gain)
-    throttle, brake = control_utils.compute_throttle_and_brake(pid, speed, target_speed, 1.0, 1.0)
-    return steer, throttle, brake
+
+    def get_mpc_control_instructions(vehicle, speed, waypoints, dt):
+            
+        # Get first 50 waypoints (50 meters) waypoints.
+        target_speeds = waypoints.target_speeds
+        path = waypoints.as_numpy_array_2D()
+        
+        # convert target waypoints into spline
+        spline = CubicSpline2D(path[0, :], path[1, :])
+        ss = []
+        vs = []
+        xs = []
+        ys = []
+        yaws = []
+        ks = []
+        for i, s in enumerate(spline.s[:-1]):
+            x, y = spline.calc_position(s)
+            yaw = np.abs(spline.calc_yaw(s))
+            k = spline.calc_curvature(s)
+            xs.append(x)
+            ys.append(y)
+            yaws.append(yaw)
+            ks.append(k)
+            ss.append(s)
+            vs.append(target_speeds[i])
+
+        mpc_config = global_config
+        mpc_config["reference"] = {
+            't_list': [],  # Time [s]
+            's_list': ss,  # Arc distance [m]
+            'x_list': xs,  # Desired X coordinates [m]
+            'y_list': ys,  # Desired Y coordinates [m]
+            'k_list': ks,  # Curvatures [1/m]
+            'vel_list': vs,  # Desired tangential velocities [m/s]
+            'yaw_list': yaws,  # Yaws [rad]
+        }
+
+        # initialize pid controller
+        pid = PIDLongitudinalController(1.0, 0.0, 0.05, dt)
+
+        # initialize mpc controller
+        _mpc = ModelPredictiveController(config=mpc_config)
+        _mpc.vehicle.x = vehicle.location.x
+        _mpc.vehicle.y = vehicle.location.y
+        _mpc.vehicle.yaw = np.deg2rad(zero_to_2_pi(vehicle.rotation.yaw))
+
+        try:
+            _mpc.step()
+        except Exception as e:
+            print('Failed to solve MPC. Emergency braking.')
+            return 0, 0, 1
+
+        # Compute pid controls.
+        target_speed = _mpc.solution.vel_list[-1]
+        target_steer_rad = _mpc.horizon_steer[0]  # in rad
+        steer = control_utils.radians_to_steer(target_steer_rad, params.steer_gain)
+        throttle, brake = control_utils.compute_throttle_and_brake(pid, speed, target_speed, 1.0, 1.0)
+        return steer, throttle, brake
 
 
 class PIDLongitudinalController(object):

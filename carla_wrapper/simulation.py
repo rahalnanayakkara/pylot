@@ -3,11 +3,13 @@ import time
 import params
 
 from utils.simulation import get_world, set_mode_fps
+import utils.logging
 
 from carla import Location, VehicleControl, command
 
 from objects.objects import Obstacle, TrafficLight, StopSign, SpeedLimitSign
-from objects.objects import Transform, Vector3D, Pose 
+from objects.objects import Transform, Vector3D, Pose, Rotation
+from objects.objects import RGBCameraSetup
 from camera.carla_camera import CarlaCamera
 
 simulator_host = 'localhost'
@@ -15,14 +17,36 @@ simulator_port = 2000
 simulator_timeout = 10
 carla_traffic_manager_port = 8000
 
+# The location of the center camera relative to the ego-vehicle.
+CENTER_CAMERA_LOCATION = Location(1.3, 0.0, 1.8)
+
+transform = Transform(CENTER_CAMERA_LOCATION, Rotation(pitch=-15))
+
+rgb_camera_setup = RGBCameraSetup('center_camera',
+                                    params.camera_image_width,
+                                    params.camera_image_height, transform,
+                                    params.camera_fov)
+
+depth_camera_setup = RGBCameraSetup('depth_center_camera',
+                                    params.camera_image_width,
+                                    params.camera_image_height, transform,
+                                    params.camera_fov)
+
 class CarlaSimulation:
 
     def __init__(self) -> None:
+
+        # Dump logs for CarlaSimulation
+        self._module_logger = utils.logging.get_module_logger("CarlaSimulation")
+
         print("\nInitializing world ...")
+
         self._client, self._world = get_world(params.simulator_host,
                              params.simulator_port,
                              params.simulator_timeout)
         set_mode_fps(self._world, params.simulator_fps)
+
+        self._game_time = 0
 
         self._spectator = self._world.get_spectator()
         
@@ -33,7 +57,8 @@ class CarlaSimulation:
         self._ego_vehicle = self.wait_for_ego_vehicle(self._world)
 
         print("\nAdding camera to vehicle ...")
-        self._camera = CarlaCamera(self._world, self._ego_vehicle)
+        self._camera = CarlaCamera(self._world, self._ego_vehicle, rgb_camera_setup)
+        self._depth_camera = CarlaCamera(self._world, self._ego_vehicle, depth_camera_setup)
 
         print("\nAdding ontick callback")
         self._world.on_tick(self.on_simulator_tick)
@@ -63,14 +88,19 @@ class CarlaSimulation:
     
     def tick_simulator(self):
         print("\nForce ticking simulator ...")
+        self._module_logger.info("\nForce ticking simulator ...")
         self._world.tick()
-    
+        frame = self._camera.get_processed_image(self._game_time)
+        depth_frame = self._camera.get_processed_image(self._game_time)
+        pose = self.read_ego_vehicle_data()
+        return self._game_time, frame, depth_frame, pose
+
     def on_simulator_tick(self, msg):
-        game_time = int(msg.elapsed_seconds * 1000)
-        print("\nWorld is ticking ... " + str(game_time))
+        self._game_time = int(msg.elapsed_seconds * 1000)
+        print("\nWorld is ticking ... " + str(self._game_time))
+        self._module_logger.info("\nWorld is ticking ... " + str(self._game_time))
         (vehicles, people, traffic, limits, stops) = self.read_ground_actors_data()
         self.update_spectator_pose()
-        print(str(vehicles))
     
     def read_ego_vehicle_data(self):
         vec_transform = Transform.from_simulator_transform(self._ego_vehicle.get_transform())
