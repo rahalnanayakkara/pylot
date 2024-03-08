@@ -10,14 +10,14 @@ from detection.object_detection import ObjectDetector
 from perception.object_tracking import ObjectTracker
 from perception.location_history import ObstacleLocationHistory
 from objects.messages import ObstacleTrajectoriesMessage
+from planning.planner import WaypointPlanner
+from control.controller import Controller
 
 from prediction.predictor import get_predictions
 
 class SimulationRunner():
 
     def __init__(self):
-        from planning.planner import WaypointPlanner
-        from control.controller import Controller
 
         client, world = get_world(params.simulator_host,
                              params.simulator_port,
@@ -47,7 +47,7 @@ class SimulationRunner():
 
         self._simulation.apply_control(throttle, steer, brake, False, False)
         self._visualizer.visualize(timestamp, frame, depth_frame, pose, tracked_obstacles, throttle, steer, brake)
-
+        
         print("\nRuntime: {}\t{}\t{}\t{}\t{}".format(detector_runtime, tracker_runtime, predictor_runtime, planner_runtime, controller_runtime))
         print("\nLocation: {}, Control: {} {} {}", pose.transform.location, throttle, steer, brake)
     
@@ -62,6 +62,7 @@ class MockSimulationRunner():
         self._detector = ObjectDetector()
         self._tracker = ObjectTracker()
         self._history = ObstacleLocationHistory()
+        self._planner = WaypointPlanner()
     
     def run_one_tick(self):
         (timestamp, frame, depth_frame, pose) = self._simulation.tick_simulator()
@@ -72,13 +73,16 @@ class MockSimulationRunner():
         (timestamp, tracked_obstacles, tracker_runtime)  = self._tracker.get_tracked_obstacles(timestamp, frame, obstacles)
         (timestamp, obstacle_trajectories)               = self._history.get_location_history(timestamp, pose, depth_frame, tracked_obstacles)
 
-        obstacle_trajectories_message = ObstacleTrajectoriesMessage(timestamp, obstacle_trajectories) # necessary because this contains methods used in prediction
+        obstacle_trajectories_message = ObstacleTrajectoriesMessage(obstacle_trajectories) # necessary because this contains methods used in prediction
         
         (obstacle_predictions, predictor_runtime)    = get_predictions(obstacle_trajectories_message)
+        (waypoints, planner_runtime)                 = self._planner.get_waypoints(obstacle_predictions)
+
         print("Detected obstacles {} {}".format(len(obstacles), detector_runtime))
         print("Tracked obstacles  {} {}".format(len(tracked_obstacles), tracker_runtime))
         print("Trajectories       {} ".format(len(obstacle_trajectories)))
         print("Predictions        {} {}".format(len(obstacle_predictions), predictor_runtime))
+        print("Planner waypoints  {} {}".format(len(waypoints), planner_runtime))
 
         self._simulation.apply_control(1, 0, 0, False, False)
         self._visualizer.visualize(timestamp, frame, depth_frame, pose, obstacles, 1, 0, 0)

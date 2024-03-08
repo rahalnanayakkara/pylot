@@ -7,6 +7,9 @@ controller_type = 'pid' # ['pid', 'mpc']
 
 tracker_source  = 'local' # ['local', 'server']
 
+deadline_enforcement = 'none' # ['none', 'static', 'dynamic']
+tracking_deadline = None
+planning_deadline = None
 
 # Simulator params
 
