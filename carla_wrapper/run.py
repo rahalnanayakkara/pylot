@@ -7,12 +7,11 @@ from utils.simulation import get_world
 from simulation import CarlaSimulation
 from visualizer import Visualizer
 from detection.object_detection import ObjectDetector
+from perception.object_tracking import ObjectTracker
 
 class SimulationRunner():
 
     def __init__(self):
-
-        from perception.object_tracking import ObjectTracker
         from perception.location_history import ObstacleLocationHistory
         from planning.planner import WaypointPlanner
         from control.controller import Controller
@@ -47,7 +46,7 @@ class SimulationRunner():
         (throttle, steer, brake, controller_runtime) = self._controller.get_control_instructions(pose, waypoints)
 
         self._simulation.apply_control(throttle, steer, brake, False, False)
-        self._visualizer.visualize(timestamp, frame, depth_frame, pose, obstacles, throttle, steer, brake)
+        self._visualizer.visualize(timestamp, frame, depth_frame, pose, tracked_obstacles, throttle, steer, brake)
 
         print("\nRuntime: {}\t{}\t{}\t{}\t{}".format(detector_runtime, tracker_runtime, predictor_runtime, planner_runtime, controller_runtime))
         print("\nLocation: {}, Control: {} {} {}", pose.transform.location, throttle, steer, brake)
@@ -61,6 +60,7 @@ class MockSimulationRunner():
         self._simulation = CarlaSimulation(client, world)
         self._visualizer = Visualizer(world)
         self._detector = ObjectDetector()
+        self._tracker = ObjectTracker()
     
     def run_one_tick(self):
         (timestamp, frame, depth_frame, pose) = self._simulation.tick_simulator()
@@ -68,15 +68,17 @@ class MockSimulationRunner():
             print("Empty frame received from simulation!")
             return
         (timestamp, obstacles, detector_runtime)         = self._detector.get_obstacles(timestamp, frame)
+        (timestamp, tracked_obstacles, tracker_runtime)  = self._tracker.get_tracked_obstacles(timestamp, frame, obstacles)
         print(detector_runtime)
+        print(tracker_runtime)
         self._simulation.apply_control(1, 0, 0, False, False)
-        self._visualizer.visualize(timestamp, frame, depth_frame, pose, obstacles, 1, 0, 0)
+        self._visualizer.visualize(timestamp, frame, depth_frame, pose, tracked_obstacles, 1, 0, 0)
 
 def main():
     setup_pipeline_logging()
     runner = MockSimulationRunner()
     while True:
-        time.sleep(2)
+        time.sleep(0.05)
         runner.run_one_tick()
 
 if __name__ == '__main__':

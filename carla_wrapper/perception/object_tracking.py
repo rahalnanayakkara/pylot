@@ -20,20 +20,18 @@ class ObjectTracker():
         self._last_tracker_run_completion_time = 0
         try:
             if params.tracker_type == 'deep_sort':
-                from tracker import MultiObjectDeepSORTTracker
-                self._tracker = MultiObjectDeepSORTTracker
+                from perception.tracker import MultiObjectDeepSORTTracker
+                self._tracker = MultiObjectDeepSORTTracker()
             elif params.tracker_type == 'sort':
-                from tracker import MultiObjectSORTTracker
-                self._tracker = MultiObjectSORTTracker
+                from perception.tracker import MultiObjectSORTTracker
+                self._tracker = MultiObjectSORTTracker()
             else:
                 raise ValueError(
                     'Unexpected tracker type {}'.format(self._tracker_type))
         except ImportError as error:
             self._module_logger.exception('Error importing {}'.format(self._tracker_type))
             raise error
-
-        self._obstacles_msgs = deque()
-        self._frame_msgs = deque()
+        
         self._detection_update_count = -1
         self._server=None
 
@@ -49,8 +47,6 @@ class ObjectTracker():
 
     def get_tracked_obstacles(self, timestamp, camera_frame, obstacles):
         self._module_logger.info('@{}: ObjectTracker received message'.format(timestamp))
-        if timestamp.is_top:
-            return
         tracked_obstacles = []
         reinit_runtime = 0
         start_time = time.time()
