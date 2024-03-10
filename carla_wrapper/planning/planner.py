@@ -1,9 +1,7 @@
 from collections import deque
 from objects.objects import Location, Rotation, Transform, Waypoints
 from planning.world import World
-from planning.map import HDMap
-
-from frenet_optimal_trajectory_planner.FrenetOptimalTrajectory.fot_wrapper import run_fot
+# from planning.map import HDMap
 
 import time
 import params
@@ -237,6 +235,7 @@ class FOTPlanner(Planner):
             :py:class:`~pylot.planning.waypoints.Waypoints`: Waypoints of the
             planned trajectory.
         """
+        from frenet_optimal_trajectory_planner.FrenetOptimalTrajectory.fot_wrapper import run_fot
         self.update_hyper_parameters(ttd)
         initial_conditions = self._compute_initial_conditions()
         start = time.time()

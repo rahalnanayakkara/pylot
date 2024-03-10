@@ -5,10 +5,11 @@ import params
 from utils.simulation import set_mode_fps
 import utils.logging
 
-from carla import Location, VehicleControl, command
+from carla import VehicleControl, command
+import carla
 
 from objects.objects import Obstacle, TrafficLight, StopSign, SpeedLimitSign
-from objects.objects import Transform, Vector3D, Pose, Rotation
+from objects.objects import Transform, Vector3D, Pose, Rotation, Location
 from objects.objects import RGBCameraSetup, DepthCameraSetup
 from camera.carla_camera import CarlaCamera
 
@@ -129,6 +130,6 @@ class CarlaSimulation:
     def update_spectator_pose(self):
          # Set the world simulation view with respect to the vehicle.
         v_pose = self._ego_vehicle.get_transform()
-        v_pose.location -= 10 * Location(v_pose.get_forward_vector())
+        v_pose.location -= 10 * carla.Location(v_pose.get_forward_vector())
         v_pose.location.z = 5
         self._spectator.set_transform(v_pose)

@@ -64,7 +64,7 @@ class World(object):
             ])
             road_options = deque([
                 RoadOption.LANE_FOLLOW
-                for _ in range(len(waypoints_deque))
+                for _ in range(len(waypoints_deque)-1, 0, -1)
             ])
             self.waypoints = Waypoints(waypoints_deque, road_options=road_options)
         else:

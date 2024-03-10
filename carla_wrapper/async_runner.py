@@ -2,6 +2,8 @@ import time
 import threading
 import params
 import copy
+import socket
+import pickle
 
 from utils.logging import setup_pipeline_logging, ModuleCompletionLogger
 from utils.simulation import get_world
@@ -16,6 +18,10 @@ from planning.planner import WaypointPlanner
 from control.controller import Controller
 
 from prediction.predictor import get_predictions
+
+from utils.service import send_msg, recv_msg
+
+from objects.messages import SensorMessage, ControlMessage
 
 class AsyncSimulationRunner():
     
@@ -43,6 +49,18 @@ class AsyncSimulationRunner():
         self._brake = -1
         self._steer = -1
         self._control_timestamp = -1
+
+        if params.distributed == True:
+            self._server = self.connect_to_server()
+
+    def connect_to_server(self):
+        # Simulator will always send data to local computer i.e. RasPi
+        host = params.local_server
+        port = params.local_port
+        
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server.connect((host, port))
+        return server
     
     def run(self):
         simulation = threading.Thread(target=self.run_simulation)
@@ -99,6 +117,21 @@ class AsyncSimulationRunner():
                 frame = self._frame
                 depth_frame = self._depth_frame
                 timestamp = self._timestamp
+            
+            if params.distributed == True:
+                sensor_data = SensorMessage(timestamp=timestamp, frame=frame, depth_frame=depth_frame, pose=pose)
+                sdd = pickle.dumps(sensor_data)
+                send_msg(self._server, sdd)
+                print("----------------------Sent sensor data"+str(len(sdd)))
+                control_msg = recv_msg(self._server)
+                print("Rxvd control message"+str(len(control_msg)))
+                control_msg = pickle.loads(control_msg)    
+                with self._control_lock:
+                    self._throttle = control_msg.throttle
+                    self._brake = control_msg.brake
+                    self._steer = control_msg.steer
+                    self._control_timestamp = timestamp
+                continue
             
             obstacle_trajectories = []
             obstacle_predictions = []

@@ -47,13 +47,6 @@ class ObjectTracker():
 
     def get_tracked_obstacles(self, timestamp, camera_frame, obstacles):
         start_time = time.time()
-        if params.tracker_source == 'server':
-            tracker_output = self.fetch_from_server(camera_frame, tracked_obstacles, True)
-            total_tracker_time = 1000 * (time.time() - start_time)
-            print("Total Tracker time: ", total_tracker_time)
-            tracked_obstacles = tracker_output.obstacles
-            tracker_runtime = tracker_output.runtime
-            return (timestamp, tracked_obstacles, tracker_runtime)
 
         detected_obstacles = []
         for obstacle in obstacles:

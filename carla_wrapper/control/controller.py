@@ -7,52 +7,55 @@ import numpy as np
 import cvxpy
 from cvxpy.expressions import constants
 
-import utils
-import control_utils
-from mpc_utils import Trajectory, Vehicle, compute_curvature
-from mpc_utils import CubicSpline2D, global_config, zero_to_2_pi
+from control import control_utils
+from control.mpc_utils import Trajectory, Vehicle, compute_curvature
+from control.mpc_utils import CubicSpline2D, global_config, zero_to_2_pi
+
+from utils.logging import get_module_logger, ModuleCompletionLogger
+
+from objects.objects import Location, Rotation, Transform, Vector3D
 
 import params
-import utils.logging
-
 
 class Controller():
     def __init__(self):
         self._config_name = "Controller"
-        # Dump logs for Controller
-        self._module_logger = utils.logging.get_module_logger(self._config_name)
-        self._csv_logger = utils.logging.ModuleCompletionLogger()
 
-        print("\nInitializing Controller")
-        self._module_logger.info("\nInitializing Controller")
+        # Dump logs for Controller
+        self._module_logger = get_module_logger(self._config_name)
+        self._csv_logger = ModuleCompletionLogger()
+        print("\nInitializing Controller...")
+        self._mpc_config = global_config
+        self._pid = PIDLongitudinalController(1.0, 0.0, 0.05, dt = 1.0 / params.simulator_fps)
+        self._mps = None
 
     def get_control_instructions(self, pose, waypoints):
         start_time = time.time()
         ego = pose.transform
         speed = pose.forward_speed
-        dt = 1.0 / params.simulator_fps
+
+        if waypoints == None or len(waypoints) < 2:
+            print('Braking! No more waypoints to follow.')
+            return 0, 0, 0.5, 0
 
         try:
             if params.controller_type == "pid":
-                steer, throttle, brake = self.get_pid_control_instructions(ego, speed, waypoints, dt)
+                steer, throttle, brake = self.get_pid_control_instructions(ego, speed, waypoints)
             else:
-                steer, throttle, brake = self.get_mpc_control_instructions(ego, speed, waypoints, dt)
-        except (ValueError, AttributeError):
+                steer, throttle, brake = self.get_mpc_control_instructions(ego, speed, waypoints)
+        except ValueError:
             print('Braking! No more waypoints to follow.')
             throttle, brake = 0.0, 0.5
             steer = 0.0
        
         return steer, throttle, brake, 1000 * (time.time() - start_time)
 
-    def get_pid_control_instructions(self, vehicle, speed, waypoints, dt):
-
-        # initialize pid controller
-        pid = PIDLongitudinalController(1.0, 0.0, 0.05, dt)
+    def get_pid_control_instructions(self, vehicle, speed, waypoints):
 
         try:
             angle_steer = waypoints.get_angle(vehicle, params.min_pid_steer_waypoint_distance)
             target_speed = waypoints.get_target_speed(vehicle, params.min_pid_speed_waypoint_distance)
-            throttle, brake = control_utils.compute_throttle_and_brake(pid, speed, target_speed, 1.0, 1.0)
+            throttle, brake = control_utils.compute_throttle_and_brake(self._pid, speed, target_speed)
             steer = control_utils.radians_to_steer(angle_steer, params.steer_gain)
         except (ValueError, AttributeError):
             print('Braking! No more waypoints to follow.')
@@ -61,13 +64,31 @@ class Controller():
         
         return steer, throttle, brake
 
+    def get_mpc_control_instructions(self, vehicle, speed, waypoints):
 
-    def get_mpc_control_instructions(self, vehicle, speed, waypoints, dt):
-            
-        # Get first 50 waypoints (50 meters) waypoints.
         target_speeds = waypoints.target_speeds
+
+        self.setup_mpc(waypoints, target_speeds)
+        self._mpc.vehicle.x = vehicle.location.x
+        self._mpc.vehicle.y = vehicle.location.y
+        self._mpc.vehicle.yaw = np.deg2rad(
+            zero_to_2_pi(vehicle.rotation.yaw))
+
+        try:
+            self._mpc.step()
+        except Exception as e:
+            return 0, 0, 1
+
+        # Compute pid controls.
+        target_speed = self._mpc.solution.vel_list[-1]
+        target_steer_rad = self._mpc.horizon_steer[0]  # in rad
+        steer = control_utils.radians_to_steer(target_steer_rad, params.steer_gain)
+        throttle, brake = control_utils.compute_throttle_and_brake(
+            self._pid, speed, target_speed)
+        return steer, throttle, brake
+    
+    def setup_mpc(self, waypoints, target_speeds):
         path = waypoints.as_numpy_array_2D()
-        
         # convert target waypoints into spline
         spline = CubicSpline2D(path[0, :], path[1, :])
         ss = []
@@ -86,9 +107,7 @@ class Controller():
             ks.append(k)
             ss.append(s)
             vs.append(target_speeds[i])
-
-        mpc_config = global_config
-        mpc_config["reference"] = {
+        self._mpc_config["reference"] = {
             't_list': [],  # Time [s]
             's_list': ss,  # Arc distance [m]
             'x_list': xs,  # Desired X coordinates [m]
@@ -97,28 +116,8 @@ class Controller():
             'vel_list': vs,  # Desired tangential velocities [m/s]
             'yaw_list': yaws,  # Yaws [rad]
         }
-
-        # initialize pid controller
-        pid = PIDLongitudinalController(1.0, 0.0, 0.05, dt)
-
         # initialize mpc controller
-        _mpc = ModelPredictiveController(config=mpc_config)
-        _mpc.vehicle.x = vehicle.location.x
-        _mpc.vehicle.y = vehicle.location.y
-        _mpc.vehicle.yaw = np.deg2rad(zero_to_2_pi(vehicle.rotation.yaw))
-
-        try:
-            _mpc.step()
-        except Exception as e:
-            print('Failed to solve MPC. Emergency braking.')
-            return 0, 0, 1
-
-        # Compute pid controls.
-        target_speed = _mpc.solution.vel_list[-1]
-        target_steer_rad = _mpc.horizon_steer[0]  # in rad
-        steer = control_utils.radians_to_steer(target_steer_rad, params.steer_gain)
-        throttle, brake = control_utils.compute_throttle_and_brake(pid, speed, target_speed, 1.0, 1.0)
-        return steer, throttle, brake
+        self._mpc = ModelPredictiveController(config=self._mpc_config)
 
 
 class PIDLongitudinalController(object):
@@ -193,7 +192,7 @@ class PIDLateralController(object):
 
     def run_step(self, waypoint, vehicle_transform):
         v_begin = vehicle_transform.location
-        v_end = v_begin + utils.Location(
+        v_end = v_begin + Location(
             x=math.cos(math.radians(vehicle_transform.rotation.yaw)),
             y=math.sin(math.radians(vehicle_transform.rotation.yaw)))
 
@@ -535,3 +534,43 @@ class ModelPredictiveController:
             (self.vehicle.config['wheelbase'] * np.cos(steer)**2)
 
         return matrix_a, matrix_b, matrix_c
+
+
+# def main():
+#     from objects.objects import Pose, Transform, Location, Rotation, Waypoints, Vector3D
+#     pose = Pose(
+#             Transform(Location(x=396.0610046386719, y=268.4299621582031, z=0.033055685460567474), Rotation(pitch=0.10232988744974136, yaw=-89.22174072265625, roll=0.0017161744181066751)), 
+#             7.523096330217679, 
+#             Vector3D(x=0.10038097947835922, y=-7.522426605224609, z=-0.00014731811825186014)
+#             )
+    
+#     pose2 = Pose(Transform(Location(x=396.00225830078125, y=274.99029541015625, z=0.03324241563677788), Rotation(pitch=0.020121736451983452, yaw=-89.90167999267578, roll=-0.02630615420639515)), 0.3966910557184042, Vector3D(x=0.11879204213619232, y=-0.3784867823123932, z=5.187123861105647e-06))
+
+#     waypoints2 = Waypoints(waypoints=deque([
+#         Transform(Location(x=396.4999300817895, y=247.38240568835948, z=1.9513485193682882), Rotation(pitch=0.020121736451983452, yaw=89.90167999267578, roll=-0.02630615420639515)),
+#         Transform(Location(x=396.4999300817895, y=247.38240568835948, z=1.9513485193682882), Rotation(pitch=0.020121736451983452, yaw=89.90167999267578, roll=-0.02630615420639515)),
+#         Transform(Location(x=396.25003054756905, y=247.381993623125, z=1.9990853476798827), Rotation(pitch=0.020121736451983452, yaw=89.90167999267578, roll=-0.02630615420639515)),
+#         Transform(Location(x=396.25003054756905, y=247.381993623125, z=1.9990853476798827), Rotation(pitch=0.020121736451983452, yaw=89.90167999267578, roll=-0.02630615420639515)),
+#         Transform(Location(x=396.4999040423407, y=247.38242553535468, z=2.007989134905502), Rotation(pitch=0.020121736451983452, yaw=89.90167999267578, roll=-0.02630615420639515))
+#     ]))
+
+#     waypoints = Waypoints(waypoints=deque([
+#         Transform(Location(x=396.50000488532976, y=246.99854892839795, z=1.2285631883801267), Rotation(pitch=0.10232988744974136, yaw=89.22174072265625, roll=0.0017161744181066751)),
+#         Transform(Location(x=396.4999920567817, y=246.87295831560212, z=0.904568255870138), Rotation(pitch=0.10232988744974136, yaw=89.22174072265625, roll=0.0017161744181066751)),
+#         Transform(Location(x=396.4999900156008, y=246.87231769582212, z=0.5459262499000094), Rotation(pitch=0.10232988744974136, yaw=89.22174072265625, roll=0.0017161744181066751)),
+#         Transform(Location(x=396.4999898766505, y=246.8722740865791, z=0.5215122263486052), Rotation(pitch=0.10232988744974136, yaw=89.22174072265625, roll=0.0017161744181066751)),
+#         Transform(Location(x=396.2500643873447, y=246.7443077719056, z=0.768080510618347), Rotation(pitch=0.10232988744974136, yaw=89.22174072265625, roll=0.0017161744181066751)),
+#         Transform(Location(x=396.4999794366592, y=246.74743311667083, z=0.6171943586872557), Rotation(pitch=0.10232988744974136, yaw=89.22174072265625, roll=0.0017161744181066751)),
+#         Transform(Location(x=396.4999805621572, y=246.7477863515393, z=0.8149479494536302), Rotation(pitch=0.10232988744974136, yaw=89.22174072265625, roll=0.0017161744181066751)),
+#         Transform(Location(x=396.5000915517723, y=246.6227494898065, z=0.8000345514480661), Rotation(pitch=0.10232988744974136, yaw=89.22174072265625, roll=0.0017161744181066751)),
+#         Transform(Location(x=396.50008049901, y=246.4977162031365, z=0.7880508399250239), Rotation(pitch=0.10232988744974136, yaw=89.22174072265625, roll=0.0017161744181066751)),
+#         Transform(Location(x=396.5000692406011, y=246.37261837478684, z=0.7399343735459034), Rotation(pitch=0.10232988744974136, yaw=89.22174072265625, roll=0.0017161744181066751))
+#         ]))
+
+#     controller = Controller()
+#     steer, throttle, brake, duration = controller.get_control_instructions(pose2, waypoints2)
+
+#     print("{} {} {} {}".format(throttle, steer, brake, duration))
+    
+# if __name__ == '__main__':
+#     main()

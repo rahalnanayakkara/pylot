@@ -3,9 +3,16 @@
 tracker_type    = 'sort' # ['sort', 'deep_sort']
 prediction_type = 'linear' # ['linear', 'r2p2']
 planner_type    = 'waypoints' # ['waypoints', 'fot', 'hybrid', 'rrtstar']
-controller_type = 'pid' # ['pid', 'mpc']
+controller_type = 'mpc' # ['pid', 'mpc']
 
-tracker_source  = 'local' # ['local', 'server']
+distributed = True # [True, False]
+perception_loc  = 'local' # ['local', 'server']
+control_loc = 'local' # ['local', 'server']
+
+local_server = '0.0.0.0'
+local_port = 5010
+cloud_server = '0.0.0.0'
+cloud_port = 5020
 
 deadline_enforcement = 'none' # ['none', 'static', 'dynamic']
 tracking_deadline = None
