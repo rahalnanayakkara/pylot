@@ -47,7 +47,7 @@ stop_at_uncontrolled_junctions = False
 traffic_light_min_distance = 5
 traffic_light_max_distance = 20
 traffic_light_max_angle = 0.6
-vehicle_max_distance = 45
+vehicle_max_distance = 30
 vehicle_max_angle = 0.4
 person_distance_hit_zone = 35
 person_angle_hit_zone = 0.15
@@ -68,7 +68,7 @@ prediction_ego_agent = False
 r2p2_model_path = '/home/erdos/workspace/pylot/dependencies/models/prediction/r2p2/r2p2-model.pt'
 
 # Taken from planning/flags.py
-target_speed = 10.0
+target_speed = 20.0
 obstacle_radius = 1.0
 num_waypoints_ahead = 60
 num_waypoints_behind = 30
@@ -91,5 +91,3 @@ obstacle_detection_gpu_index = 0
 obstacle_detection_model_paths="/home/erdos/workspace/pylot/dependencies/models/obstacle_detection/faster-rcnn"
 path_coco_labels = "/home/erdos/workspace/pylot/dependencies/models/pylot.names"
 obstacle_detection_min_score_threshold = 0.5
-
-tracker_type = "sort"

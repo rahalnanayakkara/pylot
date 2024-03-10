@@ -7,7 +7,7 @@ import math
 import numpy as np
 
 import params
-from objects.objects import Waypoints
+from objects.objects import Waypoints, RoadOption, Transform, Location, Rotation
 
 # Number of predicted locations to consider when computing speed factors.
 NUM_FUTURE_TRANSFORMS = 10
@@ -24,8 +24,8 @@ class World(object):
         self.ego_velocity_vector = None
         self._lanes = None
         self._map = None
-        self._goal_location = None
-        self.waypoints = None
+        self._goal_location = Location(376, 0.0, 0.0)
+        self.waypoints = Waypoints(deque([Transform(self._goal_location, Rotation())]))
         self._last_stop_ego_location = None
         self._distance_since_last_full_stop = 0
         self._num_ticks_stopped = 0
@@ -53,6 +53,29 @@ class World(object):
                     self.ego_transform.location) <=
                     params.static_obstacle_distance_threshold):
                 self.static_obstacles.append(obstacle)
+        
+        self.waypoints.remove_waypoint_if_close(self.ego_transform.location, 3)
+        new_goal_location = self.get_goal_location(self.ego_transform)
+        if len(self.obstacle_predictions) > 0:
+            prediction = self.obstacle_predictions[0]
+            print(prediction.obstacle_trajectory.trajectory)
+            waypoints_deque = deque([
+                transform for transform in prediction.obstacle_trajectory.trajectory # list of transforms
+            ])
+            road_options = deque([
+                RoadOption.LANE_FOLLOW
+                for _ in range(len(waypoints_deque))
+            ])
+            self.waypoints = Waypoints(waypoints_deque, road_options=road_options)
+        else:
+            new_goal_location = self._goal_location
+        
+        if new_goal_location != self._goal_location:
+            self._goal_location = new_goal_location
+            if not self.waypoints or self.waypoints.is_empty():
+                self.waypoints = Waypoints(
+                    deque([self.ego_transform]),
+                    road_options=deque([RoadOption.LANE_FOLLOW]))
 
         self._map = hd_map
         self._lanes = lanes
@@ -82,6 +105,20 @@ class World(object):
                         self._last_stop_ego_location)
             else:
                 self._distance_since_last_full_stop = 0
+
+    def get_goal_location(self, ego_transform: Transform):
+        if len(self.waypoints.waypoints) > 1:
+            dist = ego_transform.location.distance(
+                self.waypoints.waypoints[0].location)
+            if dist < 5:
+                new_goal_location = self.waypoints.waypoints[1].location
+            else:
+                new_goal_location = self.waypoints.waypoints[0].location
+        elif len(self.waypoints.waypoints) == 1:
+            new_goal_location = self.waypoints.waypoints[0].location
+        else:
+            new_goal_location = ego_transform.location
+        return new_goal_location
 
     def update_waypoints(self, goal_location, waypoints):
         self._goal_location = goal_location
@@ -426,8 +463,7 @@ def compute_vehicle_speed_factor(ego_location_2d, vehicle_location_2d,
     v_vector = vehicle_location_2d - ego_location_2d
     v_dist = vehicle_location_2d.l2_distance(ego_location_2d)
     v_angle = v_vector.get_angle(wp_vector)
-    # print('Vehicle vector {}; dist {}; angle {}'.format(
-    #     v_vector, v_dist, v_angle))
+    #print('Vehicle vector {}; dist {}; angle {}'.format(v_vector, v_dist, v_angle))
     min_angle = -0.5 * params.vehicle_max_angle / params.coast_factor
     if (min_angle < v_angle < params.vehicle_max_angle
             and v_dist < params.vehicle_max_distance):

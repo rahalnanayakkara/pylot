@@ -44,7 +44,7 @@ class RoadOption(enum.Enum):
 class WaypointPlanner():
     def __init__(self, map):
         self._world = World()
-        self._map = HDMap(map)
+        self._map = None
         self._state = BehaviorPlannerState.FOLLOW_WAYPOINTS
         self._goal_location = Location(376, 0.0, 0.0)
         self._route = Waypoints(deque([Transform(self._goal_location, Rotation())]))
@@ -58,7 +58,7 @@ class WaypointPlanner():
 
     def get_waypoints(self, pose, predictions):  
         start = time.time()
-        self.update_state_route(pose.transform, predictions)
+        # self.update_state_route(pose.transform, predictions)
         self._world.update(pose, predictions, [], self._map, None)
         
         (speed_factor, _, _, speed_factor_tl, speed_factor_stop) = self._world.stop_for_agents()

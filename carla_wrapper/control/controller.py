@@ -30,17 +30,18 @@ class Controller():
         start_time = time.time()
         ego = pose.transform
         speed = pose.forward_speed
+        dt = 1.0 / params.simulator_fps
 
-        if params.simulator_control_frequency == -1:
-            dt = 1.0 / params.simulator_fps
-        else:
-            dt = 1.0 / params.simulator_control_frequency
-        
-        if params.controller_type == "pid":
-            steer, throttle, brake = self.get_pid_control_instructions(ego, speed, waypoints, dt)
-        else:
-            steer, throttle, brake = self.get_mpc_control_instructions(ego, speed, waypoints, dt)
-
+        try:
+            if params.controller_type == "pid":
+                steer, throttle, brake = self.get_pid_control_instructions(ego, speed, waypoints, dt)
+            else:
+                steer, throttle, brake = self.get_mpc_control_instructions(ego, speed, waypoints, dt)
+        except (ValueError, AttributeError):
+            print('Braking! No more waypoints to follow.')
+            throttle, brake = 0.0, 0.5
+            steer = 0.0
+       
         return steer, throttle, brake, 1000 * (time.time() - start_time)
 
     def get_pid_control_instructions(self, vehicle, speed, waypoints, dt):
