@@ -101,10 +101,6 @@ class MockSimulationRunner():
         self._history = ObstacleLocationHistory()
         self._controller = Controller()
         self._planner = WaypointPlanner(world.get_map())
-
-        self.throttle = -1
-        self.brake = -1
-        self.steer = -1
         
         if params.distributed == True:
             self.sim_connect_to_server()
@@ -153,9 +149,6 @@ class MockSimulationRunner():
                 print("Trajectories       {} ".format(len(obstacle_trajectories)))
             
             if len(obstacle_trajectories) > 0:
-                first_trajectory = obstacle_trajectories[0].trajectory
-                # for traj_location in first_trajectory:
-                #     print("Trajectory 1  - " + str(traj_location))
                 obstacle_trajectories_message = ObstacleTrajectoriesMessage(obstacle_trajectories) # necessary because this contains methods used in prediction
                 (obstacle_predictions, predictor_runtime) = get_predictions(obstacle_trajectories_message)
                 print("Predictions        {} {}".format(len(obstacle_predictions), predictor_runtime))
@@ -166,20 +159,10 @@ class MockSimulationRunner():
                 print("Planner waypoints  {} {}".format(len(waypoints.waypoints), planner_runtime))
             
             (steer, throttle, brake, controller_runtime) = self._controller.get_control_instructions(pose, waypoints)
-            print("Control instructions {} {} {} {}".format(throttle, steer, brake, controller_runtime))
-
-            if throttle == 0 and brake == 0.5 and steer == 0:
-                if self.throttle != -1 and self.brake != -1:
-                    throttle = self.throttle
-                    brake = self.brake
-                    steer = self.steer
-
-            self.throttle = throttle
-            self.brake = brake
-            self.steer = steer            
-
+            print("Control instructions {} {} {} {}".format(throttle, steer, brake, controller_runtime)) 
+            
             self._simulation.apply_control(throttle, steer, brake, False, False)
-            self._visualizer.visualize(timestamp, frame, depth_frame, pose, obstacles, 1, 0, 0)
+            self._visualizer.visualize(timestamp, frame, depth_frame, pose, obstacles, throttle, steer, brake)
 
 def main():
     setup_pipeline_logging()

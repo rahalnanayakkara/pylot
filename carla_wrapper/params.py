@@ -4,6 +4,7 @@ tracker_type    = 'sort' # ['sort', 'deep_sort']
 prediction_type = 'linear' # ['linear', 'r2p2']
 planner_type    = 'waypoints' # ['waypoints', 'fot', 'hybrid', 'rrtstar']
 controller_type = 'mpc' # ['pid', 'mpc']
+detector_type = 'yolo'
 
 distributed = True # [True, False]
 perception_loc  = 'local' # ['local', 'server']

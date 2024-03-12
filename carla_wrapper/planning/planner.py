@@ -63,6 +63,10 @@ class WaypointPlanner():
         if params.planner_type == 'waypoints':
             print("Following world for waypoints ...")
             target_speed = speed_factor * params.target_speed
+
+            if len(self._world.waypoints) > 0:
+                self._world.waypoints = self.intermediate_waypoints(pose.transform, self._world.waypoints)
+
             output_wps = self._world.follow_waypoints(target_speed)
         else:
             print("Running tracker for waypoints ...")
@@ -77,6 +81,25 @@ class WaypointPlanner():
             print("\n" + str(output_wps.waypoints[i]))
         
         return output_wps, (time.time() - start) * 1000
+
+    def intermediate_waypoints(self, ego, output_wps):
+        first_waypoint = output_wps.waypoints.popleft()
+        count = int(first_waypoint.location.distance(ego.location))
+        delta_x = (first_waypoint.location.x - ego.location.x) / count
+        delta_y = (first_waypoint.location.y - ego.location.y) / count
+        delta_z = (first_waypoint.location.z - ego.location.z) / count
+        for i in range(count):
+            output_wps.waypoints.appendleft(Transform(Location(
+                ego.location.x + (delta_x * (count-i)), 
+                ego.location.y + (delta_y * (count-i)), 
+                ego.location.z + (delta_z * (count-i))
+                ), ego.rotation))
+            if len(output_wps.target_speeds) > 0:
+                output_wps.target_speeds.append(output_wps.target_speeds[0])
+            if len(output_wps.road_options) > 0:
+                output_wps.road_options.append(output_wps.road_options[0])            
+            
+        return output_wps
     
     def update_state_route(self, ego_transform, predictions):
         print("Planner: update_state_route")

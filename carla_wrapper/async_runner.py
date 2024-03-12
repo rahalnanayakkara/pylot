@@ -87,9 +87,9 @@ class AsyncSimulationRunner():
             self._visualizer.visualize(timestamp, frame, depth_frame, pose, None, -1, -1, -1)
             
             with self._control_lock:
-                #if control_timestamp == self._control_timestamp: # already processed
-                #    print("Already processed control timestamp " + str(control_timestamp))
-                #    continue
+                if control_timestamp == self._control_timestamp: # already processed
+                    print("Already processed control timestamp " + str(control_timestamp))
+                    continue
                 if self._throttle == -1 or self._brake == -1:
                     print("throttle or brake is -1 " + str(timestamp))
                     continue
