@@ -1,0 +1,20 @@
+@2024-03-08 05:19:34 [ObjectDetector] ObjectDetector 
+Initializing Object Detector
+@2024-03-08 05:19:35 [tensorflow] Saver not created because there are no variables in the graph to restore
+@2024-03-08 05:19:41 [ObjectTracker] ObjectTracker 
+Initializing Object Tracker
+@2024-03-08 05:19:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-08 05:19:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7861
+@2024-03-08 05:19:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-08 05:19:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7961
+@2024-03-08 05:19:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-08 05:19:42 [ObjectDetector] ObjectDetector @7961: ObjectDetector getting obstacles
+@2024-03-08 05:19:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8061
+@2024-03-08 05:19:42 [ObjectDetector] ObjectDetector @7961: ObjectDetector obstacles: []
+@2024-03-08 05:19:42 [ObjectTracker] ObjectTracker @7961: ObjectTracker received message

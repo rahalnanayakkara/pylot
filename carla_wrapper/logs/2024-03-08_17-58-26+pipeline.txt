@@ -1,0 +1,9 @@
+@2024-03-08 17:58:36 [ObjectDetector] ObjectDetector 
+Initializing Object Detector
+@2024-03-08 17:58:37 [tensorflow] Saver not created because there are no variables in the graph to restore
+@2024-03-08 17:58:43 [ObjectTracker] ObjectTracker 
+Initializing Object Tracker
+@2024-03-08 17:58:44 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-08 17:58:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 32559

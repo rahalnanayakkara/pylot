@@ -1,0 +1,16 @@
+@2024-03-12 20:15:46 [ObjectDetector] ObjectDetector 
+Initializing Object Detector
+@2024-03-12 20:15:46 [ObjectTracker] ObjectTracker 
+Initializing Object Tracker
+@2024-03-12 20:15:46 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 20:15:46 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 3543463
+@2024-03-12 20:15:46 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 20:15:46 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 3543563
+@2024-03-12 20:15:46 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 20:15:46 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 3543663

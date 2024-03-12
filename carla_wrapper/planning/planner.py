@@ -64,7 +64,7 @@ class WaypointPlanner():
             print("Following world for waypoints ...")
             target_speed = speed_factor * params.target_speed
 
-            if len(self._world.waypoints) > 0:
+            if len(self._world.waypoints.waypoints) > 0:
                 self._world.waypoints = self.intermediate_waypoints(pose.transform, self._world.waypoints)
 
             output_wps = self._world.follow_waypoints(target_speed)

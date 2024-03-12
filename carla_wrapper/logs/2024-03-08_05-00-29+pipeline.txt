@@ -1,0 +1,10 @@
+@2024-03-08 05:00:29 [ObjectDetector] ObjectDetector 
+Initializing Object Detector
+@2024-03-08 05:00:31 [tensorflow] Saver not created because there are no variables in the graph to restore
+@2024-03-08 05:00:36 [ObjectTracker] ObjectTracker 
+Initializing Object Tracker
+@2024-03-08 05:00:36 [ObjectTracker] ObjectTracker Error importing sort
+Traceback (most recent call last):
+  File "/home/erdos/workspace/pylot/carla_wrapper/perception/object_tracking.py", line 26, in __init__
+    from tracker import MultiObjectSORTTracker
+ModuleNotFoundError: No module named 'tracker'

@@ -1,0 +1,807 @@
+@2024-03-11 03:34:58 [ObjectDetector] ObjectDetector 
+Initializing Object Detector
+@2024-03-11 03:35:00 [tensorflow] Saver not created because there are no variables in the graph to restore
+@2024-03-11 03:35:06 [ObjectTracker] ObjectTracker 
+Initializing Object Tracker
+@2024-03-11 03:35:06 [Controller] Controller 
+Initializing Controller
+@2024-03-11 03:35:06 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:06 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 36504
+@2024-03-11 03:35:06 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:06 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 36604
+@2024-03-11 03:35:06 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:06 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 36704
+@2024-03-11 03:35:15 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:15 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 36804
+@2024-03-11 03:35:15 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:15 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 36904
+@2024-03-11 03:35:16 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:16 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 37004
+@2024-03-11 03:35:16 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:16 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 37104
+@2024-03-11 03:35:16 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:16 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 37204
+@2024-03-11 03:35:16 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:16 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 37304
+@2024-03-11 03:35:16 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:16 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 37404
+@2024-03-11 03:35:17 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:17 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 37504
+@2024-03-11 03:35:17 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:17 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 37604
+@2024-03-11 03:35:17 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:17 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 37704
+@2024-03-11 03:35:17 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:17 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 37804
+@2024-03-11 03:35:18 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:18 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 37904
+@2024-03-11 03:35:18 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:18 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 38004
+@2024-03-11 03:35:18 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:18 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 38104
+@2024-03-11 03:35:18 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:18 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 38204
+@2024-03-11 03:35:18 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:18 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 38304
+@2024-03-11 03:35:19 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:19 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 38404
+@2024-03-11 03:35:19 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:19 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 38504
+@2024-03-11 03:35:19 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:19 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 38604
+@2024-03-11 03:35:19 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:19 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 38704
+@2024-03-11 03:35:20 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:20 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 38804
+@2024-03-11 03:35:20 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:20 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 38904
+@2024-03-11 03:35:20 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:20 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 39004
+@2024-03-11 03:35:20 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:20 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 39104
+@2024-03-11 03:35:20 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:20 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 39204
+@2024-03-11 03:35:21 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:21 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 39304
+@2024-03-11 03:35:21 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:21 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 39404
+@2024-03-11 03:35:21 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:21 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 39504
+@2024-03-11 03:35:21 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:21 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 39604
+@2024-03-11 03:35:21 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:21 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 39704
+@2024-03-11 03:35:22 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:22 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 39804
+@2024-03-11 03:35:22 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:22 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 39904
+@2024-03-11 03:35:22 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:22 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 40004
+@2024-03-11 03:35:22 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:22 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 40104
+@2024-03-11 03:35:23 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:23 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 40204
+@2024-03-11 03:35:23 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:23 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 40304
+@2024-03-11 03:35:23 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:23 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 40404
+@2024-03-11 03:35:23 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:23 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 40504
+@2024-03-11 03:35:23 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:23 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 40604
+@2024-03-11 03:35:24 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:24 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 40704
+@2024-03-11 03:35:24 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:24 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 40804
+@2024-03-11 03:35:24 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:24 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 40904
+@2024-03-11 03:35:24 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:24 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 41004
+@2024-03-11 03:35:25 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:25 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 41104
+@2024-03-11 03:35:25 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:25 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 41204
+@2024-03-11 03:35:25 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:25 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 41304
+@2024-03-11 03:35:25 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:25 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 41404
+@2024-03-11 03:35:26 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:26 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 41504
+@2024-03-11 03:35:26 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:26 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 41604
+@2024-03-11 03:35:26 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:26 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 41704
+@2024-03-11 03:35:26 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:26 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 41804
+@2024-03-11 03:35:27 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:27 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 41904
+@2024-03-11 03:35:27 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:27 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 42004
+@2024-03-11 03:35:27 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:27 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 42104
+@2024-03-11 03:35:27 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:27 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 42204
+@2024-03-11 03:35:28 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:28 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 42304
+@2024-03-11 03:35:28 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:28 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 42404
+@2024-03-11 03:35:28 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:28 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 42504
+@2024-03-11 03:35:29 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:29 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 42604
+@2024-03-11 03:35:29 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:29 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 42704
+@2024-03-11 03:35:29 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:29 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 42804
+@2024-03-11 03:35:29 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:29 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 42904
+@2024-03-11 03:35:30 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:30 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 43004
+@2024-03-11 03:35:30 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:30 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 43104
+@2024-03-11 03:35:30 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:30 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 43204
+@2024-03-11 03:35:30 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:30 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 43304
+@2024-03-11 03:35:31 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:31 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 43404
+@2024-03-11 03:35:31 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:31 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 43504
+@2024-03-11 03:35:31 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:31 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 43604
+@2024-03-11 03:35:32 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:32 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 43704
+@2024-03-11 03:35:32 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:32 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 43804
+@2024-03-11 03:35:32 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:32 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 43904
+@2024-03-11 03:35:32 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:32 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 44004
+@2024-03-11 03:35:33 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:33 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 44104
+@2024-03-11 03:35:33 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:33 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 44204
+@2024-03-11 03:35:33 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:33 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 44304
+@2024-03-11 03:35:34 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:34 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 44404
+@2024-03-11 03:35:34 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:34 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 44504
+@2024-03-11 03:35:34 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:34 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 44604
+@2024-03-11 03:35:34 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:34 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 44704
+@2024-03-11 03:35:35 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:35 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 44804
+@2024-03-11 03:35:35 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:35 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 44904
+@2024-03-11 03:35:35 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:35 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 45004
+@2024-03-11 03:35:35 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:35 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 45104
+@2024-03-11 03:35:36 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:36 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 45204
+@2024-03-11 03:35:36 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:36 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 45304
+@2024-03-11 03:35:36 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:36 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 45404
+@2024-03-11 03:35:37 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:37 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 45504
+@2024-03-11 03:35:37 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:37 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 45604
+@2024-03-11 03:35:37 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:37 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 45704
+@2024-03-11 03:35:37 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:37 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 45804
+@2024-03-11 03:35:38 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:38 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 45904
+@2024-03-11 03:35:38 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:38 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 46004
+@2024-03-11 03:35:38 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:38 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 46104
+@2024-03-11 03:35:39 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 46204
+@2024-03-11 03:35:39 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 46304
+@2024-03-11 03:35:39 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 46404
+@2024-03-11 03:35:39 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 46504
+@2024-03-11 03:35:40 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 46604
+@2024-03-11 03:35:40 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 46704
+@2024-03-11 03:35:40 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 46804
+@2024-03-11 03:35:40 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 46904
+@2024-03-11 03:35:41 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 47004
+@2024-03-11 03:35:41 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 47104
+@2024-03-11 03:35:41 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 47204
+@2024-03-11 03:35:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 47304
+@2024-03-11 03:35:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 47404
+@2024-03-11 03:35:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 47504
+@2024-03-11 03:35:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 47604
+@2024-03-11 03:35:43 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 47704
+@2024-03-11 03:35:43 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 47804
+@2024-03-11 03:35:43 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 47904
+@2024-03-11 03:35:44 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 48004
+@2024-03-11 03:35:44 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 48104
+@2024-03-11 03:35:44 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 48204
+@2024-03-11 03:35:45 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 48304
+@2024-03-11 03:35:45 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 48404
+@2024-03-11 03:35:45 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 48504
+@2024-03-11 03:35:45 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 48604
+@2024-03-11 03:35:46 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:46 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 48704
+@2024-03-11 03:35:46 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:46 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 48804
+@2024-03-11 03:35:46 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:46 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 48904
+@2024-03-11 03:35:47 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:47 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 49004
+@2024-03-11 03:35:47 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:47 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 49104
+@2024-03-11 03:35:47 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:47 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 49204
+@2024-03-11 03:35:47 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:47 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 49304
+@2024-03-11 03:35:48 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:48 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 49404
+@2024-03-11 03:35:48 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:48 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 49504
+@2024-03-11 03:35:48 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:48 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 49604
+@2024-03-11 03:35:49 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:49 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 49704
+@2024-03-11 03:35:49 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:49 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 49804
+@2024-03-11 03:35:49 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:49 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 49904
+@2024-03-11 03:35:49 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:49 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 50004
+@2024-03-11 03:35:50 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:50 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 50104
+@2024-03-11 03:35:50 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:50 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 50204
+@2024-03-11 03:35:50 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:50 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 50304
+@2024-03-11 03:35:51 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:51 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 50404
+@2024-03-11 03:35:51 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:51 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 50504
+@2024-03-11 03:35:51 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:51 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 50604
+@2024-03-11 03:35:51 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:51 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 50704
+@2024-03-11 03:35:52 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:52 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 50804
+@2024-03-11 03:35:52 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:52 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 50904
+@2024-03-11 03:35:52 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:52 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 51004
+@2024-03-11 03:35:53 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:53 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 51104
+@2024-03-11 03:35:53 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:53 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 51204
+@2024-03-11 03:35:53 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:53 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 51304
+@2024-03-11 03:35:53 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:53 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 51404
+@2024-03-11 03:35:54 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:54 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 51504
+@2024-03-11 03:35:54 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:54 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 51604
+@2024-03-11 03:35:54 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:54 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 51704
+@2024-03-11 03:35:55 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:55 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 51804
+@2024-03-11 03:35:55 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:55 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 51904
+@2024-03-11 03:35:55 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:55 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 52004
+@2024-03-11 03:35:55 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:55 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 52104
+@2024-03-11 03:35:56 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:56 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 52204
+@2024-03-11 03:35:56 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:56 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 52304
+@2024-03-11 03:35:56 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:56 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 52404
+@2024-03-11 03:35:57 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:57 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 52504
+@2024-03-11 03:35:57 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:57 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 52604
+@2024-03-11 03:35:57 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:57 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 52704
+@2024-03-11 03:35:57 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:57 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 52804
+@2024-03-11 03:35:58 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:58 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 52904
+@2024-03-11 03:35:58 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:58 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 53004
+@2024-03-11 03:35:58 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:58 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 53104
+@2024-03-11 03:35:59 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:59 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 53204
+@2024-03-11 03:35:59 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:59 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 53304
+@2024-03-11 03:35:59 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:59 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 53404
+@2024-03-11 03:35:59 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:35:59 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 53504
+@2024-03-11 03:36:00 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:00 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 53604
+@2024-03-11 03:36:00 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:00 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 53704
+@2024-03-11 03:36:00 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:00 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 53804
+@2024-03-11 03:36:01 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:01 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 53904
+@2024-03-11 03:36:01 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:01 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 54004
+@2024-03-11 03:36:01 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:01 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 54104
+@2024-03-11 03:36:01 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:01 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 54204
+@2024-03-11 03:36:02 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:02 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 54304
+@2024-03-11 03:36:02 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:02 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 54404
+@2024-03-11 03:36:02 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:02 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 54504
+@2024-03-11 03:36:03 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:03 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 54604
+@2024-03-11 03:36:03 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:03 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 54704
+@2024-03-11 03:36:03 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:03 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 54804
+@2024-03-11 03:36:03 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:03 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 54904
+@2024-03-11 03:36:04 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:04 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 55004
+@2024-03-11 03:36:04 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:04 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 55104
+@2024-03-11 03:36:04 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:04 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 55204
+@2024-03-11 03:36:05 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:05 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 55304
+@2024-03-11 03:36:05 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:05 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 55404
+@2024-03-11 03:36:05 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:05 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 55504
+@2024-03-11 03:36:05 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:05 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 55604
+@2024-03-11 03:36:06 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:06 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 55704
+@2024-03-11 03:36:06 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:06 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 55804
+@2024-03-11 03:36:06 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:06 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 55904
+@2024-03-11 03:36:07 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:07 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 56004
+@2024-03-11 03:36:07 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:07 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 56104
+@2024-03-11 03:36:07 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:07 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 56204
+@2024-03-11 03:36:07 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:07 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 56304
+@2024-03-11 03:36:08 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-11 03:36:08 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 56404

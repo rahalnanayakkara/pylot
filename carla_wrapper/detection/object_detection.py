@@ -67,10 +67,10 @@ class ObjectDetector:
 
     def _run_yolo_model(self, frame):
         # Run batched inference on a list of images
-        results = self._model(frame)  # return a list of Results objects
+        #results = self._model(frame)  # return a list of Results objects
 
-        self._model.predict(
-            source=frame,
+        results = self._model.predict(
+            source=frame[:, :, ::-1],
             # conf=obstacle_detection_min_score_threshold,
             imgsz=(params.camera_image_height, params.camera_image_width),
             device=params.device)
@@ -89,7 +89,7 @@ class ObjectDetector:
                 xyxy = boxes.xyxy[0]
                 obstacles.append(
                     Obstacle(
-                        bounding_box = BoundingBox2D(xyxy[0].item(), xyxy()[1].item(), xyxy()[2].item(), xyxy()[3].item()),
+                        bounding_box = BoundingBox2D(xyxy[0].item(), xyxy[2].item(), xyxy[1].item(), xyxy[3].item()),
                         confidence = boxes.conf[0].item(),
                         label=label,
                         id=self._unique_id)

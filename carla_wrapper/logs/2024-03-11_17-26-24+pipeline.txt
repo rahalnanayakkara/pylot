@@ -1,0 +1,255 @@
+@2024-03-11 17:26:38 [ObjectDetector] ObjectDetector 
+Initializing Object Detector
+@2024-03-11 17:26:38 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5009
+@2024-03-11 17:26:38 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5065
+@2024-03-11 17:26:38 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5120
+@2024-03-11 17:26:38 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5174
+@2024-03-11 17:26:38 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5238
+@2024-03-11 17:26:38 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5300
+@2024-03-11 17:26:38 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5365
+@2024-03-11 17:26:38 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5606
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5671
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5750
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5812
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5874
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5935
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 5996
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6059
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6118
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6183
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6245
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6306
+@2024-03-11 17:26:39 [tensorflow] Saver not created because there are no variables in the graph to restore
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6368
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6432
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6498
+@2024-03-11 17:26:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6559
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6627
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6692
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6751
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6813
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6872
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6932
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 6991
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7050
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7111
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7174
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7235
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7295
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7356
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7419
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7479
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7541
+@2024-03-11 17:26:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7602
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7664
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7724
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7785
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7846
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7909
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 7969
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8031
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8092
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8152
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8212
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8272
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8333
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8395
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8455
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8517
+@2024-03-11 17:26:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8577
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8638
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8698
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8759
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8820
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8880
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8942
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9003
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9064
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9125
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9185
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9245
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9308
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9369
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9431
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9492
+@2024-03-11 17:26:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9552
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9612
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9673
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9734
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9796
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9858
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9921
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9983
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10044
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10104
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10165
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10225
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10285
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10348
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10410
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10471
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10535
+@2024-03-11 17:26:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10596
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10656
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10717
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10779
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10841
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10901
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10960
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11020
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11083
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11146
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11206
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11267
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11328
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11389
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11450
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11511
+@2024-03-11 17:26:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11573
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11635
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11696
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11757
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11818
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11879
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11940
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12000
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12063
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12123
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12188
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12248
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12318
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12380
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12442
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12504
+@2024-03-11 17:26:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12577
+@2024-03-11 17:26:46 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12638
+@2024-03-11 17:26:46 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12701
+@2024-03-11 17:26:46 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12766
+@2024-03-11 17:26:46 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12828
+@2024-03-11 17:26:46 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12890

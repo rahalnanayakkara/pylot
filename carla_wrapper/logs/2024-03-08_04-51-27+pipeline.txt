@@ -1,0 +1,8 @@
+@2024-03-08 04:51:40 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-08 04:51:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8466
+@2024-03-08 04:51:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-08 04:51:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8566

@@ -1,0 +1,253 @@
+@2024-03-12 04:25:31 [ObjectDetector] ObjectDetector 
+Initializing Object Detector
+@2024-03-12 04:25:32 [tensorflow] Saver not created because there are no variables in the graph to restore
+@2024-03-12 04:25:38 [ObjectTracker] ObjectTracker 
+Initializing Object Tracker
+@2024-03-12 04:25:39 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8541
+@2024-03-12 04:25:39 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8641
+@2024-03-12 04:25:39 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8741
+@2024-03-12 04:25:39 [ObjectDetector] ObjectDetector @8641: ObjectDetector obstacles: []
+@2024-03-12 04:25:39 [ObjectTracker] ObjectTracker @8641: ObjectTracker obstacles: []
+@2024-03-12 04:25:39 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:39 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8841
+@2024-03-12 04:25:40 [ObjectDetector] ObjectDetector @8741: ObjectDetector obstacles: []
+@2024-03-12 04:25:40 [ObjectTracker] ObjectTracker @8741: ObjectTracker obstacles: []
+@2024-03-12 04:25:40 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 8941
+@2024-03-12 04:25:40 [ObjectDetector] ObjectDetector @8841: ObjectDetector obstacles: []
+@2024-03-12 04:25:40 [ObjectTracker] ObjectTracker @8841: ObjectTracker obstacles: []
+@2024-03-12 04:25:40 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9041
+@2024-03-12 04:25:40 [ObjectDetector] ObjectDetector @8941: ObjectDetector obstacles: []
+@2024-03-12 04:25:40 [ObjectTracker] ObjectTracker @8941: ObjectTracker obstacles: []
+@2024-03-12 04:25:40 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9141
+@2024-03-12 04:25:40 [ObjectDetector] ObjectDetector @9041: ObjectDetector obstacles: []
+@2024-03-12 04:25:40 [ObjectTracker] ObjectTracker @9041: ObjectTracker obstacles: []
+@2024-03-12 04:25:40 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9241
+@2024-03-12 04:25:40 [ObjectDetector] ObjectDetector @9141: ObjectDetector obstacles: []
+@2024-03-12 04:25:40 [ObjectTracker] ObjectTracker @9141: ObjectTracker obstacles: []
+@2024-03-12 04:25:40 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9341
+@2024-03-12 04:25:40 [ObjectDetector] ObjectDetector @9241: ObjectDetector obstacles: []
+@2024-03-12 04:25:40 [ObjectTracker] ObjectTracker @9241: ObjectTracker obstacles: []
+@2024-03-12 04:25:40 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:40 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9441
+@2024-03-12 04:25:41 [ObjectDetector] ObjectDetector @9341: ObjectDetector obstacles: []
+@2024-03-12 04:25:41 [ObjectTracker] ObjectTracker @9341: ObjectTracker obstacles: []
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9541
+@2024-03-12 04:25:41 [ObjectDetector] ObjectDetector @9441: ObjectDetector obstacles: []
+@2024-03-12 04:25:41 [ObjectTracker] ObjectTracker @9441: ObjectTracker obstacles: []
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9641
+@2024-03-12 04:25:41 [ObjectDetector] ObjectDetector @9541: ObjectDetector obstacles: []
+@2024-03-12 04:25:41 [ObjectTracker] ObjectTracker @9541: ObjectTracker obstacles: []
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9741
+@2024-03-12 04:25:41 [ObjectDetector] ObjectDetector @9641: ObjectDetector obstacles: []
+@2024-03-12 04:25:41 [ObjectTracker] ObjectTracker @9641: ObjectTracker obstacles: []
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9841
+@2024-03-12 04:25:41 [ObjectDetector] ObjectDetector @9741: ObjectDetector obstacles: []
+@2024-03-12 04:25:41 [ObjectTracker] ObjectTracker @9741: ObjectTracker obstacles: []
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 9941
+@2024-03-12 04:25:41 [ObjectDetector] ObjectDetector @9841: ObjectDetector obstacles: []
+@2024-03-12 04:25:41 [ObjectTracker] ObjectTracker @9841: ObjectTracker obstacles: []
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10041
+@2024-03-12 04:25:41 [ObjectDetector] ObjectDetector @9941: ObjectDetector obstacles: []
+@2024-03-12 04:25:41 [ObjectTracker] ObjectTracker @9941: ObjectTracker obstacles: []
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:41 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10141
+@2024-03-12 04:25:42 [ObjectDetector] ObjectDetector @10041: ObjectDetector obstacles: []
+@2024-03-12 04:25:42 [ObjectTracker] ObjectTracker @10041: ObjectTracker obstacles: []
+@2024-03-12 04:25:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10241
+@2024-03-12 04:25:42 [ObjectDetector] ObjectDetector @10141: ObjectDetector obstacles: []
+@2024-03-12 04:25:42 [ObjectTracker] ObjectTracker @10141: ObjectTracker obstacles: []
+@2024-03-12 04:25:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10341
+@2024-03-12 04:25:42 [ObjectDetector] ObjectDetector @10241: ObjectDetector obstacles: []
+@2024-03-12 04:25:42 [ObjectTracker] ObjectTracker @10241: ObjectTracker obstacles: []
+@2024-03-12 04:25:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10441
+@2024-03-12 04:25:42 [ObjectDetector] ObjectDetector @10341: ObjectDetector obstacles: []
+@2024-03-12 04:25:42 [ObjectTracker] ObjectTracker @10341: ObjectTracker obstacles: []
+@2024-03-12 04:25:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10541
+@2024-03-12 04:25:42 [ObjectDetector] ObjectDetector @10441: ObjectDetector obstacles: []
+@2024-03-12 04:25:42 [ObjectTracker] ObjectTracker @10441: ObjectTracker obstacles: []
+@2024-03-12 04:25:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10641
+@2024-03-12 04:25:42 [ObjectDetector] ObjectDetector @10541: ObjectDetector obstacles: []
+@2024-03-12 04:25:42 [ObjectTracker] ObjectTracker @10541: ObjectTracker obstacles: []
+@2024-03-12 04:25:42 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:42 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10741
+@2024-03-12 04:25:43 [ObjectDetector] ObjectDetector @10641: ObjectDetector obstacles: []
+@2024-03-12 04:25:43 [ObjectTracker] ObjectTracker @10641: ObjectTracker obstacles: []
+@2024-03-12 04:25:43 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10841
+@2024-03-12 04:25:43 [ObjectDetector] ObjectDetector @10741: ObjectDetector obstacles: []
+@2024-03-12 04:25:43 [ObjectTracker] ObjectTracker @10741: ObjectTracker obstacles: []
+@2024-03-12 04:25:43 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 10941
+@2024-03-12 04:25:43 [ObjectDetector] ObjectDetector @10841: ObjectDetector obstacles: []
+@2024-03-12 04:25:43 [ObjectTracker] ObjectTracker @10841: ObjectTracker obstacles: []
+@2024-03-12 04:25:43 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11041
+@2024-03-12 04:25:43 [ObjectDetector] ObjectDetector @10941: ObjectDetector obstacles: []
+@2024-03-12 04:25:43 [ObjectTracker] ObjectTracker @10941: ObjectTracker obstacles: []
+@2024-03-12 04:25:43 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11141
+@2024-03-12 04:25:43 [ObjectDetector] ObjectDetector @11141: ObjectDetector obstacles: []
+@2024-03-12 04:25:43 [ObjectTracker] ObjectTracker @11141: ObjectTracker obstacles: []
+@2024-03-12 04:25:43 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11241
+@2024-03-12 04:25:43 [ObjectDetector] ObjectDetector @11141: ObjectDetector obstacles: []
+@2024-03-12 04:25:43 [ObjectTracker] ObjectTracker @11141: ObjectTracker obstacles: []
+@2024-03-12 04:25:43 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:43 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11341
+@2024-03-12 04:25:44 [ObjectDetector] ObjectDetector @11241: ObjectDetector obstacles: []
+@2024-03-12 04:25:44 [ObjectTracker] ObjectTracker @11241: ObjectTracker obstacles: []
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11441
+@2024-03-12 04:25:44 [ObjectDetector] ObjectDetector @11341: ObjectDetector obstacles: []
+@2024-03-12 04:25:44 [ObjectTracker] ObjectTracker @11341: ObjectTracker obstacles: []
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11541
+@2024-03-12 04:25:44 [ObjectDetector] ObjectDetector @11441: ObjectDetector obstacles: []
+@2024-03-12 04:25:44 [ObjectTracker] ObjectTracker @11441: ObjectTracker obstacles: []
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11641
+@2024-03-12 04:25:44 [ObjectDetector] ObjectDetector @11641: ObjectDetector obstacles: []
+@2024-03-12 04:25:44 [ObjectTracker] ObjectTracker @11641: ObjectTracker obstacles: []
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11741
+@2024-03-12 04:25:44 [ObjectDetector] ObjectDetector @11641: ObjectDetector obstacles: []
+@2024-03-12 04:25:44 [ObjectTracker] ObjectTracker @11641: ObjectTracker obstacles: []
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11841
+@2024-03-12 04:25:44 [ObjectDetector] ObjectDetector @11741: ObjectDetector obstacles: []
+@2024-03-12 04:25:44 [ObjectTracker] ObjectTracker @11741: ObjectTracker obstacles: []
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11941
+@2024-03-12 04:25:44 [ObjectDetector] ObjectDetector @11841: ObjectDetector obstacles: []
+@2024-03-12 04:25:44 [ObjectTracker] ObjectTracker @11841: ObjectTracker obstacles: []
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:44 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12041
+@2024-03-12 04:25:45 [ObjectDetector] ObjectDetector @11941: ObjectDetector obstacles: []
+@2024-03-12 04:25:45 [ObjectTracker] ObjectTracker @11941: ObjectTracker obstacles: []
+@2024-03-12 04:25:45 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12141
+@2024-03-12 04:25:45 [ObjectDetector] ObjectDetector @12041: ObjectDetector obstacles: []
+@2024-03-12 04:25:45 [ObjectTracker] ObjectTracker @12041: ObjectTracker obstacles: []
+@2024-03-12 04:25:45 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12241
+@2024-03-12 04:25:45 [ObjectDetector] ObjectDetector @12141: ObjectDetector obstacles: []
+@2024-03-12 04:25:45 [ObjectTracker] ObjectTracker @12141: ObjectTracker obstacles: []
+@2024-03-12 04:25:45 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12341
+@2024-03-12 04:25:45 [ObjectDetector] ObjectDetector @12241: ObjectDetector obstacles: []
+@2024-03-12 04:25:45 [ObjectTracker] ObjectTracker @12241: ObjectTracker obstacles: []
+@2024-03-12 04:25:45 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12441
+@2024-03-12 04:25:45 [ObjectDetector] ObjectDetector @12341: ObjectDetector obstacles: []
+@2024-03-12 04:25:45 [ObjectTracker] ObjectTracker @12341: ObjectTracker obstacles: []
+@2024-03-12 04:25:45 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12541
+@2024-03-12 04:25:45 [ObjectDetector] ObjectDetector @12441: ObjectDetector obstacles: []
+@2024-03-12 04:25:45 [ObjectTracker] ObjectTracker @12441: ObjectTracker obstacles: []
+@2024-03-12 04:25:45 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-12 04:25:45 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 12641
+@2024-03-12 04:25:46 [ObjectDetector] ObjectDetector @12541: ObjectDetector obstacles: [Obstacle(id: 0, label: car, confidence: 0.6657866835594177, bbox: BoundingBox2D(xmin: 496, xmax: 531, ymin: 135, ymax: 161))]
+@2024-03-12 04:25:46 [ObjectTracker] ObjectTracker @12541: ObjectTracker obstacles: [Obstacle(id: 0, label: car, confidence: 0, bbox: BoundingBox2D(xmin: 496, xmax: 531, ymin: 135, ymax: 161))]

@@ -1,0 +1,19 @@
+@2024-03-08 18:10:15 [ObjectDetector] ObjectDetector 
+Initializing Object Detector
+@2024-03-08 18:10:16 [tensorflow] Saver not created because there are no variables in the graph to restore
+@2024-03-08 18:10:22 [ObjectTracker] ObjectTracker 
+Initializing Object Tracker
+@2024-03-08 18:10:23 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-08 18:10:23 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11637
+@2024-03-08 18:10:23 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-08 18:10:23 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11737
+@2024-03-08 18:10:23 [CarlaSimulation] CarlaSimulation 
+Force ticking simulator ...
+@2024-03-08 18:10:23 [CarlaSimulation] CarlaSimulation 
+World is ticking ... 11837
+@2024-03-08 18:10:23 [ObjectDetector] ObjectDetector @11737: ObjectDetector obstacles: [Obstacle(id: 0, label: car, confidence: 0.979599118232727, bbox: BoundingBox2D(xmin: 504, xmax: 526, ymin: 147, ymax: 168))]
+@2024-03-08 18:10:23 [ObjectTracker] ObjectTracker @11737: ObjectTracker obstacles: [Obstacle(id: 0, label: car, confidence: 0.979599118232727, bbox: BoundingBox2D(xmin: 504, xmax: 526, ymin: 147, ymax: 168))]

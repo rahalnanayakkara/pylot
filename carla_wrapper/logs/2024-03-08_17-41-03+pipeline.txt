@@ -1,0 +1,5 @@
+@2024-03-08 17:41:14 [ObjectDetector] ObjectDetector 
+Initializing Object Detector
+@2024-03-08 17:41:15 [tensorflow] Saver not created because there are no variables in the graph to restore
+@2024-03-08 17:41:21 [ObjectTracker] ObjectTracker 
+Initializing Object Tracker
