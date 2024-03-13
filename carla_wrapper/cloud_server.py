@@ -77,7 +77,7 @@ def cloud_server():
             
             
             if params.control_loc == 'cloud':
-                (steer, throttle, brake, controller_runtime) = controller.get_control_instructions(sensor_data.pose, waypoints)
+                (steer, throttle, brake, controller_runtime) = controller.get_control_instructions(timestamp, sensor_data.pose, waypoints)
                 print("Control instructions {} {} {} {}".format(throttle, steer, brake, controller_runtime))
                 control_msg = ControlMessage(steer=steer, throttle=throttle, brake=brake, hand_brake=False, reverse=False, timestamp=timestamp)
                 send_msg(cloud_conn, pickle.dumps(control_msg))
@@ -91,7 +91,7 @@ def cloud_server():
         elif params.perception_loc == 'local' and params.control_loc == 'cloud':
             input = recv_msg(cloud_conn)
             input_message = pickle.loads(input)
-            (steer, throttle, brake, controller_runtime) = controller.get_control_instructions(input_message.pose, input_message.waypoints)
+            (steer, throttle, brake, controller_runtime) = controller.get_control_instructions(timestamp, input_message.pose, input_message.waypoints)
             print("Control instructions {} {} {} {}".format(throttle, steer, brake, controller_runtime))
             control_msg = ControlMessage(steer=steer, throttle=throttle, brake=brake, hand_brake=False, reverse=False, timestamp=0)
             send_msg(cloud_conn, pickle.dumps(control_msg))

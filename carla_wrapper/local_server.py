@@ -59,7 +59,7 @@ def local_server():
             elif params.control_loc == 'local':
                 input = recv_msg(cloud_conn)
                 input_message = pickle.loads(input)
-                (steer, throttle, brake, controller_runtime) = controller.get_control_instructions(input_message.pose, input_message.waypoints)
+                (steer, throttle, brake, controller_runtime) = controller.get_control_instructions(timestamp, input_message.pose, input_message.waypoints)
                 print("Control instructions {} {} {} {}".format(throttle, steer, brake, controller_runtime))
                 control_msg = ControlMessage(steer=steer, throttle=throttle, brake=brake, hand_brake=False, reverse=False, timestamp=0)
                 send_msg(local_conn, pickle.dumps(control_msg))
@@ -103,7 +103,7 @@ def local_server():
                 print("Planner waypoints  {} {}".format(len(waypoints.waypoints), planner_runtime))
             
             if params.control_loc == 'local':
-                (steer, throttle, brake, controller_runtime) = controller.get_control_instructions(sensor_data.pose, waypoints)
+                (steer, throttle, brake, controller_runtime) = controller.get_control_instructions(timestamp, sensor_data.pose, waypoints)
                 print("Control instructions {} {} {} {}".format(throttle, steer, brake, controller_runtime))
                 control_msg = ControlMessage(steer=steer, throttle=throttle, brake=brake, hand_brake=False, reverse=False, timestamp=0)
                 cmd = pickle.dumps(control_msg)

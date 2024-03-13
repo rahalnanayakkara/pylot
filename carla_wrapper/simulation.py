@@ -3,7 +3,7 @@ import time
 import params
 
 from utils.simulation import set_mode_fps
-import utils.logging
+from utils.logging import get_module_logger, get_timestamp_logger
 
 from carla import VehicleControl, command
 import carla
@@ -37,7 +37,8 @@ class CarlaSimulation:
 
     def __init__(self, client, world):
         # Dump logs for CarlaSimulation
-        self._module_logger = utils.logging.get_module_logger("CarlaSimulation")
+        self._module_logger = get_module_logger("CarlaSimulation")
+        self._timestamp_logger = get_timestamp_logger()
 
         print("\nInitializing world ...")
         self._client = client
@@ -94,12 +95,24 @@ class CarlaSimulation:
         frame = self._camera.get_processed_image(self._game_time)
         depth_frame = self._depth_camera.get_processed_image(self._game_time)
         pose = self.read_ego_vehicle_data()
+        distance = self.get_vehicle_distance()
+        if distance != None:
+            self._timestamp_logger.write("{} {} {}".format(self._game_time, 'actual_distance', distance))
         return self._game_time, frame, depth_frame, pose
 
     def on_simulator_tick(self, msg):
         self._game_time = int(msg.elapsed_seconds * 1000)
         self._module_logger.info("\nWorld is ticking ... " + str(self._game_time))
         self.update_spectator_pose()
+    
+    def get_vehicle_distance(self):
+        vehicle_list = self._world.get_actors().filter('vehicle.*')
+        if len(vehicle_list) != 2:
+            return None
+        vehicle1 = Obstacle.from_simulator_actor(vehicle_list[0])
+        vehicle2 = Obstacle.from_simulator_actor(vehicle_list[1])
+        return vehicle1.transform.location.distance(vehicle2.transform.location)
+        
     
     def read_ego_vehicle_data(self):
         vec_transform = Transform.from_simulator_transform(self._ego_vehicle.get_transform())

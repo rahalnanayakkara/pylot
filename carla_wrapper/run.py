@@ -72,7 +72,7 @@ class SimulationRunner():
             (waypoints, planner_runtime) = self._planner.get_waypoints(pose, obstacle_predictions)
             print("Planner waypoints  {} {}".format(len(waypoints.waypoints), planner_runtime))
             
-        (steer, throttle, brake, controller_runtime) = self._controller.get_control_instructions(pose, waypoints)
+        (steer, throttle, brake, controller_runtime) = self._controller.get_control_instructions(timestamp, pose, waypoints)
         print("Control instructions {} {} {} {}".format(throttle, steer, brake, controller_runtime))
 
         if throttle == 0 and brake == 0.5 and steer == 0:
@@ -158,7 +158,7 @@ class MockSimulationRunner():
                 (waypoints, planner_runtime) = self._planner.get_waypoints(pose, obstacle_predictions)
                 print("Planner waypoints  {} {}".format(len(waypoints.waypoints), planner_runtime))
             
-            (steer, throttle, brake, controller_runtime) = self._controller.get_control_instructions(pose, waypoints)
+            (steer, throttle, brake, controller_runtime) = self._controller.get_control_instructions(timestamp, pose, waypoints)
             print("Control instructions {} {} {} {}".format(throttle, steer, brake, controller_runtime)) 
             
             self._simulation.apply_control(throttle, steer, brake, False, False)

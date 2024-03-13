@@ -160,7 +160,7 @@ class AsyncSimulationRunner():
                 (waypoints, planner_runtime) = self._planner.get_waypoints(pose, obstacle_predictions)
                 print("Planner waypoints  {} {}".format(len(waypoints.waypoints), planner_runtime))
             
-            (steer, throttle, brake, controller_runtime) = self._controller.get_control_instructions(pose, waypoints)
+            (steer, throttle, brake, controller_runtime) = self._controller.get_control_instructions(timestamp, pose, waypoints)
             print("Control instructions {} {} {} {}".format(throttle, steer, brake, controller_runtime))
             
             with self._control_lock:

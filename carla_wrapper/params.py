@@ -19,6 +19,8 @@ deadline_enforcement = 'none' # ['none', 'static', 'dynamic']
 tracking_deadline = None
 planning_deadline = None
 
+detector_type = 'yolo' 
+
 # Simulator params
 
 simulator_host = '127.0.0.1'
@@ -45,7 +47,6 @@ device='cpu' # used by torch for r2p2 computation
 
 min_pid_steer_waypoint_distance = 5
 min_pid_speed_waypoint_distance = 5
-steer_gain = False
 
 stop_for_traffic_lights = True
 stop_for_people = True
@@ -99,3 +100,5 @@ obstacle_detection_gpu_index = 0
 obstacle_detection_model_paths="/home/erdos/workspace/pylot/dependencies/models/obstacle_detection/faster-rcnn"
 path_coco_labels = "/home/erdos/workspace/pylot/dependencies/models/pylot.names"
 obstacle_detection_min_score_threshold = 0.5
+
+timestamp_log_file = '/home/erdos/workplace/pylot/timestamp_log.txt'

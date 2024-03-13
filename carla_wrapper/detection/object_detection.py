@@ -67,11 +67,9 @@ class ObjectDetector:
 
     def _run_yolo_model(self, frame):
         # Run batched inference on a list of images
-        #results = self._model(frame)  # return a list of Results objects
-
         results = self._model.predict(
             source=frame[:, :, ::-1],
-            # conf=obstacle_detection_min_score_threshold,
+            conf=obstacle_detection_min_score_threshold,
             imgsz=(params.camera_image_height, params.camera_image_width),
             device=params.device)
 
@@ -83,9 +81,9 @@ class ObjectDetector:
             label = ''
             for cls in boxes.cls:
                 if int(cls.item()) in names:
-                    label = names[int(cls.item())] # e.g. 'car'
-                    print(label)
-            if (label in OBSTACLE_LABELS):
+                    label = names[int(cls.item())]
+
+            if (label == 'car'):
                 xyxy = boxes.xyxy[0]
                 obstacles.append(
                     Obstacle(

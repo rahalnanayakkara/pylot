@@ -5,6 +5,8 @@ import os
 import numpy as np
 import pandas as pd
 
+import params
+
 log_dir = '/home/erdos/workspace/pylot/carla_wrapper/logs/'
 metrics_dir = '/home/erdos/workspace/pylot/carla_wrapper/metrics/'
 
@@ -54,6 +56,7 @@ def get_module_logger(module_name):
     adapter = ModuleLoggerAdapter(logger, {'module_name': module_name})
     return adapter
 
+
 class ModuleCompletionLogger:
     _instance = None
     filename = None
@@ -86,4 +89,42 @@ class ModuleCompletionLogger:
         })
         new_row.to_csv(self.filepath, mode='a', header=False, index=False)
 
+def get_timestamp_logger():
+    return open(params.timestamp_log_file, 'a')
 
+class ModuleLogParser:
+
+    def __init__(self):
+        self._timestamp_map = {}
+    
+    def read(self, filename):
+        file = open(filename, 'r')
+        lines = file.readlines()
+        for line in lines:
+            fields = line.split()
+            if len(fields) < 3:
+                print("Warning! Encountered too few fields in  - " + line)
+            self._add(fields[0], fields[1], fields[2])
+    
+    def _add(self, timestamp, name, value):
+        if self._timestamp_map[timestamp] == None:
+            self._timestamp_map[timestamp] = {}
+        if self._timestamp_map[timestamp][name] != None:
+            print("Warning! Encountered duplicate value for {} at {}".format(name, timestamp))
+        self._timestamp_map[timestamp][name] = float(value)
+    
+    def get_timestamps(self):
+        return [key for key in self._timestamp_map.keys()]
+    
+    def get(self, timestamp):
+        return self._timestamp_map[timestamp]
+    
+    def get_acceleration(self, timestamp):
+        return self.get(timestamp)['acceleration']
+    
+    def get_actual_distance(self, timestamp):
+        return self.get(timestamp)['actual_distance']
+    
+    def get_perceived_distance(self, timestamp):
+        return self.get(timestamp)['perceived_distance']
+    

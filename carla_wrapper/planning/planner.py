@@ -1,7 +1,7 @@
 from collections import deque
 from objects.objects import Location, Rotation, Transform, Waypoints
 from planning.world import World
-# from planning.map import HDMap
+from utils.logging import get_timestamp_logger
 
 import time
 import params
@@ -54,7 +54,11 @@ class WaypointPlanner():
         else:
             self._planner = RRTStarPlanner(self._world)
 
-    def get_waypoints(self, pose, predictions):  
+        self._timestamp_logger = get_timestamp_logger()
+        self.last_timestamp = -1
+    
+    def get_waypoints(self, timestamp, pose, predictions):  
+        self.last_timestamp = timestamp
         start = time.time()
         # self.update_state_route(pose.transform, predictions)
         self._world.update(pose, predictions, [], self._map, None)
@@ -65,6 +69,8 @@ class WaypointPlanner():
             target_speed = speed_factor * params.target_speed
 
             if len(self._world.waypoints.waypoints) > 0:
+                distance = pose.transform.location.distance(self._world.waypoints.waypoints[0].location)
+                self._timestamp_logger.write('{} {} {}\n'.format(self.last_timestamp, 'perceived_distance', distance))
                 self._world.waypoints = self.intermediate_waypoints(pose.transform, self._world.waypoints)
 
             output_wps = self._world.follow_waypoints(target_speed)
@@ -75,7 +81,7 @@ class WaypointPlanner():
             output_wps = self._planner.run(ttd)
             speed_factor = min(speed_factor_stop, speed_factor_tl)
             output_wps.apply_speed_factor(speed_factor)
-
+        
         print("\n------Waypoint dump------")
         for i in range(len(output_wps.waypoints)):
             print("\n" + str(output_wps.waypoints[i]))
