@@ -4,9 +4,8 @@ tracker_type    = 'sort' # ['sort', 'deep_sort']
 prediction_type = 'linear' # ['linear', 'r2p2']
 planner_type    = 'waypoints' # ['waypoints', 'fot', 'hybrid', 'rrtstar']
 controller_type = 'mpc' # ['pid', 'mpc']
-detector_type = 'yolo'
 
-distributed = True # [True, False]
+distributed = False # [True, False]
 perception_loc  = 'local' # ['local', 'server']
 control_loc = 'local' # ['local', 'server']
 
@@ -34,7 +33,7 @@ camera_image_height = 576
 camera_fov = 90.0
 
 simulator_control_frequency = -1
-simulator_fps = 10
+simulator_fps = 30
 
 # Service params
 
@@ -56,7 +55,7 @@ stop_at_uncontrolled_junctions = False
 traffic_light_min_distance = 5
 traffic_light_max_distance = 20
 traffic_light_max_angle = 0.6
-vehicle_max_distance = 30
+vehicle_max_distance = 25
 vehicle_max_angle = 0.4
 person_distance_hit_zone = 35
 person_angle_hit_zone = 0.15
@@ -64,7 +63,7 @@ person_distance_emergency_zone = 15
 person_angle_emergency_zone = 0.5
 
 throttle_max = 1.0
-steer_gain = 0.7
+steer_gain = 0.5
 brake_max = 1.0
 coast_factor = 1.75
 
@@ -101,4 +100,4 @@ obstacle_detection_model_paths="/home/erdos/workspace/pylot/dependencies/models/
 path_coco_labels = "/home/erdos/workspace/pylot/dependencies/models/pylot.names"
 obstacle_detection_min_score_threshold = 0.5
 
-timestamp_log_file = '/home/erdos/workplace/pylot/timestamp_log.txt'
+timestamp_log_file = '/home/erdos/workspace/pylot/carla_wrapper/timestamp_log.txt'

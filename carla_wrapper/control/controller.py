@@ -37,7 +37,7 @@ class Controller():
         ego = pose.transform
         speed = pose.forward_speed
 
-        if waypoints == None or len(waypoints.waypoints) < 2:
+        if waypoints == None or len(waypoints.waypoints) < 3:
             print('Braking! No more waypoints to follow.')
             return 0, 0, 0.5, 0
 

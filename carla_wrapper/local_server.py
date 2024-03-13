@@ -86,11 +86,13 @@ def local_server():
             print("Tracked obstacles  {} {}".format(len(obstacles), tracker_runtime))
             
             if len(tracked_obstacles) > 0:
+                print(obstacles)
+                print(tracked_obstacles)
                 (timestamp, obstacle_trajectories) = history.get_location_history(timestamp, sensor_data.pose, sensor_data.depth_frame, tracked_obstacles)
                 print("Trajectories       {} ".format(len(obstacle_trajectories)))
             
             if len(obstacle_trajectories) > 0:
-                first_trajectory = obstacle_trajectories[0].trajectory
+                # first_trajectory = obstacle_trajectories[0].trajectory
                 # for traj_location in first_trajectory:
                 #     print("Trajectory 1  - " + str(traj_location))
                 obstacle_trajectories_message = ObstacleTrajectoriesMessage(obstacle_trajectories) # necessary because this contains methods used in prediction
@@ -99,7 +101,7 @@ def local_server():
             
             if len(obstacle_predictions) > 0:
                 print("Predictions  - " + str(obstacle_predictions[0]))
-                (waypoints, planner_runtime) = planner.get_waypoints(sensor_data.pose, obstacle_predictions)
+                (waypoints, planner_runtime) = planner.get_waypoints(timestamp, sensor_data.pose, obstacle_predictions)
                 print("Planner waypoints  {} {}".format(len(waypoints.waypoints), planner_runtime))
             
             if params.control_loc == 'local':

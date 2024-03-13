@@ -69,7 +69,7 @@ class SimulationRunner():
         
         if len(obstacle_predictions) > 0:
             print(pose)
-            (waypoints, planner_runtime) = self._planner.get_waypoints(pose, obstacle_predictions)
+            (waypoints, planner_runtime) = self._planner.get_waypoints(timestamp, pose, obstacle_predictions)
             print("Planner waypoints  {} {}".format(len(waypoints.waypoints), planner_runtime))
             
         (steer, throttle, brake, controller_runtime) = self._controller.get_control_instructions(timestamp, pose, waypoints)

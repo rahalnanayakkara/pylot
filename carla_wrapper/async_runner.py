@@ -74,6 +74,7 @@ class AsyncSimulationRunner():
         brake = 0
         steer = 0
         control_timestamp = 0
+        self._simulation.apply_control(1, 0, 1, False, False)
         while True:
             time.sleep(1.0 / params.simulator_fps) # Sleep for one frame
             timestamp, frame, depth_frame, pose = self._simulation.tick_simulator()
@@ -88,7 +89,7 @@ class AsyncSimulationRunner():
             
             with self._control_lock:
                 if control_timestamp == self._control_timestamp: # already processed
-                    print("Already processed control timestamp " + str(control_timestamp))
+                    #print("Already processed control timestamp " + str(control_timestamp))
                     continue
                 if self._throttle == -1 or self._brake == -1:
                     print("throttle or brake is -1 " + str(timestamp))
@@ -108,7 +109,7 @@ class AsyncSimulationRunner():
         while True:
             with self._sim_lock:
                 if timestamp == self._timestamp: # already processed
-                    print("Already processed sim timestamp " + str(timestamp))
+                    #print("Already processed sim timestamp " + str(timestamp))
                     continue
                 if self._pose == None or self._frame == None or self._depth_frame == None:
                     print("Empty pose or frame or depth frame " + str(timestamp))
@@ -138,10 +139,10 @@ class AsyncSimulationRunner():
             waypoints = None
             
             (timestamp, obstacles, detector_runtime) = self._detector.get_obstacles(timestamp, frame)
-            print("Detected obstacles {} {}".format(len(obstacles), detector_runtime))
+            print("Detected obstacles {} {} {}".format(len(obstacles), detector_runtime, obstacles))
             
             (timestamp, tracked_obstacles, tracker_runtime) = self._tracker.get_tracked_obstacles(timestamp, frame, obstacles)
-            print("Tracked obstacles  {} {}".format(len(obstacles), tracker_runtime))
+            print("Tracked obstacles  {} {} {}".format(len(obstacles), tracker_runtime, tracked_obstacles))
             
             if len(tracked_obstacles) > 0:
                 (timestamp, obstacle_trajectories) = self._history.get_location_history(timestamp, pose, depth_frame, tracked_obstacles)
@@ -157,7 +158,7 @@ class AsyncSimulationRunner():
             
             if len(obstacle_predictions) > 0:
                 print("Predictions  - " + str(obstacle_predictions[0]))
-                (waypoints, planner_runtime) = self._planner.get_waypoints(pose, obstacle_predictions)
+                (waypoints, planner_runtime) = self._planner.get_waypoints(timestamp, pose, obstacle_predictions)
                 print("Planner waypoints  {} {}".format(len(waypoints.waypoints), planner_runtime))
             
             (steer, throttle, brake, controller_runtime) = self._controller.get_control_instructions(timestamp, pose, waypoints)

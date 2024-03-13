@@ -5,7 +5,9 @@ import utils.logging
 
 from ultralytics import YOLO
 
-from objects.objects import BoundingBox2D, Obstacle
+import tensorflow as tf
+
+from objects.objects import BoundingBox2D, Obstacle, VEHICLE_LABELS
 from objects.messages import ObstaclesMessage
 
 from utils.detection_utils import OBSTACLE_LABELS
@@ -30,9 +32,8 @@ class ObjectDetector:
         self._bbox_colors = load_coco_bbox_colors(self._coco_labels)
         
         if params.detector_type == 'yolo':
-            self._model = YOLO('detection/yolov8n.pt', task='detect')
+            self._model = YOLO('yolov8s.pt', task='detect')
         else:
-            import tensorflow as tf
             # Only sets memory growth for flagged GPU
             physical_devices = tf.config.experimental.list_physical_devices('GPU')
             tf.config.experimental.set_visible_devices([physical_devices[obstacle_detection_gpu_index]], 'GPU')
@@ -69,31 +70,38 @@ class ObjectDetector:
         # Run batched inference on a list of images
         results = self._model.predict(
             source=frame[:, :, ::-1],
-            conf=obstacle_detection_min_score_threshold,
-            imgsz=(params.camera_image_height, params.camera_image_width),
-            device=params.device)
+            conf=0.2, #obstacle_detection_min_score_threshold,
+            imgsz=[params.camera_image_height, params.camera_image_width],
+            device=params.device,
+            classes=[1,2,3,5,6,7])
 
         obstacles = []
+        min_conf = 0.0
         # Process results list
         for result in results:
             names = result.names # map of all labels used for prediction e.g. {2: 'car'}
             boxes = result.boxes  # Boxes object for bounding box outputs
             label = ''
-            for cls in boxes.cls:
-                if int(cls.item()) in names:
-                    label = names[int(cls.item())]
+            index = 0
+            if result.probs != None:
+                index = probs.top1
+                label = boxes.cls[index]
+            else:
+                for cls in boxes.cls:
+                    if int(cls.item()) in names:
+                        label = names[int(cls.item())]
 
-            if (label == 'car'):
-                xyxy = boxes.xyxy[0]
+            if (label in VEHICLE_LABELS):
+                xyxy = boxes.xyxy[index]
+                conf = boxes.conf[index].item()
                 obstacles.append(
                     Obstacle(
                         bounding_box = BoundingBox2D(xyxy[0].item(), xyxy[2].item(), xyxy[1].item(), xyxy[3].item()),
-                        confidence = boxes.conf[0].item(),
+                        confidence = conf,
                         label=label,
                         id=self._unique_id)
                         )
                 self._unique_id += 1
-            
         return obstacles
 
     def _run_tf_model(self, image_np):

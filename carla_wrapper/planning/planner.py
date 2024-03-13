@@ -82,9 +82,9 @@ class WaypointPlanner():
             speed_factor = min(speed_factor_stop, speed_factor_tl)
             output_wps.apply_speed_factor(speed_factor)
         
-        print("\n------Waypoint dump------")
-        for i in range(len(output_wps.waypoints)):
-            print("\n" + str(output_wps.waypoints[i]))
+        # print("\n------Waypoint dump------")
+        # for i in range(len(output_wps.waypoints)):
+        #    print("\n" + str(output_wps.waypoints[i]))
         
         return output_wps, (time.time() - start) * 1000
 

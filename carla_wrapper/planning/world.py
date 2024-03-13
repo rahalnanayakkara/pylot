@@ -58,13 +58,14 @@ class World(object):
         new_goal_location = self.get_goal_location(self.ego_transform)
         if len(self.obstacle_predictions) > 0:
             prediction = self.obstacle_predictions[0]
-            print(prediction.obstacle_trajectory.trajectory)
             waypoints_deque = deque([
                 transform for transform in prediction.obstacle_trajectory.trajectory # list of transforms
             ])
+            # for future_transform in prediction.predicted_trajectory:
+            #    waypoints_deque.append(future_transform)
             road_options = deque([
                 RoadOption.LANE_FOLLOW
-                for _ in range(len(waypoints_deque)-1, 0, -1)
+                for _ in waypoints_deque
             ])
             self.waypoints = Waypoints(waypoints_deque, road_options=road_options)
         else:

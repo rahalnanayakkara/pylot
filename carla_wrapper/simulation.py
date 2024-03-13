@@ -97,7 +97,7 @@ class CarlaSimulation:
         pose = self.read_ego_vehicle_data()
         distance = self.get_vehicle_distance()
         if distance != None:
-            self._timestamp_logger.write("{} {} {}".format(self._game_time, 'actual_distance', distance))
+            self._timestamp_logger.write("{} {} {}\n".format(self._game_time, 'actual_distance', distance))
         return self._game_time, frame, depth_frame, pose
 
     def on_simulator_tick(self, msg):
