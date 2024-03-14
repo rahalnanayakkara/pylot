@@ -1,5 +1,4 @@
 from sort.sort import Sort
-from dependencies.nanonets_object_tracking.deepsort import deepsort_rbc
 
 import time
 import numpy as np
@@ -109,6 +108,7 @@ class MultiObjectDeepSORTTracker(MultiObjectTracker):
     def __init__(self):
         # self._logger = logger
         # Initialize the deepsort object, which has a tracker object within it
+        from dependencies.nanonets_object_tracking.deepsort import deepsort_rbc
         self._deepsort = deepsort_rbc(
             wt_path=params.deep_sort_tracker_weights_path,
             max_age=params.obstacle_track_max_age,

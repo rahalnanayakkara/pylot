@@ -22,6 +22,12 @@ def local_server():
     local_socket = socket.socket() 
     local_socket.bind((host, port))
 
+    detector = ObjectDetector()
+    tracker = ObjectTracker()
+    history = ObstacleLocationHistory()
+    controller = Controller()
+    planner = WaypointPlanner(None)
+
     print("Local server open...")
 
     # configure how many client the server can listen simultaneously
@@ -35,34 +41,37 @@ def local_server():
         cloud_conn.connect((host, port))
         print("Connected to cloud..")
 
-
-    detector = ObjectDetector()
-    tracker = ObjectTracker()
-    history = ObstacleLocationHistory()
-    controller = Controller()
-    planner = WaypointPlanner(None)
-
     while True:
         # receive data stream. it won't accept data packet greater than 1024 bytes
+        start_rx = time.time()
         input = recv_msg(local_conn)
+        print("Sensor message rx time: "+str(time.time()-start_rx))
         # input_message = pickle.loads(input)
 
         if params.perception_loc == 'cloud':
+            start_tx = time.time()
             send_msg(cloud_conn, input)
+            print("Perception message tx time to cloud: "+str(time.time()-start_tx))
             
             if params.control_loc == 'cloud':
+                start_rx = time.time()
                 input = recv_msg(cloud_conn)
+                print("Control message rx time from cloud: "+str(time.time()-start_rx))
                 input_message = pickle.loads(input)
                 control_msg = ControlMessage(steer=input_message.steer, throttle=input_message.throttle, brake=input_message.brake, hand_brake=False, reverse=False, timestamp=0)
                 send_msg(local_conn, pickle.dumps(control_msg))
             
             elif params.control_loc == 'local':
+                start_rx = time.time()
                 input = recv_msg(cloud_conn)
+                print("Planner message rx time from cloud: "+str(time.time()-start_rx))
                 input_message = pickle.loads(input)
                 (steer, throttle, brake, controller_runtime) = controller.get_control_instructions(timestamp, input_message.pose, input_message.waypoints)
                 print("Control instructions {} {} {} {}".format(throttle, steer, brake, controller_runtime))
                 control_msg = ControlMessage(steer=steer, throttle=throttle, brake=brake, hand_brake=False, reverse=False, timestamp=0)
+                start_tx = time.time()
                 send_msg(local_conn, pickle.dumps(control_msg))
+                print("Control message tx time to sim: "+str(time.time()-start_tx))
                 print("Sent control message")
         
         elif params.perception_loc == 'local':
@@ -109,6 +118,7 @@ def local_server():
                 print("Control instructions {} {} {} {}".format(throttle, steer, brake, controller_runtime))
                 control_msg = ControlMessage(steer=steer, throttle=throttle, brake=brake, hand_brake=False, reverse=False, timestamp=0)
                 cmd = pickle.dumps(control_msg)
+                start_tx = time.time()
                 print("----------------------Sent control data"+str(len(cmd)))
                 send_msg(local_conn, cmd)
 
@@ -116,13 +126,19 @@ def local_server():
                 planner_msg = PlannerMessage(pose=sensor_data.pose, waypoints=waypoints)
                 pmd = pickle.dumps(planner_msg)
                 print("----------------------Sent planner data"+str(len(pmd)))
+                start_tx = time.time()
                 send_msg(cloud_conn, pmd)
+                print("Planner message tx time to cloud: "+str(time.time()-start_tx))
+                start_rx = time.time()
                 input = recv_msg(cloud_conn)
+                print("Control message rx time from cloud: "+str(time.time()-start_rx))
                 input_message = pickle.loads(input)
                 control_msg = ControlMessage(steer=input_message.steer, throttle=input_message.throttle, brake=input_message.brake, hand_brake=False, reverse=False, timestamp=timestamp)
                 cmd = pickle.dumps(control_msg)
                 print("----------------------Sent control data"+str(len(cmd)))
+                start_tx = time.time()
                 send_msg(local_conn, cmd)
+                print("Control message tx time to sim: "+str(time.time()-start_tx))
 
 
 if __name__=='__main__':

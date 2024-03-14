@@ -5,7 +5,7 @@ import utils.logging
 
 from ultralytics import YOLO
 
-import tensorflow as tf
+#import tensorflow as tf
 
 from objects.objects import BoundingBox2D, Obstacle, VEHICLE_LABELS
 from objects.messages import ObstaclesMessage
@@ -32,7 +32,7 @@ class ObjectDetector:
         self._bbox_colors = load_coco_bbox_colors(self._coco_labels)
         
         if params.detector_type == 'yolo':
-            self._model = YOLO('yolov8s.pt', task='detect')
+            self._model = YOLO('yolov8n.pt', task='detect')
         else:
             # Only sets memory growth for flagged GPU
             physical_devices = tf.config.experimental.list_physical_devices('GPU')
@@ -72,7 +72,7 @@ class ObjectDetector:
             source=frame[:, :, ::-1],
             conf=0.2, #obstacle_detection_min_score_threshold,
             imgsz=[params.camera_image_height, params.camera_image_width],
-            device=params.device,
+            device=0,
             classes=[1,2,3,5,6,7])
 
         obstacles = []

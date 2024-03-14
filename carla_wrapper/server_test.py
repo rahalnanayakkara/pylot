@@ -3,6 +3,7 @@ import pickle
 import threading
 import time
 import params
+import numpy as np
 
 from detection.object_detection import ObjectDetector
 from perception.object_tracking import ObjectTracker
@@ -18,30 +19,44 @@ from objects.frames import CameraFrame, DepthFrame
 from objects.objects import CameraSetup, DepthCameraSetup, Transform, Location, Rotation, Pose, Vector3D
 
 def server():
-    
+    print("In server")
 
     detector = ObjectDetector()
+    print("detector")
     tracker = ObjectTracker()
+    print("tracker")
     history = ObstacleLocationHistory()
+    print("olh")
     controller = Controller()
+    print("controller")
     planner = WaypointPlanner(None)
+    print("planner")
+
+    frame_temp = np.zeros((512, 960, 3), dtype='uint8')
+    frame = frame_temp.astype(np.float32)
+    frame = np.dot(frame[:, :, :3], [65536.0, 256.0, 1.0])
+    frame /= 16777215.0
 
     while True:
 
-        if params.perception_loc == 'cloud':
+        if params.perception_loc == 'local':
+
+            print("In main function")
 
             sensor_data = SensorMessage(timestamp = 8357,
                                         frame=CameraFrame(encoding= 'BGR', 
+                                                            frame = np.zeros((512, 960, 3), dtype='uint8'),
                                                             camera_setup= CameraSetup(name= 'center_camera', 
-                                                            type= 'sensor.camera.rgb', 
-                                                            width= 1024, 
-                                                            height= 576, 
+                                                            camera_type= 'sensor.camera.rgb', 
+                                                            width= 960, 
+                                                            height= 512, 
                                                             transform= Transform(location= Location(x=1.3, y=0.0, z=1.8), rotation= Rotation(pitch=-15, yaw=0, roll=0)), 
                                                             fov= 90.0)),
-                                        depth_frame=DepthFrame(camera_setup= CameraSetup(name= 'depth_center_camera', 
-                                                            type= 'sensor.camera.depth', 
-                                                            width= 1024, 
-                                                            height= 576, 
+                                        depth_frame=DepthFrame(frame = frame,
+                                                            camera_setup= CameraSetup(name= 'depth_center_camera', 
+                                                            camera_type= 'sensor.camera.depth', 
+                                                            width= 960, 
+                                                            height= 512, 
                                                             transform= Transform(location= Location(x=1.3, y=0.0, z=1.8), rotation= Rotation(pitch=-15, yaw=0, roll=0)), 
                                                             fov= 90.0)),
                                         pose=Pose(transform= Transform(location= Location(x=396.0, y=275.0, z=0.032674599438905716), rotation= Rotation(pitch=0.0, yaw=-89.99999237060547, roll=0.0)),
