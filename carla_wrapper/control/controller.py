@@ -144,7 +144,7 @@ class Controller():
         self._timestamp_logger.write("{} {} {}\n".format(self.last_timestamp, 'acceleration', acceleration))
         if acceleration >= 0.0:
             throttle = min(acceleration, params.throttle_max)
-            brake = 0
+            brake = 0.0
         else:
             throttle = 0.0
             brake = min(abs(acceleration), params.brake_max)
@@ -195,9 +195,7 @@ class PIDLongitudinalController(object):
             _de = 0.0
             _ie = 0.0
 
-        return np.clip(
-            (self._k_p * error) + (self._k_d * _de) + (self._k_i * _ie), -1.0,
-            1.0)
+        return (self._k_p * error) + (self._k_d * _de) + (self._k_i * _ie)
 
 
 class PIDLateralController(object):
@@ -259,9 +257,7 @@ class PIDLateralController(object):
             _de = 0.0
             _ie = 0.0
 
-        return np.clip(
-            (self._k_p * _dot) + (self._k_d * _de) + (self._k_i * _ie), -1.0,
-            1.0)
+        return (self._k_p * _dot) + (self._k_d * _de) + (self._k_i * _ie)
 
 
 class ModelPredictiveController:

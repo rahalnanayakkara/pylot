@@ -1,7 +1,6 @@
 from collections import deque
 from objects.objects import Location, Rotation, Transform, Waypoints
 from planning.world import World
-from utils.logging import get_timestamp_logger
 
 import time
 import params
@@ -54,7 +53,6 @@ class WaypointPlanner():
         else:
             self._planner = RRTStarPlanner(self._world)
 
-        self._timestamp_logger = get_timestamp_logger()
         self.last_timestamp = -1
     
     def get_waypoints(self, timestamp, pose, predictions):  
@@ -69,8 +67,6 @@ class WaypointPlanner():
             target_speed = speed_factor * params.target_speed
 
             if len(self._world.waypoints.waypoints) > 0:
-                distance = pose.transform.location.distance(self._world.waypoints.waypoints[0].location)
-                self._timestamp_logger.write('{} {} {}\n'.format(self.last_timestamp, 'perceived_distance', distance))
                 self._world.waypoints = self.intermediate_waypoints(pose.transform, self._world.waypoints)
 
             output_wps = self._world.follow_waypoints(target_speed)
@@ -91,6 +87,8 @@ class WaypointPlanner():
     def intermediate_waypoints(self, ego, output_wps):
         first_waypoint = output_wps.waypoints.popleft()
         count = int(first_waypoint.location.distance(ego.location))
+        if count < 2:
+            return output_wps
         delta_x = (first_waypoint.location.x - ego.location.x) / count
         delta_y = (first_waypoint.location.y - ego.location.y) / count
         delta_z = (first_waypoint.location.z - ego.location.z) / count

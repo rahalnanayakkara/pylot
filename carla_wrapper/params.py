@@ -3,13 +3,13 @@
 tracker_type    = 'sort' # ['sort', 'deep_sort']
 prediction_type = 'linear' # ['linear', 'r2p2']
 planner_type    = 'waypoints' # ['waypoints', 'fot', 'hybrid', 'rrtstar']
-controller_type = 'mpc' # ['pid', 'mpc']
+controller_type = 'pid' # ['pid', 'mpc']
 
-distributed = False # [True, False]
-perception_loc  = 'local' # ['local', 'server']
-control_loc = 'local' # ['local', 'server']
+distributed = True # [True, False]
+perception_loc  = 'cloud' # ['local', 'server']
+control_loc = 'cloud' # ['local', 'server']
 
-local_server = '0.0.0.0'
+local_server = '10.0.0.6'
 local_port = 5010
 cloud_server = '0.0.0.0'
 cloud_port = 5020
@@ -28,12 +28,12 @@ simulator_timeout = 10
 
 simulator_camera_frequency = -1
 
-camera_image_width = 1024
-camera_image_height = 576
+camera_image_width = 960
+camera_image_height = 512
 camera_fov = 90.0
 
 simulator_control_frequency = -1
-simulator_fps = 30
+simulator_fps = 15
 
 # Service params
 
@@ -55,7 +55,7 @@ stop_at_uncontrolled_junctions = False
 traffic_light_min_distance = 5
 traffic_light_max_distance = 20
 traffic_light_max_angle = 0.6
-vehicle_max_distance = 25
+vehicle_max_distance = 15
 vehicle_max_angle = 0.4
 person_distance_hit_zone = 35
 person_angle_hit_zone = 0.15
@@ -76,7 +76,7 @@ prediction_ego_agent = False
 r2p2_model_path = '/home/erdos/workspace/pylot/dependencies/models/prediction/r2p2/r2p2-model.pt'
 
 # Taken from planning/flags.py
-target_speed = 20.0
+target_speed = 15.0
 obstacle_radius = 1.0
 num_waypoints_ahead = 60
 num_waypoints_behind = 30
@@ -84,12 +84,12 @@ obstacle_filtering_distance = 1.0
 
 # Taken from perception/flags.py
 
-static_obstacle_distance_threshold = 70.0
-dynamic_obstacle_distance_threshold = 50.0
+static_obstacle_distance_threshold = 50.0
+dynamic_obstacle_distance_threshold = 75.0
 
 traffic_light_det_min_score_threshold = 0.3
 
-tracking_num_steps = 10
+tracking_num_steps = 50
 
 min_matching_iou=0.5
 obstacle_track_max_age=3

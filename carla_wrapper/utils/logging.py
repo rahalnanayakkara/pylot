@@ -90,7 +90,9 @@ class ModuleCompletionLogger:
         new_row.to_csv(self.filepath, mode='a', header=False, index=False)
 
 def get_timestamp_logger():
-    return open(params.timestamp_log_file, 'a')
+    #if tl_file == None:
+    tl_file = open(params.timestamp_log_file, 'a', 1)
+    return tl_file
 
 class ModuleLogParser:
 
@@ -104,12 +106,12 @@ class ModuleLogParser:
             fields = line.split()
             if len(fields) < 3:
                 print("Warning! Encountered too few fields in  - " + line)
-            self._add(fields[0], fields[1], fields[2])
+            self._add(int(fields[0]), fields[1], float(fields[2]))
     
     def _add(self, timestamp, name, value):
-        if self._timestamp_map[timestamp] == None:
+        if timestamp not in self._timestamp_map:
             self._timestamp_map[timestamp] = {}
-        if self._timestamp_map[timestamp][name] != None:
+        if name in self._timestamp_map[timestamp]:
             print("Warning! Encountered duplicate value for {} at {}".format(name, timestamp))
         self._timestamp_map[timestamp][name] = float(value)
     
