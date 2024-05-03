@@ -4,6 +4,7 @@ import params
 import copy
 import socket
 import pickle
+import zlib
 
 from utils.logging import setup_pipeline_logging, ModuleCompletionLogger
 from utils.simulation import get_world
@@ -128,6 +129,8 @@ class AsyncSimulationRunner():
                 #print("Size of sensor data: ", len(sensor_data))
 
             if self._pose is not None or self._frame is not None or self._depth_frame is not None:
+                frame.frame = zlib.compress(frame.frame)
+                depth_frame.frame = zlib.compress(depth_frame.frame)
                 pickle_pose = pickle.dumps(pose)
                 pickle_frame = pickle.dumps(frame)
                 pickle_depth_frame = pickle.dumps(depth_frame)
@@ -161,6 +164,9 @@ class AsyncSimulationRunner():
             obstacle_trajectories = []
             obstacle_predictions = []
             waypoints = None
+
+            frame.frame = zlib.compress(frame.frame)
+            depth_frame.frame = zlib.compress(depth_frame.frame)
             
             (timestamp, obstacles, detector_runtime) = self._detector.get_obstacles(timestamp, frame)
             print("Detected obstacles {} {} {}".format(len(obstacles), detector_runtime, obstacles))
