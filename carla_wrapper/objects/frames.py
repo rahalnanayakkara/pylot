@@ -68,6 +68,8 @@ class DepthFrame(object):
         # Apply (R + G * 256 + B * 256 * 256) / (256 * 256 * 256 - 1).
         frame = np.dot(frame[:, :, :3], [65536.0, 256.0, 1.0])
         frame /= 16777215.0  # (256.0 * 256.0 * 256.0 - 1.0)
+        print("Length of depth frame: ", len(frame))
+        print(frame)
         return cls(frame, camera_setup, original_frame)
 
     def as_numpy_array(self):

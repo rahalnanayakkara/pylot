@@ -5,7 +5,7 @@ prediction_type = 'linear' # ['linear', 'r2p2']
 planner_type    = 'waypoints' # ['waypoints', 'fot', 'hybrid', 'rrtstar']
 controller_type = 'pid' # ['pid', 'mpc']
 
-distributed = True # [True, False]
+distributed = False # [True, False]
 perception_loc  = 'cloud' # ['local', 'server']
 control_loc = 'cloud' # ['local', 'server']
 
@@ -33,7 +33,7 @@ camera_image_height = 512
 camera_fov = 90.0
 
 simulator_control_frequency = -1
-simulator_fps = 15
+simulator_fps = 10
 
 # Service params
 
@@ -55,7 +55,7 @@ stop_at_uncontrolled_junctions = False
 traffic_light_min_distance = 5
 traffic_light_max_distance = 20
 traffic_light_max_angle = 0.6
-vehicle_max_distance = 15
+vehicle_max_distance = 10
 vehicle_max_angle = 0.4
 person_distance_hit_zone = 35
 person_angle_hit_zone = 0.15
@@ -76,7 +76,7 @@ prediction_ego_agent = False
 r2p2_model_path = '/home/erdos/workspace/pylot/dependencies/models/prediction/r2p2/r2p2-model.pt'
 
 # Taken from planning/flags.py
-target_speed = 15.0
+target_speed = 5.0
 obstacle_radius = 1.0
 num_waypoints_ahead = 60
 num_waypoints_behind = 30

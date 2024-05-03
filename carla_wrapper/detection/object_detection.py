@@ -1,9 +1,9 @@
 import params
 import time
 import numpy as np
+import os
+import logging
 import utils.logging
-
-from ultralytics import YOLO
 
 import tensorflow as tf
 
@@ -27,23 +27,27 @@ class ObjectDetector:
 
         print("\nInitializing Object Detector ... ")
         self._module_logger.info("\nInitializing Object Detector")
+        
+        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+        logging.getLogger('tensorflow').setLevel(logging.ERROR)
+        
+        # Only sets memory growth for flagged GPU
+        physical_devices = tf.config.experimental.list_physical_devices('GPU')
+        tf.config.experimental.set_visible_devices([physical_devices[obstacle_detection_gpu_index]], 'GPU')
+        tf.config.experimental.set_memory_growth(physical_devices[obstacle_detection_gpu_index], True)
+
+        # Load the model from the saved_model format file.
+        self._tf_model = tf.saved_model.load(obstacle_detection_model_paths)
 
         self._coco_labels = load_coco_labels(path_coco_labels)
         self._bbox_colors = load_coco_bbox_colors(self._coco_labels)
-        
+
+        # Serve some junk image to load up the model.
+        self._run_tf_model(np.zeros((108, 192, 3), dtype='uint8'))
+
         if params.detector_type == 'yolo':
-            self._model = YOLO('yolov8s.pt', task='detect')
-        else:
-            # Only sets memory growth for flagged GPU
-            physical_devices = tf.config.experimental.list_physical_devices('GPU')
-            tf.config.experimental.set_visible_devices([physical_devices[obstacle_detection_gpu_index]], 'GPU')
-            tf.config.experimental.set_memory_growth(physical_devices[obstacle_detection_gpu_index], True)
-
-            # Load the model from the saved_model format file.
-            self._model = tf.saved_model.load(obstacle_detection_model_paths)
-
-            # Serve some junk image to load up the model.
-            self._run_tf_model(np.zeros((108, 192, 3), dtype='uint8'))
+            from ultralytics import YOLO
+            self._model = YOLO('yolov8m.pt', task='detect')
 
         # Unique bounding box id. Incremented for each bounding box.
         self._unique_id = 0
@@ -55,8 +59,9 @@ class ObjectDetector:
         assert frame.encoding == 'BGR', 'Expects BGR frames'
         if params.detector_type == 'yolo':
             obstacles = self._run_yolo_model(frame.frame)
-        else:
-            obstacles = self._run_tf_model(frame.frame)
+        
+        #tf_obstacles = self._run_tf_model(frame.frame)
+        #print(tf_obstacles)
 
         self._module_logger.info('@{}: {} obstacles: {}'.format(timestamp, self._config_name, obstacles))
 
@@ -69,8 +74,8 @@ class ObjectDetector:
     def _run_yolo_model(self, frame):
         # Run batched inference on a list of images
         results = self._model.predict(
-            source=frame[:, :, ::-1],
-            conf=0.2, #obstacle_detection_min_score_threshold,
+            source=frame[:,:,::-1],
+            conf=0.1, #obstacle_detection_min_score_threshold,
             imgsz=[params.camera_image_height, params.camera_image_width],
             device=params.device,
             classes=[1,2,3,5,6,7])
@@ -104,13 +109,12 @@ class ObjectDetector:
                 self._unique_id += 1
         return obstacles
 
-    def _run_tf_model(self, image_np):
-        import tensorflow as tf
+    def _run_tf_model(self, frame):
         # Expand dimensions since the model expects images to have
         # shape: [1, None, None, 3]
-        image_np_expanded = np.expand_dims(image_np, axis=0)
+        image_np_expanded = np.expand_dims(frame, axis=0)
 
-        infer = self._model.signatures['serving_default']
+        infer = self._tf_model.signatures['serving_default']
         result = infer(tf.convert_to_tensor(value=image_np_expanded))
 
         boxes = result['boxes']
@@ -130,10 +134,10 @@ class ObjectDetector:
                     if (self._coco_labels[res_classes[i]] in OBSTACLE_LABELS):
                         obstacles.append(
                             Obstacle(BoundingBox2D(
-                                int(res_boxes[i][1] * image_np.camera_setup.width),
-                                int(res_boxes[i][3] * image_np.camera_setup.width),
-                                int(res_boxes[i][0] * image_np.camera_setup.height),
-                                int(res_boxes[i][2] * image_np.camera_setup.height)),
+                                int(res_boxes[i][1] * params.camera_image_width),
+                                int(res_boxes[i][3] * params.camera_image_width),
+                                int(res_boxes[i][0] * params.camera_image_height),
+                                int(res_boxes[i][2] * params.camera_image_height)),
                                      res_scores[i],
                                      self._coco_labels[res_classes[i]],
                                      id=self._unique_id)

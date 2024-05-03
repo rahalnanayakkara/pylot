@@ -74,7 +74,10 @@ class AsyncSimulationRunner():
         brake = 0
         steer = 0
         control_timestamp = 0
-        self._simulation.apply_control(1, 0, 1, False, False)
+        for _ in range(0, 15, 1): # needed to kick off the scenario
+            self._simulation.tick_simulator()
+            self._simulation.apply_control(0.5, 0, 0, False, False)
+        #self._simulation.apply_control(1, 0, 1, False, False)
         while True:
             time.sleep(1.0 / params.simulator_fps) # Sleep for one frame
             timestamp, frame, depth_frame, pose = self._simulation.tick_simulator()
@@ -85,14 +88,17 @@ class AsyncSimulationRunner():
                 self._timestamp = timestamp
             
             # Not visualizing obstacles or control params
-            self._visualizer.visualize(timestamp, frame, depth_frame, pose, None, -1, -1, -1)
-            
+            self._visualizer.visualize(timestamp, frame, depth_frame, pose, None, throttle, steer, brake)
+
+            # if timestamp % 1000 == 0:
+            #     self._simulation.apply_control(1, 0, 0, False, False)
+
             with self._control_lock:
                 if control_timestamp == self._control_timestamp: # already processed
                     #print("Already processed control timestamp " + str(control_timestamp))
                     continue
-                if self._throttle == -1 or self._brake == -1:
-                    print("throttle or brake is -1 " + str(timestamp))
+                if self._throttle == -1 or self._brake == -1 or self._control_timestamp == -1:
+                    #print("throttle or brake is -1 " + str(timestamp))
                     continue
                 throttle = self._throttle
                 brake = self._brake
@@ -111,21 +117,26 @@ class AsyncSimulationRunner():
                 if timestamp == self._timestamp: # already processed
                     #print("Already processed sim timestamp " + str(timestamp))
                     continue
-                if self._pose == None or self._frame == None or self._depth_frame == None:
+                if self._pose == None or self._frame == None or self._depth_frame == None or self._timestamp == -1:
                     print("Empty pose or frame or depth frame " + str(timestamp))
                     continue
                 pose = self._pose
                 frame = self._frame
                 depth_frame = self._depth_frame
                 timestamp = self._timestamp
-            
+                sensor_data = SensorMessage(timestamp=timestamp, frame=frame, depth_frame=depth_frame, pose=pose)
+                #print("Size of sensor data: ", len(sensor_data))
+
             if params.distributed == True:
                 sensor_data = SensorMessage(timestamp=timestamp, frame=frame, depth_frame=depth_frame, pose=pose)
                 sdd = pickle.dumps(sensor_data)
+                send_time = time.time()
                 send_msg(self._server, sdd)
-                print("----------------------Sent sensor data"+str(len(sdd)))
+                print("Time taken to send "+str(time.time()-send_time))
+                print("----------------------Sent sensor data "+str(len(sdd)))
                 control_msg = recv_msg(self._server)
                 print("Rxvd control message"+str(len(control_msg)))
+                print("Time taken for sense-effect "+str(time.time()-send_time))
                 control_msg = pickle.loads(control_msg)    
                 with self._control_lock:
                     self._throttle = control_msg.throttle
@@ -159,7 +170,7 @@ class AsyncSimulationRunner():
             if len(obstacle_predictions) > 0:
                 print("Predictions  - " + str(obstacle_predictions[0]))
                 (waypoints, planner_runtime) = self._planner.get_waypoints(timestamp, pose, obstacle_predictions)
-                print("Planner waypoints  {} {}".format(len(waypoints.waypoints), planner_runtime))
+                print("Planner waypoints  {} {} {}".format(len(waypoints.waypoints), planner_runtime, waypoints))
             
             (steer, throttle, brake, controller_runtime) = self._controller.get_control_instructions(timestamp, pose, waypoints)
             print("Control instructions {} {} {} {}".format(throttle, steer, brake, controller_runtime))

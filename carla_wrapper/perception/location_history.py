@@ -8,6 +8,8 @@ import math
 from objects.objects import Transform, Location, Rotation, RGBCameraSetup, DepthCameraSetup, ObstacleTrajectory, Vector2D
 from objects.frames import DepthFrame, PointCloud
 
+from utils.logging import get_timestamp_logger
+
 camera_transform = Transform(Location(1.3, 0.0, 1.8), Rotation(pitch=-15))
 camera_setup = RGBCameraSetup('center_camera', params.camera_image_width, params.camera_image_height, camera_transform, params.camera_fov)
 depth_camera_setup = DepthCameraSetup('depth_center_camera', params.camera_image_width, params.camera_image_height, camera_transform, params.camera_fov)
@@ -18,6 +20,7 @@ class ObstacleLocationHistory:
         self._obstacle_history = defaultdict(deque)
         self._timestamp_history = deque()
         self._timestamp_to_id = defaultdict(list)
+        self._timestamp_logger = get_timestamp_logger()
 
     def get_location_history(self, timestamp, pose, depth_frame, obstacles):
         vehicle_transform = pose.transform
@@ -26,6 +29,8 @@ class ObstacleLocationHistory:
         ids_cur_timestamp = []
         obstacle_trajectories = []
         for obstacle in obstacles_with_location:
+            distance = pose.transform.location.distance(obstacle.transform.location)
+            self._timestamp_logger.write('{} {} {}\n'.format(timestamp, 'perceived_distance', distance))
             # Ignore obstacles that are far away.
             if (vehicle_transform.location.distance(obstacle.transform.location) > params.dynamic_obstacle_distance_threshold):
                 continue
