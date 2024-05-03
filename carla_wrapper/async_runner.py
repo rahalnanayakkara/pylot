@@ -165,8 +165,8 @@ class AsyncSimulationRunner():
             obstacle_predictions = []
             waypoints = None
 
-            frame.frame = zlib.compress(frame.frame)
-            depth_frame.frame = zlib.compress(depth_frame.frame)
+            #frame.frame = zlib.compress(frame.frame)
+            #depth_frame.frame = zlib.compress(depth_frame.frame)
             
             (timestamp, obstacles, detector_runtime) = self._detector.get_obstacles(timestamp, frame)
             print("Detected obstacles {} {} {}".format(len(obstacles), detector_runtime, obstacles))
