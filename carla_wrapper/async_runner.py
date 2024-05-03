@@ -127,6 +127,19 @@ class AsyncSimulationRunner():
                 sensor_data = SensorMessage(timestamp=timestamp, frame=frame, depth_frame=depth_frame, pose=pose)
                 #print("Size of sensor data: ", len(sensor_data))
 
+            if self._pose is not None or self._frame is not None or self._depth_frame is not None:
+                pickle_pose = pickle.dumps(pose)
+                pickle_frame = pickle.dumps(frame)
+                pickle_depth_frame = pickle.dumps(depth_frame)
+                pickle_timestamp = pickle.dumps(timestamp)
+                sensor_data = SensorMessage(timestamp=timestamp, frame=frame, depth_frame=depth_frame, pose=pose)
+                sdd = pickle.dumps(sensor_data)
+                print("----------------------Sensor data: "+str(len(sdd)))
+                print("----------------------Sensor pose: "+str(len(pickle_pose)))
+                print("----------------------Sensor frame: "+str(len(pickle_frame)))
+                print("----------------------Sensor depth frame: "+str(len(pickle_depth_frame)))
+                print("----------------------Sensor timestamp: "+str(len(pickle_timestamp)))
+
             if params.distributed == True:
                 sensor_data = SensorMessage(timestamp=timestamp, frame=frame, depth_frame=depth_frame, pose=pose)
                 sdd = pickle.dumps(sensor_data)
