@@ -142,6 +142,7 @@ class AsyncSimulationRunner():
                 print("----------------------Sensor frame: "+str(len(pickle_frame)))
                 print("----------------------Sensor depth frame: "+str(len(pickle_depth_frame)))
                 print("----------------------Sensor timestamp: "+str(len(pickle_timestamp)))
+                exit()
 
             if params.distributed == True:
                 sensor_data = SensorMessage(timestamp=timestamp, frame=frame, depth_frame=depth_frame, pose=pose)
