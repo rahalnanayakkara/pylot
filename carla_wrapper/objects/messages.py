@@ -351,7 +351,7 @@ class ControlMessage():
             the message.
     """
     def __init__(self, steer: float, throttle: float, brake: float,
-                 hand_brake: bool, reverse: bool, timestamp):
+                 hand_brake: bool, reverse: bool, timestamp, local_send_time = None):
         # assert steer >= -1 and steer <= 1, 'Steer angle must be in [-1, 1]'
         self.steer = steer
         # assert throttle >= 0 and throttle <= 1, 'Throttle must be in [0, 1]'
@@ -361,6 +361,7 @@ class ControlMessage():
         self.hand_brake = hand_brake
         self.reverse = reverse
         self.creation_time = time.time()
+        self.local_send_time = local_send_time
 
     def __repr__(self):
         return self.__str__()
@@ -373,11 +374,12 @@ class ControlMessage():
 
 
 class SensorMessage():
-    def __init__(self, timestamp, frame, depth_frame, pose):
+    def __init__(self, timestamp, frame, depth_frame, pose, local_send_time=None):
         self.timestamp = timestamp
         self.frame = frame
         self.depth_frame = depth_frame
         self.pose = pose
+        self.local_send_time = local_send_time
 
 class PlannerMessage():
     def __init__(self, pose, waypoints):

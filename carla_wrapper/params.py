@@ -5,9 +5,9 @@ prediction_type = 'linear' # ['linear', 'r2p2']
 planner_type    = 'waypoints' # ['waypoints', 'fot', 'hybrid', 'rrtstar']
 controller_type = 'pid' # ['pid', 'mpc']
 
-distributed = False # [True, False]
-perception_loc  = 'cloud' # ['local', 'server']
-control_loc = 'cloud' # ['local', 'server']
+distributed = True # [True, False]
+perception_loc  = 'local' # ['local', 'cloud']
+control_loc = 'local' # ['local', 'cloud']
 
 local_server = '10.0.0.6'
 local_port = 5010
