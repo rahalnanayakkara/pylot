@@ -5,7 +5,7 @@ import copy
 import socket
 import pickle
 import zlib
-
+import numpy as np
 from utils.logging import setup_pipeline_logging, ModuleCompletionLogger
 from utils.simulation import get_world
 
@@ -127,6 +127,9 @@ class AsyncSimulationRunner():
                 timestamp = self._timestamp
                 sensor_data = SensorMessage(timestamp=timestamp, frame=frame, depth_frame=depth_frame, pose=pose)
                 #print("Size of sensor data: ", len(sensor_data))
+            fshape = frame.frame.shape
+            dfshape = depth_frame.frame.shape
+            dftype = depth_frame.frame.dtype
 
             if self._pose is not None or self._frame is not None or self._depth_frame is not None:
                 frame.frame = zlib.compress(frame.frame)
@@ -142,7 +145,6 @@ class AsyncSimulationRunner():
                 print("----------------------Sensor frame: "+str(len(pickle_frame)))
                 print("----------------------Sensor depth frame: "+str(len(pickle_depth_frame)))
                 print("----------------------Sensor timestamp: "+str(len(pickle_timestamp)))
-                exit()
 
             if params.distributed == True:
                 sensor_data = SensorMessage(timestamp=timestamp, frame=frame, depth_frame=depth_frame, pose=pose)
@@ -166,9 +168,16 @@ class AsyncSimulationRunner():
             obstacle_predictions = []
             waypoints = None
 
-            #frame.frame = zlib.compress(frame.frame)
-            #depth_frame.frame = zlib.compress(depth_frame.frame)
-            
+            frame.frame = zlib.decompress(frame.frame)
+            #print(frame.frame.shape)
+            frame.frame = np.frombuffer(frame.frame, dtype=np.uint8)
+            frame.frame = np.reshape(frame.frame, fshape)
+            depth_frame.frame = zlib.decompress(depth_frame.frame)
+            #print(depth_frame.frame.shape)
+            print(dftype)
+            depth_frame.frame = np.frombuffer(depth_frame.frame, dtype=dftype)
+            #depth_frame.frame = depth_frame.frame.astype(np.float32)
+            depth_frame.frame = np.reshape(depth_frame.frame, dfshape)
             (timestamp, obstacles, detector_runtime) = self._detector.get_obstacles(timestamp, frame)
             print("Detected obstacles {} {} {}".format(len(obstacles), detector_runtime, obstacles))
             
