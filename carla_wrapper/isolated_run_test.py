@@ -1,5 +1,6 @@
 import pandas as pd
 import time
+import numpy as np
 from collections import deque
 from control.controller import Controller
 
@@ -51,6 +52,14 @@ class Waypoints(object):
         target_speeds = deque([target_speed for _ in range(len(waypoints))])
         return cls(deque(waypoints), target_speeds)
 
+    def as_numpy_array_2D(self):
+        wx = []
+        wy =[]
+        for wp in self.waypoints:
+            wx.append(wp.location.x)
+            wy.append(wp.location.y)
+        return np.array([wx,wy])
+
 class MPCRunner():
 
     def __init__(self):
@@ -78,9 +87,11 @@ class MPCRunner():
         self.steer = steer
 
 def parse_pose(pose_str):
+    #print(pose_str)
     transform_str = pose_str.split('transform: ')[1].split('), forward_speed')[0]
-    forward_speed = float(pose_str.split('forward_speed: ')[1].split(',')[0])
-
+    #print(transform_str)
+    forward_speed = float(pose_str.split('forward speed: ')[1].split(',')[0])
+    #print("forward speed : ", forward_speed)
     location_str = transform_str.split('location: Location(')[1].split('), rotation:')[0]
     rotation_str = transform_str.split('rotation: Rotation(')[1].split(')')[0]
 
@@ -94,11 +105,14 @@ def parse_pose(pose_str):
     return Pose(transform, forward_speed)
 
 def parse_waypoints(waypoints_str):
-    waypoints_list = waypoints_str[6:-1].split('), ')
+    #print(waypoints_str)
+    waypoints_list = waypoints_str[6:-1].split('), Transform')
     waypoints = []
     for waypoint_str in waypoints_list:
-        waypoint_str += ')'
+        waypoint_str = 'Transform' + waypoint_str if not waypoint_str.startswith('Transform') else waypoint_str
+        #print(waypoint_str)
         location_str = waypoint_str.split('location: Location(')[1].split('), rotation:')[0]
+        #print(location_str)
         rotation_str = waypoint_str.split('rotation: Rotation(')[1].split(')')[0]
 
         x, y, z = [float(value.split('=')[1]) for value in location_str.split(', ')]
@@ -114,7 +128,7 @@ def parse_waypoints(waypoints_str):
     return Waypoints(deque(waypoints), target_speeds)
 
 def main():
-    file_path = '/mnt/data/planner_dump.csv'
+    file_path = 'planner_dump.csv'
     data = pd.read_csv(file_path)
     
     runner = MPCRunner()
