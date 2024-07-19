@@ -78,49 +78,43 @@ class MPCRunner():
         self.steer = steer
 
 def parse_pose(pose_str):
-    # Parse pose string and create Pose object
-    # Assume pose_str format: 'Pose(transform: Transform(location: Location(x=.., y=.., z=..), rotation: Rotation(pitch=.., yaw=.., roll=..)), forward_speed=..)'
-    transform_str = pose_str.split('Pose(transform: ')[1].split('), forward_speed=')[0]
-    forward_speed = float(pose_str.split('forward_speed=')[1].split(',')[0])
-    
+    transform_str = pose_str.split('transform: ')[1].split('), forward_speed')[0]
+    forward_speed = float(pose_str.split('forward_speed: ')[1].split(',')[0])
+
     location_str = transform_str.split('location: Location(')[1].split('), rotation:')[0]
     rotation_str = transform_str.split('rotation: Rotation(')[1].split(')')[0]
-    
+
     x, y, z = [float(value.split('=')[1]) for value in location_str.split(', ')]
     pitch, yaw, roll = [float(value.split('=')[1]) for value in rotation_str.split(', ')]
-    
+
     location = Location(x, y, z)
     rotation = Rotation(pitch, yaw, roll)
     transform = Transform(location, rotation)
-    
+
     return Pose(transform, forward_speed)
 
 def parse_waypoints(waypoints_str):
-    # Parse waypoints string and create Waypoints object
-    # Assume waypoints_str format: 'deque([Transform(location: Location(x=.., y=.., z=..), rotation: Rotation(pitch=.., yaw=.., roll=..)), ...])'
     waypoints_list = waypoints_str[6:-1].split('), ')
-    
     waypoints = []
     for waypoint_str in waypoints_list:
         waypoint_str += ')'
         location_str = waypoint_str.split('location: Location(')[1].split('), rotation:')[0]
         rotation_str = waypoint_str.split('rotation: Rotation(')[1].split(')')[0]
-        
+
         x, y, z = [float(value.split('=')[1]) for value in location_str.split(', ')]
         pitch, yaw, roll = [float(value.split('=')[1]) for value in rotation_str.split(', ')]
-        
+
         location = Location(x, y, z)
         rotation = Rotation(pitch, yaw, roll)
         transform = Transform(location, rotation)
-        
+
         waypoints.append(transform)
-    
-    target_speeds = deque([0] * len(waypoints))  # Assuming target speeds are 0 for simplicity
+
+    target_speeds = deque([0] * len(waypoints))
     return Waypoints(deque(waypoints), target_speeds)
 
 def main():
-    # Load data from the CSV file
-    file_path = 'planner_dump.csv'
+    file_path = '/mnt/data/planner_dump.csv'
     data = pd.read_csv(file_path)
     
     runner = MPCRunner()
