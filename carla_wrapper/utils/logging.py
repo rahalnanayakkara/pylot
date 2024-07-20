@@ -7,8 +7,8 @@ import pandas as pd
 
 import params
 
-log_dir = '/home/erdos/workspace/pylot/carla_wrapper/logs/'
-metrics_dir = '/home/erdos/workspace/pylot/carla_wrapper/metrics/'
+log_dir = 'G:\\UCLA\\Research\\IoBT\\pylot\\carla_wrapper\\'
+metrics_dir = 'G:\\UCLA\\Research\\IoBT\\pylot\\carla_wrapper\\'
 
 def setup_module_logging(module_name):
     # Ensure the log directory exists

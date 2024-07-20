@@ -3,7 +3,7 @@
 tracker_type    = 'sort' # ['sort', 'deep_sort']
 prediction_type = 'linear' # ['linear', 'r2p2']
 planner_type    = 'waypoints' # ['waypoints', 'fot', 'hybrid', 'rrtstar']
-controller_type = 'pid' # ['pid', 'mpc']
+controller_type = 'mpc' # ['pid', 'mpc']
 
 distributed = True # [True, False]
 perception_loc  = 'local' # ['local', 'cloud']
@@ -100,4 +100,4 @@ obstacle_detection_model_paths="/home/erdos/workspace/pylot/dependencies/models/
 path_coco_labels = "/home/erdos/workspace/pylot/dependencies/models/pylot.names"
 obstacle_detection_min_score_threshold = 0.5
 
-timestamp_log_file = '/home/erdos/workspace/pylot/carla_wrapper/timestamp_log.txt'
+timestamp_log_file = 'G:\\UCLA\\Research\\IoBT\\pylot\\carla_wrapper\\timestsamp.txt'

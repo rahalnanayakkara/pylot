@@ -141,7 +141,7 @@ class Controller():
         else:
             non_negative_speed = current_speed
         acceleration = pid.run_step(target_speed, non_negative_speed)
-        self._timestamp_logger.write("{} {} {}\n".format(self.last_timestamp, 'acceleration', acceleration))
+        # self._timestamp_logger.write("{} {} {}\n".format(self.last_timestamp, 'acceleration', acceleration))
         if acceleration >= 0.0:
             throttle = min(acceleration, params.throttle_max)
             brake = 0.0
