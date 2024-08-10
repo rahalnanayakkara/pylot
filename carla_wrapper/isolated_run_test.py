@@ -63,6 +63,7 @@ class Waypoints(object):
     Stores a sequence of waypoints and target speeds. Each waypoint
     Args:
         waypoints (deque<Transform>) - deque of transform objects. (Target configurations)
+        target_speeds (deque<float>) - deque of target speeds
     '''
     def __init__(self, waypoints: deque, target_speeds: deque):
         self.waypoints = waypoints
@@ -83,12 +84,18 @@ class Waypoints(object):
     #     return cls(deque(waypoints), target_speeds)
 
     def as_numpy_array_2D(self):
+        '''
+        Returns only x and y positions as numpy array
+        '''
         wx = []
         wy =[]
         for wp in self.waypoints:
             wx.append(wp.location.x)
             wy.append(wp.location.y)
         return np.array([wx,wy])
+    
+    def __str__(self) -> str:
+        return str([(str(self.waypoints[i]), str(self.target_speeds[i])) for i,wp in enumerate(self.waypoints)])
 
 class MPCRunner():
 
@@ -98,7 +105,7 @@ class MPCRunner():
         self.brake = -1
         self.steer = -1
 
-    def run_MPC(self, timestamp, pose, waypoints):
+    def run_MPC(self, timestamp, pose : Pose, waypoints : Waypoints):
         start_time = time.time()
         (steer, throttle, brake, controller_runtime) = self._controller.get_control_instructions(timestamp, pose, waypoints)
         end_time = time.time()
@@ -161,7 +168,6 @@ def main():
         timestamp = row['timestamp']
         pose = parse_pose(row['pose'])
         waypoints = parse_waypoints(row['waypoints']) # Target speed is always 0?
-        # exit()
         
         runner.run_MPC(timestamp, pose, waypoints)
 
